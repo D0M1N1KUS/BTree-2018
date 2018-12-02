@@ -58,7 +58,25 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interfaces\BTreeStructure\Key.cs" />
+    <Compile Include="BTreeOperations\ValuePointerTestClass.cs" />
+    <Compile Include="BTreeStructure\BTree.cs" />
+    <Compile Include="Interfaces\BTreeOperations\IBTreeAdding.cs" />
+    <Compile Include="Interfaces\BTreeOperations\IBTreeCompensation.cs" />
+    <Compile Include="Interfaces\BTreeOperations\IBTreeMerging.cs" />
+    <Compile Include="Interfaces\BTreeOperations\IBTreeRemoving.cs" />
+    <Compile Include="Interfaces\BTreeOperations\IBTreeSplitting.cs" />
+    <Compile Include="Interfaces\BTreeStructure\IPage.cs" />
+    <Compile Include="Interfaces\BTreeStructure\IKey.cs" />
+    <Compile Include="Interfaces\BTreeStructure\IPagePointer.cs" />
+    <Compile Include="Interfaces\BTreeStructure\IValuePointer.cs" />
+    <Compile Include="Interfaces\FileIO\Basics\IFileInput.cs" />
+    <Compile Include="Interfaces\FileIO\Basics\IFileIO.cs" />
+    <Compile Include="Interfaces\FileIO\Basics\IFileOutput.cs" />
+    <Compile Include="Interfaces\FileIO\IBTreePointer.cs" />
+    <Compile Include="Interfaces\FileIO\IBTreeStructure.cs" />
+    <Compile Include="Interfaces\FileIO\IFileMap.cs" />
+    <Compile Include="Interfaces\IBTree.cs" />
+    <Compile Include="Interfaces\IRecord.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -80,10 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BTreeOperations" />
-    <Folder Include="Interfaces\BTreeOperations" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
