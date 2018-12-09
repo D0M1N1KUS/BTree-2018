@@ -4,7 +4,7 @@ using BTree2018.Interfaces.BTreeStructure;
 
 namespace BTree2018.BTreeOperations
 {
-    public class ValuePointerTestClass<T> : IValuePointer<T> where T : IComparable
+    public class ValuePointerTestClass<T> : IValuePointer<T> where T : IComparable<T>
     {
         public T GetValue()
         {
@@ -12,7 +12,7 @@ namespace BTree2018.BTreeOperations
         }
     }
     
-    public class TestValueClass<T> : IRecord<T> where T : IComparable
+    public class TestValueClass<T> : IRecord<T> where T : IComparable<T>
     {
         public int CompareTo(object obj)
         {

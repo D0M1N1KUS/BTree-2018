@@ -3,8 +3,13 @@ using System.Windows.Input;
 
 namespace BTree2018.Interfaces.BTreeStructure
 {
-    public interface IPagePointer<T> where T : IComparable
+    public interface IPagePointer<T> where T : IComparable<T>
     {
          IPage<T> Get();
+    }
+
+    public interface IPageNullPointer<T> : IPagePointer<T> where T : IComparable<T>
+    {
+        new IPage<T> Get();
     }
 }

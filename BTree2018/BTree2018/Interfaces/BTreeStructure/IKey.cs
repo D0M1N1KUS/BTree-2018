@@ -2,7 +2,7 @@ using System;
 
 namespace BTree2018.Interfaces.BTreeStructure
 {
-    public interface IKey<T> where T : IComparable
+    public interface IKey<T> where T : IComparable<T>
     {
         T Value { get; }
         long N { get; }

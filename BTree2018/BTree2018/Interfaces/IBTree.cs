@@ -5,7 +5,7 @@ namespace BTree2018.Interfaces.BTreeStructure
     /*
      * Btree Interface which provides methods required by the project description
      */
-    public interface IBTree<T> where T : IComparable
+    public interface IBTree<T> where T : IComparable<T>
     {
         //Compensation class is required
         //Splitting class is required

@@ -3,7 +3,7 @@ using BTree2018.Interfaces.BTreeStructure;
 
 namespace BTree2018.Interfaces.FileIO
 {
-    public interface IBTreeStructure<T> where T : IComparable
+    public interface IBTreeStructure<T> where T : IComparable<T>
     {
         long H { get; }
         long D { get; }
