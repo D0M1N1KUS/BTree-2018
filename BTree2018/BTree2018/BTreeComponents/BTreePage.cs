@@ -3,13 +3,20 @@ using BTree2018.Interfaces.BTreeStructure;
 
 namespace BTree2018.BTreeStructure
 {
-    public struct BTreePage<T> : IPage<T> where T : IComparable<T>
+    public struct BTreePage<T> : IPage<T> where T : IComparable
     {
         public IPagePointer<T>[] Pointers;
         public IKey<T>[] Keys;
         
-        public long Length { get; set; }
+        public long PageLength { get; set; }
+        public long KeysInPage { get; set; }
+
+        public long Length => KeysInPage;
+        public T this[long index] => Keys[index].Value.Value;
+
         public IPagePointer<T> ParentPage { get; set; }
+        public IPagePointer<T> PagePointer { get; }
+
         public IPagePointer<T> PointerAt(long index)
         {
             if(PageType == PageType.NULL)

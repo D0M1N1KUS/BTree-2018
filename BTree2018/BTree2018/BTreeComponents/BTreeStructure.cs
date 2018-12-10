@@ -4,7 +4,7 @@ using BTree2018.Interfaces.FileIO;
 
 namespace BTree2018.BTreeStructure
 {
-    public struct BTreeStructure<T> : IBTreeStructure<T> where T : IComparable<T>
+    public struct BTreeStructure<T> : IBTreeStructure<T> where T : IComparable
     {
         public long H { get; set; }
         public long D { get; set; }

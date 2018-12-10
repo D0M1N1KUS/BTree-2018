@@ -5,7 +5,7 @@ namespace BTree2018.Interfaces.BTreeStructure
     /*
      * Btree Interface which provides methods required by the project description
      */
-    public interface IBTree<T> where T : IComparable<T>
+    public interface IBTree<T> where T : IComparable
     {
         //Compensation class is required
         //Splitting class is required
@@ -13,6 +13,7 @@ namespace BTree2018.Interfaces.BTreeStructure
 
         void Add(IRecord<T> record); //Adding
         void Remove(IRecord<T> record); //Removing
+        void Remove(IKey<T> key);
         void Remove(T key);
 
         bool HasKey(T key);//Searching

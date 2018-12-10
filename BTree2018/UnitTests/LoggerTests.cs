@@ -18,6 +18,8 @@ namespace UnitTests
             Assert.AreEqual(3, Logger.Messages);
             Console.Write(Logger.GetLog());
             Assert.AreEqual(0, Logger.Messages);
+            
+            Logger.Reset();
         }
     }
 }

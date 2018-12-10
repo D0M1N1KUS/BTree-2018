@@ -58,6 +58,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Bisection\BisectSearch.cs" />
     <Compile Include="BTreeComponents\BTreeKey.cs" />
     <Compile Include="BTreeComponents\BTreePage.cs" />
     <Compile Include="BTreeComponents\BTreePagePointer.cs" />
@@ -65,7 +66,11 @@
     <Compile Include="BTreeComponents\Record.cs" />
     <Compile Include="BTreeComponents\RecordPointer.cs" />
     <Compile Include="BTreeComponents\BTree.cs" />
-    <Compile Include="Builders\BTreeKeyBuilder.cs" />
+    <Compile Include="BTreeOperations\BTreeAdder.cs" />
+    <Compile Include="BTreeOperations\BTreeSearcher.cs" />
+    <Compile Include="Builders\BTreeComponentBuilders\BTreeKeyBuilder.cs" />
+    <Compile Include="Builders\BTreeComponentBuilders\BTreePageBuilder.cs" />
+    <Compile Include="Interfaces\Bisection\IBisection.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreeAdding.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreeCompensation.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreeMerging.cs" />
@@ -76,9 +81,11 @@
     <Compile Include="Interfaces\BTreeStructure\IKey.cs" />
     <Compile Include="Interfaces\BTreeStructure\IPagePointer.cs" />
     <Compile Include="Interfaces\BTreeStructure\IRecordPointer.cs" />
+    <Compile Include="Interfaces\Bisection\ICustomCollection.cs" />
     <Compile Include="Interfaces\FileIO\Basics\IFileInput.cs" />
     <Compile Include="Interfaces\FileIO\Basics\IFileIO.cs" />
     <Compile Include="Interfaces\FileIO\Basics\IFileOutput.cs" />
+    <Compile Include="Interfaces\FileIO\IBTreeIO.cs" />
     <Compile Include="Interfaces\FileIO\IBTreePointer.cs" />
     <Compile Include="Interfaces\FileIO\IBTreeStructure.cs" />
     <Compile Include="Interfaces\FileIO\IFileMap.cs" />
@@ -107,9 +114,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BTreeOperations" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

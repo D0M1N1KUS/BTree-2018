@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Text;
 
 namespace BTree2018.Logging
@@ -57,6 +58,12 @@ namespace BTree2018.Logging
             Messages = 0;
             
             return currentLog;
+        }
+
+        public static void Reset()
+        {
+            messageBuilder = new StringBuilder();
+            Messages = 0;
         }
     }
 }

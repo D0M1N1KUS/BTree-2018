@@ -6,37 +6,30 @@ using BTree2018.Logging;
 
 namespace BTree2018.Builders
 {
-    public class BTreeKeyBuilder<T> where T : IComparable<T>
+    public class BTreeKeyBuilder<T> where T : IComparable
     {
         private BTreeKey<T> key;
 
-        public T Value;
+        public IRecord<T> Value;
         public long? N = null;
         public IRecordPointer<T> RecordPointer;
         public IPagePointer<T> LeftPage;
         public IPagePointer<T> RightPage;
         
-        public IKey<T> Build(bool autoAssignMissingValues = true)
+        public IKey<T> Build()
         {
-            if(!allNecessaryParametersInitialized(autoAssignMissingValues))
+            if(!allNecessaryParametersInitialized())
                 throw new Exception("BTreeKeyBuilder: Not all necessary values have been initialized! (See above logs)");
             key = new BTreeKey<T> {N = N ?? -1, Record = RecordPointer, Value = Value};
-            if (autoAssignMissingValues)
-            {
-                //LeftPage = new IPageNullPointer<T>();//TODO: Implement Null Page Struct
-                //RightPage = new IPageNullPointer<T>();
-            }
-            else
-            {
-                key.Value = Value;
-                key.LeftPagePointer = LeftPage;
-                key.RightPagePointer = RightPage;
-            }
+
+            key.Value = Value;
+            key.LeftPagePointer = LeftPage;
+            key.RightPagePointer = RightPage;
 
             return key;
         }
 
-        private bool allNecessaryParametersInitialized(bool autoAssignMissingValues)
+        private bool allNecessaryParametersInitialized()
         {
             bool allInitialized = true;
             if (N == null)
@@ -57,25 +50,22 @@ namespace BTree2018.Builders
                 Logger.Log("BTreeKeyBuilder: Value is not initialized!");
             }
             
-            if (!autoAssignMissingValues)
+            if (LeftPage == null)
             {
-                if (LeftPage == null)
-                {
-                    allInitialized = false;
-                    Logger.Log("BTreeKeyBuilder: LeftPage is not initialized!");
-                }
+                allInitialized = false;
+                Logger.Log("BTreeKeyBuilder: LeftPage is not initialized!");
+            }
 
-                if (RightPage == null)
-                {
-                    allInitialized = false;
-                    Logger.Log("BTreeKeyBuilder: RightPage is not initialized!");
-                }
+            if (RightPage == null)
+            {
+                allInitialized = false;
+                Logger.Log("BTreeKeyBuilder: RightPage is not initialized!");
             }
 
             return allInitialized;
         }
 
-        public BTreeKeyBuilder<T> SetVaule(T value)
+        public BTreeKeyBuilder<T> SetVaule(IRecord<T> value)
         {
             Value = value;
             return this;

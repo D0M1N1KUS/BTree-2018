@@ -1,10 +1,15 @@
 using System;
 using BTree2018.Interfaces;
+using BTree2018.Interfaces.BTreeStructure;
 
 namespace BTree2018.BTreeStructure
 {
-    public struct Record<T> : IRecord<T>, IComparable where T : IComparable<T>
+    public struct Record<T> : IRecord<T>, IComparable where T : IComparable
     {
+        public IRecordPointer<T> RecordPointer { get; }
+        public T Value { get; set; }
+        public T[] ValueComponents { get; set; }
+
         public int CompareTo(object obj)
         {
             if (!(obj is IRecord<T> otherRecord)) return 1;
@@ -14,9 +19,6 @@ namespace BTree2018.BTreeStructure
             if (otherRecord.ValueComponents.Length < ValueComponents.Length) return -1;
             return 1;
         }
-
-        public T Value { get; set; }
-        public T[] ValueComponents { get; set; }
 
         public int CompareTo(Record<T> other)
         {

@@ -5,9 +5,9 @@ using BTree2018.Interfaces.BTreeStructure;
 namespace BTree2018.BTreeStructure
 {
     /// <summary> This struct should be initialized by a builder </summary>
-    public struct BTreeKey<T> : IKey<T> where T : IComparable<T>
+    public struct BTreeKey<T> : IKey<T> where T : IComparable
     {
-        public T Value { get; set; }
+        public IRecord<T> Value { get; set; }
         public long N { get; set; }
         public IRecordPointer<T> Record { get; set; }
         public IPagePointer<T> LeftPagePointer { get; set; }

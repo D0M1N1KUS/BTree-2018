@@ -4,7 +4,7 @@ using BTree2018.Interfaces.BTreeStructure;
 
 namespace BTree2018.BTreeStructure
 {
-    public class BTree<T> : IBTree<T> where T : IComparable<T>
+    public class BTree<T> : IBTree<T> where T : IComparable
     {
         public void Add(IRecord<T> record)
         {
@@ -12,6 +12,11 @@ namespace BTree2018.BTreeStructure
         }
 
         public void Remove(IRecord<T> record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(IKey<T> key)
         {
             throw new NotImplementedException();
         }
