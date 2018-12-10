@@ -43,7 +43,7 @@ namespace BTree2018.BTreeOperations
 
             while (currentPage.PageType != PageType.NULL)
             {
-                BisectSearch.GetClosestIndexTo(currentPage, key.Value.Value);
+                BisectSearch.GetClosestIndexTo(currentPage, key.Value);
                 if (key.Equals(currentPage.KeyAt(BisectSearch.LastIndex)))
                 {
                     GetAllKeysWithSameValue(BisectSearch.LastIndex);
@@ -63,15 +63,15 @@ namespace BTree2018.BTreeOperations
         {
             var listOfFoundKeys = new List<IKey<T>>();
             var currentIndex = index;
-            var currentValue = currentPage.KeyAt(index).Value.Value;
+            var currentValue = currentPage.KeyAt(index).Value;
             listOfFoundKeys.Add(currentPage.KeyAt(index));
-            while (currentIndex < currentPage.PageLength - 1 && currentValue.Equals(currentPage.KeyAt(currentIndex + 1).Value.Value))
+            while (currentIndex < currentPage.PageLength - 1 && currentValue.Equals(currentPage.KeyAt(currentIndex + 1).Value))
             {
                 listOfFoundKeys.Add(currentPage.KeyAt(++currentIndex));
             }
 
             currentIndex = index;
-            while (currentIndex > 0 && currentValue.Equals(currentPage.KeyAt(currentIndex - 1).Value.Value))
+            while (currentIndex > 0 && currentValue.Equals(currentPage.KeyAt(currentIndex - 1).Value))
             {
                 listOfFoundKeys.Add(currentPage.KeyAt(--currentIndex));
             }

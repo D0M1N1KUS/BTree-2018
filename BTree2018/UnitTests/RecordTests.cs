@@ -1,4 +1,5 @@
 using BTree2018.BTreeStructure;
+using BTree2018.Enums;
 using NUnit.Framework;
 
 namespace UnitTests
@@ -37,7 +38,7 @@ namespace UnitTests
 
             var comparison = record1.CompareTo(record2);
             
-            Assert.IsTrue(comparison == 1);
+            Assert.IsTrue(comparison == (int)Comparison.LESS);
         }
         
         [Test]

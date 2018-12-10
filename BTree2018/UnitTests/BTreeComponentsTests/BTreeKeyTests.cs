@@ -24,12 +24,12 @@ namespace UnitTests.BTreeComponentsTests
             recordPointer.GetRecord().Returns(record);
             var key = new BTreeKeyBuilder<double>()
             {
-                N = 1, Value = record, RecordPointer = recordPointer, LeftPage = pageNullPointer, 
+                N = 1, Value = record.Value, RecordPointer = recordPointer, LeftPage = pageNullPointer, 
                 RightPage = pageNullPointer
             }.Build();
             
             Assert.AreEqual(1, key.N);
-            Assert.AreEqual(record, key.Value);
+            Assert.AreEqual(record.Value, key.Value);
             Assert.AreEqual(recordPointer, key.Record);
             Assert.AreEqual(pageNullPointer, key.LeftPagePointer);
             Assert.AreEqual(pageNullPointer, key.RightPagePointer);
@@ -48,11 +48,11 @@ namespace UnitTests.BTreeComponentsTests
         {
             var key1 = new BTreeKey<int>()
             {
-                N = 1, Value = new Record<int>() {Value = 0, ValueComponents = new int[] {0}},
+                N = 1, Value = 0
             };
             var key2 = new BTreeKey<int>()
             {
-                N = 2, Value = new Record<int>() {Value = 1, ValueComponents = new int[] {1}}
+                N = 2, Value = 1
             };
             
             Assert.AreEqual((int)Comparison.LESS, key1.CompareTo(key2));

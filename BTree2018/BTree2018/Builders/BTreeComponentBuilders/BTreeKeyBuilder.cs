@@ -10,7 +10,7 @@ namespace BTree2018.Builders
     {
         private BTreeKey<T> key;
 
-        public IRecord<T> Value;
+        public T Value;
         public long? N = null;
         public IRecordPointer<T> RecordPointer;
         public IPagePointer<T> LeftPage;
@@ -65,7 +65,7 @@ namespace BTree2018.Builders
             return allInitialized;
         }
 
-        public BTreeKeyBuilder<T> SetVaule(IRecord<T> value)
+        public BTreeKeyBuilder<T> SetVaule(T value)
         {
             Value = value;
             return this;

@@ -16,8 +16,8 @@ namespace BTree2018.BTreeStructure
             var compareValue = otherRecord.Value.CompareTo(Value);
             if (compareValue != 0) return compareValue;
             if (otherRecord.ValueComponents.Length == ValueComponents.Length) return 0;
-            if (otherRecord.ValueComponents.Length < ValueComponents.Length) return -1;
-            return 1;
+            if (otherRecord.ValueComponents.Length < ValueComponents.Length) return 1;
+            return -1;
         }
 
         public int CompareTo(Record<T> other)
@@ -25,8 +25,8 @@ namespace BTree2018.BTreeStructure
             var compareValue = other.Value.CompareTo(Value);
             if (compareValue != 0) return compareValue;
             if (other.ValueComponents.Length == ValueComponents.Length) return 0;
-            if (other.ValueComponents.Length < ValueComponents.Length) return -1;
-            return 1;
+            if (other.ValueComponents.Length < ValueComponents.Length) return 1;
+            return -1;
         }
 
         public int CompareTo(T other)
