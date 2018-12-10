@@ -70,6 +70,7 @@
     <Compile Include="BTreeOperations\BTreeSearcher.cs" />
     <Compile Include="Builders\BTreeComponentBuilders\BTreeKeyBuilder.cs" />
     <Compile Include="Builders\BTreeComponentBuilders\BTreePageBuilder.cs" />
+    <Compile Include="Enums\Comparison.cs" />
     <Compile Include="Interfaces\Bisection\IBisection.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreeAdding.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreeCompensation.cs" />

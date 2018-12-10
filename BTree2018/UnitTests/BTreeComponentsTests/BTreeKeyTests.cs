@@ -1,6 +1,7 @@
 using System;
 using BTree2018.BTreeStructure;
 using BTree2018.Builders;
+using BTree2018.Enums;
 using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeStructure;
 using NSubstitute;
@@ -40,6 +41,21 @@ namespace UnitTests.BTreeComponentsTests
             var keyBuilder = new BTreeKeyBuilder<IRecord<double>>();
 
             Assert.Throws<Exception>(() => keyBuilder.Build());
+        }
+
+        [Test]
+        public void compareKeys_KeyValuesDiffer()
+        {
+            var key1 = new BTreeKey<int>()
+            {
+                N = 1, Value = new Record<int>() {Value = 0, ValueComponents = new int[] {0}},
+            };
+            var key2 = new BTreeKey<int>()
+            {
+                N = 2, Value = new Record<int>() {Value = 1, ValueComponents = new int[] {1}}
+            };
+            
+            Assert.AreEqual((int)Comparison.LESS, key1.CompareTo(key2));
         }
     }
 }
