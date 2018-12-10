@@ -13,10 +13,12 @@ namespace UnitTests.BTreeComponentsTests
     {
         public void makeKeyWithDoubleValues()
         {
-            var pageNullPointer = Substitute.For<IPageNullPointer<double>>();
             var record = Substitute.For<IRecord<double>>();
             record.Value.Returns(0.123);
             record.ValueComponents.Returns(new double[] {0.0, 0.0, 0.123, 0.0123});
+            var pageNullPointer = Substitute.For<IPageNullPointer<IRecord<double>>>();
+            var recordPointer = Substitute.For<IRecordPointer<IRecord<double>>>();
+            recordPointer.GetRecord().Returns(record);
 //            var key = Substitute.For<IKey<double>>();
 //            key.Value.Returns(0.123);
 //            key.N.Returns(1);
@@ -25,7 +27,7 @@ namespace UnitTests.BTreeComponentsTests
 //            key.RightPagePointer.Returns(pageNullPointer);
             var key = new BTreeKeyBuilder<double>()
             {
-                N = 1, Record = record, LeftPage = pageNullPointer, RightPage = pageNullPointer
+                N = 1, RecordPointer = recordPointer, LeftPage = pageNullPointer, RightPage = pageNullPointer
             }.Build();
         }
     }

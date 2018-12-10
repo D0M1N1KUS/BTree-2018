@@ -59,7 +59,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BTreeComponents\BTreeKey.cs" />
-    <Compile Include="BTreeOperations\ValuePointerTestClass.cs" />
+    <Compile Include="BTreeComponents\BTreePage.cs" />
+    <Compile Include="BTreeComponents\BTreePagePointer.cs" />
+    <Compile Include="BTreeComponents\BTreeStructure.cs" />
+    <Compile Include="BTreeComponents\Record.cs" />
+    <Compile Include="BTreeComponents\RecordPointer.cs" />
     <Compile Include="BTreeComponents\BTree.cs" />
     <Compile Include="Builders\BTreeKeyBuilder.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreeAdding.cs" />
@@ -71,7 +75,7 @@
     <Compile Include="Interfaces\BTreeStructure\IPage.cs" />
     <Compile Include="Interfaces\BTreeStructure\IKey.cs" />
     <Compile Include="Interfaces\BTreeStructure\IPagePointer.cs" />
-    <Compile Include="Interfaces\BTreeStructure\IValuePointer.cs" />
+    <Compile Include="Interfaces\BTreeStructure\IRecordPointer.cs" />
     <Compile Include="Interfaces\FileIO\Basics\IFileInput.cs" />
     <Compile Include="Interfaces\FileIO\Basics\IFileIO.cs" />
     <Compile Include="Interfaces\FileIO\Basics\IFileOutput.cs" />
@@ -103,6 +107,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BTreeOperations" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

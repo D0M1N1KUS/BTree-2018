@@ -11,10 +11,10 @@ namespace BTree2018.Interfaces.BTreeStructure
         PageType PageType { get; }//TODO: Questionable way of knowing if an IPage pointer is null or not.
     }
 
-    public interface INullPage<T> : IPage<T> where T : IComparable<T>
-    {
-        
-    }
+//    public interface INullPage<T> : IPage<T> where T : IComparable<T>
+//    {
+//        
+//    }//TODO: If this interface proofs to be unnecessary delete it!
 
     public enum PageType
     {

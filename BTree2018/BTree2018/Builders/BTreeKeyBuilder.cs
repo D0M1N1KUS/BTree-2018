@@ -12,7 +12,7 @@ namespace BTree2018.Builders
 
         public T Value;
         public long? N = null;
-        public IRecord<T> Record;
+        public IRecordPointer<T> RecordPointer;
         public IPagePointer<T> LeftPage;
         public IPagePointer<T> RightPage;
         
@@ -20,10 +20,9 @@ namespace BTree2018.Builders
         {
             if(!allNecessaryParametersInitialized(autoAssignMissingValues))
                 throw new Exception("BTreeKeyBuilder: Not all necessary values have been initialized! (See above logs)");
-            key = new BTreeKey<T> {N = N ?? -1, Record = Record};
+            key = new BTreeKey<T> {N = N ?? -1, Record = RecordPointer, Value = Value};
             if (autoAssignMissingValues)
             {
-                key.Value = Record.Value;
                 //LeftPage = new IPageNullPointer<T>();//TODO: Implement Null Page Struct
                 //RightPage = new IPageNullPointer<T>();
             }
@@ -46,12 +45,18 @@ namespace BTree2018.Builders
                 Logger.Log("BTreeKeyBuilder: N is not initialized!");
             }
 
-            if (Record == null)
+            if (RecordPointer == null)
             {
                 allInitialized = false;
                 Logger.Log("BTreeKeyBuilder: Record is not initialized!");
             }
 
+            if (Value == null)
+            {
+                allInitialized = false;
+                Logger.Log("BTreeKeyBuilder: Value is not initialized!");
+            }
+            
             if (!autoAssignMissingValues)
             {
                 if (LeftPage == null)
@@ -64,12 +69,6 @@ namespace BTree2018.Builders
                 {
                     allInitialized = false;
                     Logger.Log("BTreeKeyBuilder: RightPage is not initialized!");
-                }
-
-                if (Value == null)
-                {
-                    allInitialized = false;
-                    Logger.Log("BTreeKeyBuilder: Value is not initialized!");
                 }
             }
 
@@ -88,9 +87,9 @@ namespace BTree2018.Builders
             return this;
         }
 
-        public BTreeKeyBuilder<T> SetRecord(IRecord<T> record)
+        public BTreeKeyBuilder<T> SetRecord(IRecordPointer<T> recordPointer)
         {
-            Record = record;
+            RecordPointer = recordPointer;
             return this;
         }
 
