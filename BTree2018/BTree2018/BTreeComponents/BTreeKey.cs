@@ -20,8 +20,8 @@ namespace BTree2018.BTreeStructure
             if (comparisonValue == 0)
             {
                 if (other.N == N) return 0;
-                if (other.N < N) return -1;
-                return 1;
+                if (other.N < N) return 1;
+                return -1;
             }
 
             return comparisonValue;

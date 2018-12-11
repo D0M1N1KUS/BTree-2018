@@ -65,7 +65,7 @@ namespace BTree2018.BTreeOperations
             var currentIndex = index;
             var currentValue = currentPage.KeyAt(index).Value;
             listOfFoundKeys.Add(currentPage.KeyAt(index));
-            while (currentIndex < currentPage.PageLength - 1 && currentValue.Equals(currentPage.KeyAt(currentIndex + 1).Value))
+            while (currentIndex < currentPage.KeysInPage - 1 && currentValue.Equals(currentPage.KeyAt(currentIndex + 1).Value))
             {
                 listOfFoundKeys.Add(currentPage.KeyAt(++currentIndex));
             }
@@ -75,6 +75,8 @@ namespace BTree2018.BTreeOperations
             {
                 listOfFoundKeys.Add(currentPage.KeyAt(--currentIndex));
             }
+
+            FoundKeys = listOfFoundKeys.ToArray();
         }
     }
 }
