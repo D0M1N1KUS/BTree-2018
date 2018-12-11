@@ -9,8 +9,8 @@ namespace BTree2018.BTreeStructure
     public struct BTreeKey<T> : IKey<T>, IComparable<BTreeKey<T>> where T : IComparable
     {
         public T Value { get; set; }
-        public long N { get; set; }
-        public IRecordPointer<T> Record { get; set; }
+        public long N { get; set; }//TODO: Remove N, as it's unnecessary
+        public IRecordPointer<T> RecordPointer { get; set; }
         public IPagePointer<T> LeftPagePointer { get; set; }
         public IPagePointer<T> RightPagePointer { get; set; }
 

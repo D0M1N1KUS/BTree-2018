@@ -30,7 +30,7 @@ namespace UnitTests.BTreeComponentsTests
             
             Assert.AreEqual(1, key.N);
             Assert.AreEqual(record.Value, key.Value);
-            Assert.AreEqual(recordPointer, key.Record);
+            Assert.AreEqual(recordPointer, key.RecordPointer);
             Assert.AreEqual(pageNullPointer, key.LeftPagePointer);
             Assert.AreEqual(pageNullPointer, key.RightPagePointer);
         }

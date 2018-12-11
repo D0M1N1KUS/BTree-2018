@@ -4,6 +4,7 @@ using BTree2018.BTreeStructure;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Interfaces.FileIO;
 using NSubstitute;
+using NSubstitute.Core.Arguments;
 using NUnit.Framework;
 using UnitTests.HelperClasses.BTree;
 
@@ -16,20 +17,26 @@ namespace UnitTests.BTreeOperationsTests
         public void findKeyRecordPair_ValueIsOnRootPage()
         {
             var searchedRecord = new Record<int>() {Value = 8};
+            
+            var nullPage = new PageTestFixture<int>();
+            nullPage.PageType = PageType.NULL;
+            nullPage.KeysInPage = -1; //To recognize it better while debugging
+            
             var rootPage = new PageTestFixture<int>();
             rootPage.SetUpValues(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
             rootPage.PageType = PageType.ROOT;
             rootPage.PageLength = 20;
+            
             var btreeSearcher = new BTreeSearcher<int>();
             btreeSearcher.BTreeIO = Substitute.For<IBTreeIO<int>>();
             btreeSearcher.BTreeIO.GetRootPage().Returns(rootPage);
+            btreeSearcher.BTreeIO.GetPage(null).ReturnsForAnyArgs(nullPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
             var success = btreeSearcher.SearchForPair(rootPage.KeyAt(7), searchedRecord);
             
             Assert.IsTrue(success);
-            Assert.AreEqual(1, btreeSearcher.FoundKeys.Length);
-            Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKeys[0].Value);
+            Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKey.Value);
         }
 
         [Test]
@@ -62,16 +69,35 @@ namespace UnitTests.BTreeOperationsTests
             var btreeSearcher = new BTreeSearcher<int>();
             btreeSearcher.BTreeIO = Substitute.For<IBTreeIO<int>>();
             btreeSearcher.BTreeIO.GetRootPage().Returns(rootPage);
+            //sadly does not work. Or I'm the on who's not working
 //            btreeSearcher.BTreeIO.GetPage(pageNullPointer).Returns(nullPage);
-//            btreeSearcher.BTreeIO.GetPage(childPagePointer).Returns(childPage);
+//            btreeSearcher.BTreeIO.GetPage(childPagePointer).Returns(childPage); 
             btreeSearcher.BTreeIO.GetPage(null).ReturnsForAnyArgs(childPage, nullPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
             var success = btreeSearcher.SearchForPair(childPage.KeyAt(4), searchedRecord);
             
             Assert.IsTrue(success);
-            Assert.AreEqual(1, btreeSearcher.FoundKeys.Length);
-            Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKeys[0].Value);
+            Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKey.Value);
+        }
+
+        [Test]
+        public void findKeyRecordPair_RecordDoesNotExist_NoRecordShouldBeReturned()
+        {
+            var searchedRecord = new Record<int>() {Value = 8};
+            var nonExistingKey = new BTreeKey<int>() {Value = 8};
+            var rootPage = new PageTestFixture<int>();
+            rootPage.SetUpValues(1, 2, 3, 4, 5, 6, 7, 9, 10);
+            rootPage.PageType = PageType.ROOT;
+            rootPage.PageLength = 20;
+            var btreeSearcher = new BTreeSearcher<int> {BTreeIO = Substitute.For<IBTreeIO<int>>()};
+            btreeSearcher.BTreeIO.GetRootPage().Returns(rootPage);
+            btreeSearcher.BisectSearch = new BisectSearch<int>();
+
+            var success = btreeSearcher.SearchForPair(nonExistingKey, searchedRecord);
+            
+            Assert.IsFalse(success);
+            Assert.IsNull(btreeSearcher.FoundKey);
         }
     }
 }

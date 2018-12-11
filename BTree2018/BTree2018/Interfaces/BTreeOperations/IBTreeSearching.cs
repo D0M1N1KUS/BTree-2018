@@ -5,8 +5,8 @@ namespace BTree2018.Interfaces.BTreeOperations
 {
     public interface IBTreeSearching<T> where T : IComparable
     {
-        IKey<T>[] FoundKeys { get; }
-        IRecord<T>[] FoundRecords { get; }
+        IKey<T> FoundKey { get; }
+        IRecord<T> FoundRecord { get; }
         bool SearchForPair(IKey<T> key, IRecord<T> record);
     }
 }

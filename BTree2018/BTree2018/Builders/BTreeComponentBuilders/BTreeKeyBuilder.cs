@@ -20,7 +20,7 @@ namespace BTree2018.Builders
         {
             if(!allNecessaryParametersInitialized())
                 throw new Exception("BTreeKeyBuilder: Not all necessary values have been initialized! (See above logs)");
-            key = new BTreeKey<T> {N = N ?? -1, Record = RecordPointer, Value = Value};
+            key = new BTreeKey<T> {N = N ?? -1, RecordPointer = RecordPointer, Value = Value};
 
             key.Value = Value;
             key.LeftPagePointer = LeftPage;

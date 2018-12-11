@@ -11,72 +11,88 @@ namespace BTree2018.BTreeOperations
 {
     public class BTreeSearcher<T> : IBTreeSearching<T> where T : IComparable
     {
-        private IPage<T> currentPage;
-        private List<IRecord<T>> foundRecords = new List<IRecord<T>>();
-        
-        private IPage<T> BiggerPageOfFoundKey => 
-            BTreeIO.GetPage(currentPage.KeyAt(BisectSearch.LastIndex).RightPagePointer);
-        private IPage<T> SmallerPageOfFoundKey => 
-            BTreeIO.GetPage(currentPage.KeyAt(BisectSearch.LastIndex).LeftPagePointer);
+        private IRecord<T> foundRecord;
         
         public IBTreeIO<T> BTreeIO;
         public IBisection<T> BisectSearch;
-        
-        public IKey<T>[] FoundKeys { get; private set; }
-        public IRecord<T>[] FoundRecords {
+
+        public IKey<T> FoundKey { get; private set; }
+
+        public IRecord<T> FoundRecord
+        {
             get
             {
-                if (foundRecords.Count > 0) return foundRecords.ToArray();
-                foreach (var key in FoundKeys)
-                {
-                    foundRecords.Add(BTreeIO.GetRecord(key.Record));
-                }
-
-                return foundRecords.ToArray();
-            } 
+                if (foundRecord != null) return foundRecord;
+                if(FoundKey == null) throw new Exception("Can't find record! No key was found yet.");
+                foundRecord = BTreeIO.GetRecord(FoundKey.RecordPointer);
+                return foundRecord;
+            }
+            private set => foundRecord = value;
         }
-        
+
         public bool SearchForPair(IKey<T> key, IRecord<T> record)
         {
-            currentPage = BTreeIO.GetRootPage();
-            foundRecords.Clear();
+            FoundKey = null;
+            FoundRecord = null;
+            
+            return SearchForPair(key, record, BTreeIO.GetRootPage());
+        }
 
+        private bool SearchForPair(IKey<T> key, IRecord<T> record, IPage<T> beginningPage)
+        {
+            var currentPage = beginningPage;
             while (currentPage.PageType != PageType.NULL)
             {
-                BisectSearch.GetClosestIndexTo(currentPage, key.Value);
-                if (key.Equals(currentPage.KeyAt(BisectSearch.LastIndex)))
+                var index = BisectSearch.GetClosestIndexTo(currentPage, key.Value);
+                if (key.Equals(currentPage.KeyAt(index)))
                 {
-                    GetAllKeysWithSameValue(BisectSearch.LastIndex);
+                    FoundKey = currentPage.KeyAt(index);
                     return true;
                 }
 
-                if (key.CompareTo(currentPage.KeyAt(BisectSearch.LastIndex)) == (int) Comparison.LESS)
-                    currentPage = SmallerPageOfFoundKey;
+                if (currentPage.PageType == PageType.LEAF) return false;
+                if (key.CompareTo(currentPage.KeyAt(index)) == (int) Comparison.LESS)
+                    currentPage = getRightPage(currentPage, index);
                 else
-                    currentPage = BiggerPageOfFoundKey;
+                    currentPage = getLeftPage(currentPage, index);
             }
 
             return false;
         }
 
-        private void GetAllKeysWithSameValue(long index)
+        private IPage<T> getRightPage(IPage<T> currentPage, long index)
         {
-            var listOfFoundKeys = new List<IKey<T>>();
-            var currentIndex = index;
-            var currentValue = currentPage.KeyAt(index).Value;
-            listOfFoundKeys.Add(currentPage.KeyAt(index));
-            while (currentIndex < currentPage.KeysInPage - 1 && currentValue.Equals(currentPage.KeyAt(currentIndex + 1).Value))
-            {
-                listOfFoundKeys.Add(currentPage.KeyAt(++currentIndex));
-            }
-
-            currentIndex = index;
-            while (currentIndex > 0 && currentValue.Equals(currentPage.KeyAt(currentIndex - 1).Value))
-            {
-                listOfFoundKeys.Add(currentPage.KeyAt(--currentIndex));
-            }
-
-            FoundKeys = listOfFoundKeys.ToArray();
+            return BTreeIO.GetPage(currentPage.KeyAt(index).RightPagePointer);
         }
+
+        private IPage<T> getLeftPage(IPage<T> currentPage, long index)
+        {
+            return BTreeIO.GetPage(currentPage.KeyAt(index).LeftPagePointer);
+        }
+        
+        private IPage<T> getPage(IPagePointer<T> pagePointer)
+        {
+            return BTreeIO.GetPage(pagePointer);
+        }
+//
+//        private void GetAllKeysWithSameValue(IKey<T> key, IRecord<T> record, long index, IPage<T> currentPage)
+//        {
+//            var listOfFoundKeys = new List<IKey<T>>();
+//            var currentIndex = index;
+//            var currentValue = key.Value;
+//            listOfFoundKeys.Add(currentPage.KeyAt(index));
+//            while (currentIndex < currentPage.KeysInPage - 1 && currentValue.Equals(currentPage.KeyAt(currentIndex + 1).Value))
+//            {
+//                listOfFoundKeys.Add(currentPage.KeyAt(++currentIndex));
+//            }
+//
+//            currentIndex = index;
+//            while (currentIndex > 0 && currentValue.Equals(currentPage.KeyAt(currentIndex - 1).Value))
+//            {
+//                listOfFoundKeys.Add(currentPage.KeyAt(--currentIndex));
+//            }
+//
+//            foundKeys.AddRange(listOfFoundKeys);
+//        }
     }
 }
