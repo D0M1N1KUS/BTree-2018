@@ -37,43 +37,47 @@ namespace BTree2018.BTreeOperations
             
             if (currentPage.KeysInPage < currentPage.PageLength)//m < 2d
             {
-                var keyAdded = false;
-                var pageBuilder = new BTreePageBuilder<T>((int) currentPage.PageLength)
-                    .SetPageType(currentPage.PageType)
-                    .SetParentPagePointer(currentPage.ParentPage);
-                for (var i = 0; i < currentPage.KeysInPage; i++)
-                {
-                    var currentKey = currentPage.KeyAt(i);
-                    if (keyAdded || keyToAdd.CompareTo(currentKey) == (int) Comparison.LESS)
-                    {
-                        pageBuilder.AddKey(currentKey)
-                            .AddPointer(currentPage.PointerAt(i));
-                    } 
-                    else if (!keyAdded && keyToAdd.CompareTo(currentKey) == (int) Comparison.GREATER)
-                    {
-                        pageBuilder.AddKey(keyToAdd)
-                            .AddPointer(keyToAdd.LeftPagePointer);
-                        pageBuilder.AddKey(currentKey)
-                            .AddPointer(currentKey.RightPagePointer);
-                        keyAdded = true;
-                    }
-                    else
-                        throw KeyAddingException("Duplicate key detected while inserting.");
-                }
-
-                if (!keyAdded)
-                    pageBuilder.AddKey(keyToAdd)
-                        .AddPointer(keyToAdd.RightPagePointer);
-                
-                BTreeIO.WritePage(pageBuilder.Build());
+                BTreeIO.WritePage(insertKeyIntoPage());
             }
-            else if (currentPage.KeysInPage == currentPage.PageLength)
+            else if (currentPage.KeysInPage == currentPage.PageLength)//found page is full
             {
                 if (!BTreeCompensation.Compensate(currentPage, key))
                     BTreeSplitting.Split(page, key);
             }
             else
                 throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!");
+        }
+
+        private IPage<T> insertKeyIntoPage()
+        {
+            var keyAdded = false;
+            var pageBuilder = new BTreePageBuilder<T>((int) currentPage.PageLength)
+                .SetPageType(currentPage.PageType)
+                .SetParentPagePointer(currentPage.ParentPage);
+            for (var i = 0; i < currentPage.KeysInPage; i++)
+            {
+                var currentKey = currentPage.KeyAt(i);
+                if (keyAdded || keyToAdd.CompareTo(currentKey) == (int) Comparison.LESS)
+                {
+                    pageBuilder.AddKey(currentKey)
+                        .AddPointer(currentPage.PointerAt(i));
+                }
+                else if (!keyAdded && keyToAdd.CompareTo(currentKey) == (int) Comparison.GREATER)
+                {
+                    pageBuilder.AddKey(keyToAdd)
+                        .AddPointer(keyToAdd.LeftPagePointer);
+                    pageBuilder.AddKey(currentKey)
+                        .AddPointer(currentKey.RightPagePointer);
+                    keyAdded = true;
+                }
+                else
+                    throw KeyAddingException("Duplicate key detected while inserting.");
+            }
+
+            if (!keyAdded)
+                pageBuilder.AddKey(keyToAdd)
+                    .AddPointer(keyToAdd.RightPagePointer);
+            return pageBuilder.Build();
         }
 
         private Exception KeyAddingException(string message)
