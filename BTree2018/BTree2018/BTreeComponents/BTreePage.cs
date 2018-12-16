@@ -1,5 +1,7 @@
 using System;
 using BTree2018.Interfaces.BTreeStructure;
+using BTree2018.Interfaces.CustomCollection;
+using BTree2018.Logging;
 
 namespace BTree2018.BTreeStructure
 {
@@ -7,8 +9,8 @@ namespace BTree2018.BTreeStructure
     {
         public IPagePointer<T>[] Pointers;
         public IKey<T>[] Keys;
-        
-        public long PageLength { get; set; }
+
+        public long PageLength => Keys?.Length ?? 0;
         public long KeysInPage { get; set; }
 
         public long Length => KeysInPage;
@@ -17,6 +19,8 @@ namespace BTree2018.BTreeStructure
         public IPagePointer<T> ParentPage { get; set; }
         public IPagePointer<T> PagePointer { get; }
 
+        public PageType PageType { get; set; }
+        
         public IPagePointer<T> PointerAt(long index)
         {
             if(PageType == PageType.NULL)
@@ -30,7 +34,18 @@ namespace BTree2018.BTreeStructure
                 throw new NullReferenceException("Can't access keys of Null-type page!");
             return Keys[index];
         }
-
-        public PageType PageType { get; set; }
+        
+        public string ToString()
+        {
+            return string.Concat(
+                "[Page(", base.ToString(),
+                ") KeysInPage(", KeysInPage,
+                ") PointersInPage(", Pointers.Length,
+                ") KeyValues(", CollectionSerialization.Stringify(this),
+                ") PageType(", PageType.ToString("g"),
+                ") ParentPage(", ParentPage.ToString(),
+                ") PagePointer(", PagePointer.ToString(),
+                ")]");
+        }
     }
 }

@@ -1,6 +1,9 @@
 using System;
+using System.Linq;
+using System.Text;
 using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeStructure;
+using BTree2018.Logging;
 
 namespace BTree2018.BTreeStructure
 {
@@ -32,6 +35,16 @@ namespace BTree2018.BTreeStructure
         public int CompareTo(T other)
         {
             return other.CompareTo(Value);
+        }
+
+        public string ToString()
+        {
+            return string.Concat(
+                "[Record(", base.ToString(),
+                ") Value(", Value.ToString(),
+                ") ValueComponents(", CollectionSerialization.Stringify(ValueComponents),
+                ") Pointer(", RecordPointer.ToString(),
+                ")");
         }
     }
 }

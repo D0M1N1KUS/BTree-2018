@@ -11,7 +11,6 @@ namespace BTree2018.Builders
         private BTreeKey<T> key;
 
         public T Value;
-        public long? N = null;
         public IRecordPointer<T> RecordPointer;
         public IPagePointer<T> LeftPage;
         public IPagePointer<T> RightPage;
@@ -20,7 +19,7 @@ namespace BTree2018.Builders
         {
             if(!allNecessaryParametersInitialized())
                 throw new Exception("BTreeKeyBuilder: Not all necessary values have been initialized! (See above logs)");
-            key = new BTreeKey<T> {N = N ?? -1, RecordPointer = RecordPointer, Value = Value};
+            key = new BTreeKey<T> { RecordPointer = RecordPointer, Value = Value};
 
             key.Value = Value;
             key.LeftPagePointer = LeftPage;
@@ -32,12 +31,6 @@ namespace BTree2018.Builders
         private bool allNecessaryParametersInitialized()
         {
             bool allInitialized = true;
-            if (N == null)
-            {
-                allInitialized = false;
-                Logger.Log("BTreeKeyBuilder: N is not initialized!");
-            }
-
             if (RecordPointer == null)
             {
                 allInitialized = false;
@@ -68,12 +61,6 @@ namespace BTree2018.Builders
         public BTreeKeyBuilder<T> SetVaule(T value)
         {
             Value = value;
-            return this;
-        }
-
-        public BTreeKeyBuilder<T> SetKeyN(long n)
-        {
-            N = n;
             return this;
         }
 

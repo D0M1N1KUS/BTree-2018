@@ -58,7 +58,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Bisection\BisectSearch.cs" />
+    <Compile Include="Exceptions\DuplicateKeyException.cs" />
+    <Compile Include="Logging\CollectionSerialization.cs" />
+    <Compile Include="Sorting\BisectSearch.cs" />
     <Compile Include="BTreeComponents\BTreeKey.cs" />
     <Compile Include="BTreeComponents\BTreePage.cs" />
     <Compile Include="BTreeComponents\BTreePagePointer.cs" />

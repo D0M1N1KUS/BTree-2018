@@ -5,14 +5,11 @@ namespace BTree2018.BTreeStructure
 {
     public class BTreePagePointer<T> : IPagePointer<T> where T : IComparable
     {
+        public PageType PointsToPageType { get; set; }
         public IPage<T> page = null;
         
         public IPage<T> Get()
         {
-            if (page == null)
-            {
-                //TODO: Read page from disk here?
-            }
             return page;
         }
     }

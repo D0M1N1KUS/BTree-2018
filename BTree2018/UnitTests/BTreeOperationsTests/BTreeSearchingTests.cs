@@ -33,7 +33,7 @@ namespace UnitTests.BTreeOperationsTests
             btreeSearcher.BTreeIO.GetPage(null).ReturnsForAnyArgs(nullPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
-            var success = btreeSearcher.SearchForPair(rootPage.KeyAt(7), searchedRecord);
+            var success = btreeSearcher.SearchForPair(rootPage.KeyAt(7));
             
             Assert.IsTrue(success);
             Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKey.Value);
@@ -69,13 +69,13 @@ namespace UnitTests.BTreeOperationsTests
             var btreeSearcher = new BTreeSearcher<int>();
             btreeSearcher.BTreeIO = Substitute.For<IBTreeIO<int>>();
             btreeSearcher.BTreeIO.GetRootPage().Returns(rootPage);
-            //sadly does not work. Or I'm the on who's not working
+            //sadly this does not work. Or I'm the on who's not working
 //            btreeSearcher.BTreeIO.GetPage(pageNullPointer).Returns(nullPage);
 //            btreeSearcher.BTreeIO.GetPage(childPagePointer).Returns(childPage); 
             btreeSearcher.BTreeIO.GetPage(null).ReturnsForAnyArgs(childPage, nullPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
-            var success = btreeSearcher.SearchForPair(childPage.KeyAt(4), searchedRecord);
+            var success = btreeSearcher.SearchForPair(childPage.KeyAt(4));
             
             Assert.IsTrue(success);
             Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKey.Value);
@@ -84,7 +84,6 @@ namespace UnitTests.BTreeOperationsTests
         [Test]
         public void findKeyRecordPair_RecordDoesNotExist_NoRecordShouldBeReturned()
         {
-            var searchedRecord = new Record<int>() {Value = 8};
             var nonExistingKey = new BTreeKey<int>() {Value = 8};
             var rootPage = new PageTestFixture<int>();
             rootPage.SetUpValues(1, 2, 3, 4, 5, 6, 7, 9, 10);
@@ -94,7 +93,7 @@ namespace UnitTests.BTreeOperationsTests
             btreeSearcher.BTreeIO.GetRootPage().Returns(rootPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
-            var success = btreeSearcher.SearchForPair(nonExistingKey, searchedRecord);
+            var success = btreeSearcher.SearchForPair(nonExistingKey);
             
             Assert.IsFalse(success);
             Assert.IsNull(btreeSearcher.FoundKey);

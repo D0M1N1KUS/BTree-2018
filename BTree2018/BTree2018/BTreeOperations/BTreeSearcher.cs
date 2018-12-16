@@ -17,7 +17,7 @@ namespace BTree2018.BTreeOperations
         public IBisection<T> BisectSearch;
 
         public IKey<T> FoundKey { get; private set; }
-
+        public IPage<T> FoundPage { get; private set; }
         public IRecord<T> FoundRecord
         {
             get
@@ -30,15 +30,16 @@ namespace BTree2018.BTreeOperations
             private set => foundRecord = value;
         }
 
-        public bool SearchForPair(IKey<T> key, IRecord<T> record)
+        public bool SearchForPair(IKey<T> key)
         {
             FoundKey = null;
             FoundRecord = null;
+            FoundPage = null;
             
-            return SearchForPair(key, record, BTreeIO.GetRootPage());
+            return SearchForPair(key, BTreeIO.GetRootPage());
         }
 
-        private bool SearchForPair(IKey<T> key, IRecord<T> record, IPage<T> beginningPage)
+        private bool SearchForPair(IKey<T> key, IPage<T> beginningPage)
         {
             var currentPage = beginningPage;
             while (currentPage.PageType != PageType.NULL)
@@ -47,6 +48,7 @@ namespace BTree2018.BTreeOperations
                 if (key.Equals(currentPage.KeyAt(index)))
                 {
                     FoundKey = currentPage.KeyAt(index);
+                    FoundPage = currentPage;
                     return true;
                 }
 

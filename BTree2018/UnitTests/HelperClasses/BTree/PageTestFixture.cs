@@ -17,9 +17,9 @@ namespace UnitTests.HelperClasses.BTree
             var listOfNewKeys = new List<BTreeKey<T>>();
             foreach (var value in values)
             {
-                var key = new BTreeKey<T>() { Value = value, N = 0 };
-                while (listOfNewKeys.Contains(key))
-                    key.N++;
+                var key = new BTreeKey<T>() { Value = value };
+                if (listOfNewKeys.Contains(key))
+                    throw new Exception("Duplicate values are not allowed!");
                 listOfNewKeys.Add(key);
             }
             
@@ -39,7 +39,7 @@ namespace UnitTests.HelperClasses.BTree
                 Keys[i].RightPagePointer = pagePointers[i + 1];
             }
             pointerList.Add(pagePointers[Keys.Length]);
-            pagePointers = pointerList.ToArray();
+            PagePointers = pointerList.ToArray();
         }
 
 
