@@ -4,18 +4,12 @@ using BTree2018.Interfaces.BTreeStructure;
 
 namespace BTree2018.BTreeStructure
 {
-    public class RecordPointer<T> : IRecordPointer<T> where T : IComparable
+    public struct RecordPointer<T> : IRecordPointer<T> where T : IComparable
     {
-        private IRecord<T> record;
-        
-        public IRecord<T> GetRecord()
-        {
-            if (record == null)
-            {
-                //TODO: Get record from file
-            }
+        public RecordPointerType PointerType { get; set; }
+        public long Index { get; set; }
 
-            return record;
-        }
+        public static IRecordPointer<T> NullPointer => new RecordPointer<T>()
+            {Index = long.MinValue, PointerType = RecordPointerType.NULL};
     }
 }

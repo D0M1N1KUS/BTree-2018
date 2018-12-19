@@ -7,7 +7,7 @@ namespace BTree2018.Interfaces.BTreeStructure
     {
         T Value { get; }
         IRecordPointer<T> RecordPointer { get; }//TODO: check if this can be applied to the record class
-        IPagePointer<T> LeftPagePointer { get; }
-        IPagePointer<T> RightPagePointer { get; }
+        //IPagePointer<T> LeftPagePointer { get; }
+        //IPagePointer<T> RightPagePointer { get; }
     }
 }

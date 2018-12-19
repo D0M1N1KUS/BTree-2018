@@ -5,6 +5,6 @@ namespace BTree2018.Interfaces.BTreeOperations
 {
     public interface IBTreeCompensation<T> where T : IComparable
     {
-        bool Compensate(IPage<T> page, IKey<T> key);
+        bool Compensate(IPage<T> page, IKey<T> keyToAdd);
     }
 }

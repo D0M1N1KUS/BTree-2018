@@ -11,12 +11,12 @@ namespace BTree2018.BTreeStructure
     {
         public T Value { get; set; }
         public IRecordPointer<T> RecordPointer { get; set; }
-        public IPagePointer<T> LeftPagePointer { get; set; }
-        public IPagePointer<T> RightPagePointer { get; set; }
+        //public IPagePointer<T> LeftPagePointer { get; set; }
+        //public IPagePointer<T> RightPagePointer { get; set; }
 
         public int CompareTo(IKey<T> other)
         {
-            var comparisonValue = other.Value.CompareTo(Value);
+            var comparisonValue = Value.CompareTo(other.Value);
             return comparisonValue;
         }
 
@@ -31,8 +31,8 @@ namespace BTree2018.BTreeStructure
                 "[Key(", base.ToString(),
                 ") Value(", Value.ToString(),
                 ") RecordPointer(", RecordPointer.ToString(), 
-                ") LeftPagePointer(", LeftPagePointer.ToString(),
-                ") RightPagePointer(", RightPagePointer.ToString(),
+                //") LeftPagePointer(", LeftPagePointer.ToString(),
+                //") RightPagePointer(", RightPagePointer.ToString(),
                 ")]"
             );
         }

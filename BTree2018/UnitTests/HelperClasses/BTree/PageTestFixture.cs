@@ -29,19 +29,8 @@ namespace UnitTests.HelperClasses.BTree
 
         public void SetUpPointers(params IPagePointer<T>[] pagePointers)
         {
-            if (Keys == null)
-                throw new Exception("No key values initialized! Values need to be set up before pointers!");
-            var pointerList = new List<IPagePointer<T>>();
-            for (var i = 0; i < Keys.Length; i++)
-            {
-                pointerList.Add(pagePointers[i]);
-                Keys[i].LeftPagePointer = pagePointers[i];
-                Keys[i].RightPagePointer = pagePointers[i + 1];
-            }
-            pointerList.Add(pagePointers[Keys.Length]);
-            PagePointers = pointerList.ToArray();
+            PagePointers = pagePointers;
         }
-
 
         public long Length => KeysInPage;
 
@@ -51,11 +40,22 @@ namespace UnitTests.HelperClasses.BTree
         public long KeysInPage { get; set; }
         public IPagePointer<T> ParentPage { get; set; }
         public IPagePointer<T> PagePointer { get; set; }
+
         public IPagePointer<T> PointerAt(long index)
         {
             return PagePointers[index];
         }
 
+        public IPagePointer<T> LeftPointerAt(long keyIndex)
+        {
+            return PagePointers[keyIndex];
+        }
+        
+        public IPagePointer<T> RightPointerAt(long keyIndex)
+        {
+            return PagePointers[keyIndex + 1];
+        }
+        
         public IKey<T> KeyAt(long index)
         {
             return Keys[index];

@@ -27,6 +27,16 @@ namespace BTree2018.BTreeStructure
                 throw new NullReferenceException("Can't access pointers of Null-type page!");
             return Pointers[index];
         }
+        
+        public IPagePointer<T> LeftPointerAt(long keyIndex)
+        {
+            return PointerAt(keyIndex);
+        }
+        
+        public IPagePointer<T> RightPointerAt(long keyIndex)
+        {
+            return PointerAt(keyIndex + 1);
+        }
 
         public IKey<T> KeyAt(long index)
         {

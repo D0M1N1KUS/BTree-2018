@@ -11,14 +11,11 @@ namespace BTree2018.Interfaces.BTreeStructure
         IPagePointer<T> ParentPage { get; }
         IPagePointer<T> PagePointer { get; }
         IPagePointer<T> PointerAt(long index);
+        IPagePointer<T> LeftPointerAt(long keyIndex);
+        IPagePointer<T> RightPointerAt(long keyIndex);
         IKey<T> KeyAt(long index);
         PageType PageType { get; }//TODO: Questionable way of knowing if an IPage pointer is null or not.
     }
-
-//    public interface INullPage<T> : IPage<T> where T : IComparable<T>
-//    {
-//        
-//    }//TODO: If this interface proofs to be unnecessary delete it!
 
     public enum PageType
     {

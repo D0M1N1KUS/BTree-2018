@@ -12,8 +12,6 @@ namespace BTree2018.Builders
 
         public T Value;
         public IRecordPointer<T> RecordPointer;
-        public IPagePointer<T> LeftPage;
-        public IPagePointer<T> RightPage;
         
         public IKey<T> Build()
         {
@@ -22,8 +20,6 @@ namespace BTree2018.Builders
             key = new BTreeKey<T> { RecordPointer = RecordPointer, Value = Value};
 
             key.Value = Value;
-            key.LeftPagePointer = LeftPage;
-            key.RightPagePointer = RightPage;
 
             return key;
         }
@@ -42,18 +38,6 @@ namespace BTree2018.Builders
                 allInitialized = false;
                 Logger.Log("BTreeKeyBuilder: Value is not initialized!");
             }
-            
-            if (LeftPage == null)
-            {
-                allInitialized = false;
-                Logger.Log("BTreeKeyBuilder: LeftPage is not initialized!");
-            }
-
-            if (RightPage == null)
-            {
-                allInitialized = false;
-                Logger.Log("BTreeKeyBuilder: RightPage is not initialized!");
-            }
 
             return allInitialized;
         }
@@ -67,18 +51,6 @@ namespace BTree2018.Builders
         public BTreeKeyBuilder<T> SetRecord(IRecordPointer<T> recordPointer)
         {
             RecordPointer = recordPointer;
-            return this;
-        }
-
-        public BTreeKeyBuilder<T> SetPointerToLeftPage(IPagePointer<T> lp)
-        {
-            LeftPage = lp;
-            return this;
-        }
-
-        public BTreeKeyBuilder<T> SetPointerToRightPage(IPagePointer<T> rp)
-        {
-            RightPage = rp;
             return this;
         }
     }

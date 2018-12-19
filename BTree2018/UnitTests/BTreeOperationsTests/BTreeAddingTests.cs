@@ -68,17 +68,44 @@ namespace UnitTests.BTreeOperationsTests
                 Assert.AreEqual(expectedModifiedPage.KeyAt(i).Value, actualModifiedPage.KeyAt(i).Value);
             }
         }
+
+        [Test]
+        public void insertKeyIntoPage_OperationIsUsedByWhileSplitting()
+        {
+            var pagePointers = new IPagePointer<int>[]
+            {
+                new BTreePagePointer<int>() {Index = 1, PointsToPageType = PageType.LEAF},
+                new BTreePagePointer<int>() {Index = 2, PointsToPageType = PageType.LEAF},
+                new BTreePagePointer<int>() {Index = 4, PointsToPageType = PageType.LEAF},
+                new BTreePagePointer<int>() {Index = 5, PointsToPageType = PageType.LEAF}
+            };
+            var keyToInsert = new BTreeKey<int>() {Value = 3, RecordPointer = RecordPointer<int>.NullPointer};
+            var pointerToInsert = new BTreePagePointer<int>() {Index = 3, PointsToPageType = PageType.LEAF};
+
+            var testPage = new PageTestFixture<int>();
+            testPage.PageLength = 4;
+            testPage.PageType = PageType.ROOT;
+            testPage.SetUpValues(1, 2, 4);
+            testPage.SetUpPointers(pagePointers);
+            var adder = new BTreeAdder<int>();
+            var btreeIOInterceptor = new BTreeIOTestFixture<int>();
+            adder.BTreeIO = btreeIOInterceptor;
+            
+            adder.InsertKeyIntoPage(testPage, keyToInsert, pointerToInsert);
+            var actualPage = btreeIOInterceptor.WrittenPage[0];
+            
+            Assert.IsTrue(btreeIOInterceptor.WritePageCalls == 1);
+            Assert.AreEqual(keyToInsert.Value, actualPage.KeyAt(2).Value);
+            Assert.AreEqual(keyToInsert.RecordPointer, actualPage.KeyAt(2).RecordPointer);
+            Assert.AreEqual(pointerToInsert, actualPage.RightPointerAt(2));
+        }
         
         private static BTreeKey<int> preparePageWithOneEmptySpace(int valueToAdd, out BTreeIOTestFixture<int> btreeIOInterceptor,
             out BTreeAdder<int> btreeAdder, out PageTestFixture<int> expectedModifiedPage, params int[] valuesInPage)
         {
             var nullPage = new PageTestFixture<int>();
             nullPage.PagePointer = new BTreePagePointer<int>() {PointsToPageType = PageType.NULL};
-            var keyToAdd = new BTreeKey<int>()
-            {
-                LeftPagePointer = nullPage.PagePointer,
-                RightPagePointer = nullPage.PagePointer, Value = valueToAdd
-            };
+            var keyToAdd = new BTreeKey<int>() { Value = valueToAdd };
             var testPage = new PageTestFixture<int>();
             testPage.PageType = PageType.ROOT;
             testPage.SetUpValues(valuesInPage);

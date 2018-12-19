@@ -19,19 +19,14 @@ namespace UnitTests.BTreeComponentsTests
             var record = Substitute.For<IRecord<double>>();
             record.Value.Returns(0.123);
             record.ValueComponents.Returns(new double[] {0.0, 0.0, 0.123, 0.0123});
-            var pageNullPointer = Substitute.For<IPageNullPointer<double>>();
             var recordPointer = Substitute.For<IRecordPointer<double>>();
-            recordPointer.GetRecord().Returns(record);
             var key = new BTreeKeyBuilder<double>()
             {
-                Value = record.Value, RecordPointer = recordPointer, LeftPage = pageNullPointer, 
-                RightPage = pageNullPointer
+                Value = record.Value, RecordPointer = recordPointer
             }.Build();
             
             Assert.AreEqual(record.Value, key.Value);
             Assert.AreEqual(recordPointer, key.RecordPointer);
-            Assert.AreEqual(pageNullPointer, key.LeftPagePointer);
-            Assert.AreEqual(pageNullPointer, key.RightPagePointer);
         }
 
         [Test]
@@ -68,6 +63,22 @@ namespace UnitTests.BTreeComponentsTests
             Assert.IsFalse(key1 != key2);
             Assert.IsFalse(key1 > key2);
             Assert.IsFalse(key1 < key2);
+        }
+
+        [Test]
+        public void compareKeys_SanityCheck()
+        {
+            var key1 = new BTreeKey<int>() {Value = 0};
+            IKey<int> key2s = new BTreeKey<int>() {Value = 1};
+
+            IKey<int> key1s = new BTreeKey<int>() {Value = 0};
+            var key2 = new BTreeKey<int>() {Value = 1};
+            
+            var val1 = key1.CompareTo(key2s);
+            var val2 = key1s.CompareTo(key2);
+            
+            Assert.IsTrue(val1 == val2);
+            Assert.IsTrue(key1s.CompareTo(key2s) == (int)Comparison.LESS);
         }
     }
 }

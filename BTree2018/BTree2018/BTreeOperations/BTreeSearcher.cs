@@ -64,37 +64,17 @@ namespace BTree2018.BTreeOperations
 
         private IPage<T> getRightPage(IPage<T> currentPage, long index)
         {
-            return BTreeIO.GetPage(currentPage.KeyAt(index).RightPagePointer);
+            return BTreeIO.GetPage(currentPage.RightPointerAt(index));
         }
 
         private IPage<T> getLeftPage(IPage<T> currentPage, long index)
         {
-            return BTreeIO.GetPage(currentPage.KeyAt(index).LeftPagePointer);
+            return BTreeIO.GetPage(currentPage.LeftPointerAt(index));
         }
         
         private IPage<T> getPage(IPagePointer<T> pagePointer)
         {
             return BTreeIO.GetPage(pagePointer);
         }
-//
-//        private void GetAllKeysWithSameValue(IKey<T> key, IRecord<T> record, long index, IPage<T> currentPage)
-//        {
-//            var listOfFoundKeys = new List<IKey<T>>();
-//            var currentIndex = index;
-//            var currentValue = key.Value;
-//            listOfFoundKeys.Add(currentPage.KeyAt(index));
-//            while (currentIndex < currentPage.KeysInPage - 1 && currentValue.Equals(currentPage.KeyAt(currentIndex + 1).Value))
-//            {
-//                listOfFoundKeys.Add(currentPage.KeyAt(++currentIndex));
-//            }
-//
-//            currentIndex = index;
-//            while (currentIndex > 0 && currentValue.Equals(currentPage.KeyAt(currentIndex - 1).Value))
-//            {
-//                listOfFoundKeys.Add(currentPage.KeyAt(--currentIndex));
-//            }
-//
-//            foundKeys.AddRange(listOfFoundKeys);
-//        }
     }
 }

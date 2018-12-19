@@ -1,4 +1,5 @@
 using System;
+using BTree2018.BTreeStructure;
 using BTree2018.Builders;
 using BTree2018.Enums;
 using BTree2018.Exceptions;
@@ -14,6 +15,8 @@ namespace BTree2018.BTreeOperations
     {
         private IKey<T> keyToAdd;
         private IPage<T> currentPage;
+
+        private IPagePointer<T> rightPointerOfAddedKey;
         
         public IBTreeIO<T> BTreeIO;
         public IBTreeSearching<T> BTreeSearching;
@@ -26,7 +29,8 @@ namespace BTree2018.BTreeOperations
             {
                 throw new Exception("Key already exists: " + key);
             }
-            
+
+            rightPointerOfAddedKey = null;
             AddToPage(key, BTreeSearching.FoundPage);
         }
 
@@ -37,7 +41,7 @@ namespace BTree2018.BTreeOperations
             
             if (currentPage.KeysInPage < currentPage.PageLength)//m < 2d
             {
-                BTreeIO.WritePage(insertKeyIntoPage());
+                BTreeIO.WritePage(addKeyToPage());
             }
             else if (currentPage.KeysInPage == currentPage.PageLength)//found page is full
             {
@@ -48,7 +52,7 @@ namespace BTree2018.BTreeOperations
                 throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!");
         }
 
-        private IPage<T> insertKeyIntoPage()
+        private IPage<T> addKeyToPage()
         {
             var keyAdded = false;
             var pageBuilder = new BTreePageBuilder<T>((int) currentPage.PageLength)
@@ -57,17 +61,20 @@ namespace BTree2018.BTreeOperations
             for (var i = 0; i < currentPage.KeysInPage; i++)
             {
                 var currentKey = currentPage.KeyAt(i);
-                if (keyAdded || keyToAdd.CompareTo(currentKey) == (int) Comparison.LESS)
+                if (keyAdded || keyToAdd.CompareTo(currentKey) == (int) Comparison.GREATER) //currentKey < keyToAdd
                 {
+                    if (i == 0) pageBuilder.AddPointer(currentPage.LeftPointerAt(i));
                     pageBuilder.AddKey(currentKey)
                         .AddPointer(currentPage.PointerAt(i));
                 }
-                else if (!keyAdded && keyToAdd.CompareTo(currentKey) == (int) Comparison.GREATER)
+                else if (!keyAdded && keyToAdd.CompareTo(currentKey) == (int) Comparison.LESS)
                 {
+                    if (i == 0) pageBuilder.AddPointer(currentPage.LeftPointerAt(i));
+                    //
                     pageBuilder.AddKey(keyToAdd)
-                        .AddPointer(keyToAdd.LeftPagePointer);
+                        .AddPointer(rightPointerOfAddedKey ?? BTreePagePointer<T>.NullPointer);
                     pageBuilder.AddKey(currentKey)
-                        .AddPointer(currentKey.RightPagePointer);
+                        .AddPointer(currentPage.RightPointerAt(i));
                     keyAdded = true;
                 }
                 else
@@ -76,7 +83,8 @@ namespace BTree2018.BTreeOperations
 
             if (!keyAdded)
                 pageBuilder.AddKey(keyToAdd)
-                    .AddPointer(keyToAdd.RightPagePointer);
+                    .AddPointer(rightPointerOfAddedKey ?? BTreePagePointer<T>.NullPointer);
+            
             return pageBuilder.Build();
         }
 
@@ -86,6 +94,12 @@ namespace BTree2018.BTreeOperations
             e.Data.Add("Key to add", keyToAdd.ToString());
             e.Data.Add("Destination page", currentPage.ToString());
             return e;
+        }
+
+        public void InsertKeyIntoPage(IPage<T> page, IKey<T> key, IPagePointer<T> rightPointerOfKey = null)
+        {
+            rightPointerOfAddedKey = rightPointerOfKey;
+            AddToPage(key, page);
         }
     }
 }

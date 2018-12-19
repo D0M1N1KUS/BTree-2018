@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BTree2018.BTreeStructure;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Logging;
@@ -68,9 +69,15 @@ namespace BTree2018.Builders
                 pagePointers.Add(page.PointerAt(i));
             }
             pagePointers.Add(page.PointerAt(page.KeysInPage));
+            CreateEmptyClone(page);
+            
+            return this;
+        }
+
+        public BTreePageBuilder<T> CreateEmptyClone(IPage<T> page)
+        {
             ParentPage = page.ParentPage;
             PageType = page.PageType;
-            
             return this;
         }
 
@@ -114,31 +121,40 @@ namespace BTree2018.Builders
         private IKey<T>[] KeysToArray()
         {
             if (pageLength <= 0) return keys.ToArray();
-            var array = new IKey<T>[pageLength];
-            for (var i = 0; i < pageLength; i++)
+            if (keys.Count > 0)
             {
-                array[i] = i < keys.Count ? keys[i] : null;
-            }
+                var array = new IKey<T>[pageLength];
+                for (var i = 0; i < pageLength; i++)
+                {
+                    array[i] = i < keys.Count ? keys[i] : null;
+                }
 
-            return array;
+                return array;
+            }
+            throw new Exception("No keys provided!");
         }
 
         private IPagePointer<T>[] PointersToArray()
         {
             if (pageLength <= 0) return pagePointers.ToArray();
             var array = new IPagePointer<T>[pageLength + 1];
-            for (var i = 0; i < pageLength; i++)
+            if (pagePointers.Count > 0)
             {
-                array[i] = i < pagePointers.Count ? pagePointers[i] : null;
-            }
+                for (var i = 0; i < pageLength + 1; i++)
+                {
+                    array[i] = i < pagePointers.Count ? pagePointers[i] : null;
+                }
 
-            return array;
+                return array;
+            }
+            
+            throw new Exception("BTreePageBuilder: No pointers provided!");
         }
 
         private bool checkIfAllNecessaryValuesInitialized()
         {
             bool allNecessaryValuesInitialized = true;
-            if (keys.Count != pagePointers.Count + 1 && pagePointers.Count != 0)
+            if (keys.Count != pagePointers.Count + 1)
             {
                 Logger.Log("BTreePageBuilder warning: Inconsistent number of keys or pages detected! Keys: " + keys.Count +
                            " Pointers: " + pagePointers.Count);
