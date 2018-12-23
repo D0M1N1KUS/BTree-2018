@@ -30,11 +30,17 @@ namespace BTree2018.BTreeStructure
             return string.Concat(
                 "[Key(", base.ToString(),
                 ") Value(", Value.ToString(),
-                ") RecordPointer(", RecordPointer.ToString(), 
-                //") LeftPagePointer(", LeftPagePointer.ToString(),
-                //") RightPagePointer(", RightPagePointer.ToString(),
+                ") RecordPointer(", RecordPointer.ToString(),
                 ")]"
             );
+        }
+
+        public override bool Equals(object o)
+        {
+            var otherKey = o as IKey<T>;
+            if (otherKey == null || !Value.Equals(otherKey.Value) || !RecordPointer.Equals(otherKey.RecordPointer))
+                return false;
+            return true;
         }
 
         public static bool operator <(BTreeKey<T> a, BTreeKey<T> b)

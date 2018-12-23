@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Interfaces.CustomCollection;
 using BTree2018.Logging;
@@ -10,7 +11,8 @@ namespace BTree2018.BTreeStructure
         public IPagePointer<T>[] Pointers;
         public IKey<T>[] Keys;
 
-        public long PageLength => Keys?.Length ?? 0;
+        public bool OverFlown { get; set; }
+        public long PageLength { get; set; }
         public long KeysInPage { get; set; }
 
         public long Length => KeysInPage;
@@ -45,17 +47,33 @@ namespace BTree2018.BTreeStructure
             return Keys[index];
         }
         
-        public string ToString()
+        public override string ToString()
         {
             return string.Concat(
                 "[Page(", base.ToString(),
                 ") KeysInPage(", KeysInPage,
-                ") PointersInPage(", Pointers.Length,
+                ") PointersInPage(", Pointers?.Length ?? -1,
                 ") KeyValues(", CollectionSerialization.Stringify(this),
                 ") PageType(", PageType.ToString("g"),
-                ") ParentPage(", ParentPage.ToString(),
-                ") PagePointer(", PagePointer.ToString(),
+                ") ParentPage(", ParentPage?.ToString() ?? "NULL",
+                ") PagePointer(", PagePointer?.ToString() ?? "NULL",
                 ")]");
+        }
+
+        public override bool Equals(object o)
+        {
+            var otherPage = o as IPage<T>;
+            if (otherPage == null || KeysInPage != otherPage.KeysInPage || 
+                PageLength != otherPage.PageLength || PageType != otherPage.PageType) 
+                return false;
+            for (var i = 0; i < KeysInPage; i++)
+            {
+                if (!KeyAt(i).Equals(otherPage.KeyAt(i))) return false;
+                if (!PointerAt(i).Equals(otherPage.PointerAt(i))) return false;
+            }
+            if (!PointerAt(KeysInPage).Equals(otherPage.PointerAt(KeysInPage))) return false;
+
+            return true;
         }
     }
 }

@@ -6,6 +6,7 @@ namespace BTree2018.Interfaces.BTreeStructure
 {
     public interface IPage<T> : ICustomCollection<T> where T : IComparable
     {
+        bool OverFlown { get; }
         long PageLength { get; }
         long KeysInPage { get; }
         IPagePointer<T> ParentPage { get; }

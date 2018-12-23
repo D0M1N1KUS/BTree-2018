@@ -37,7 +37,7 @@ namespace BTree2018.BTreeStructure
             return other.CompareTo(Value);
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return string.Concat(
                 "[Record(", base.ToString(),

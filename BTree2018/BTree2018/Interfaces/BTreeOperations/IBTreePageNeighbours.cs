@@ -7,5 +7,6 @@ namespace BTree2018.Interfaces.BTreeOperations
     {
         bool GetNeighbours(IPage<T> page, out IPagePointer<T> leftNeighbourPtr, 
             out IPagePointer<T> rightNeighbourPtr, out IKey<T> parentKey);
+        IPage<T> ParentPage { get; }
     }
 }

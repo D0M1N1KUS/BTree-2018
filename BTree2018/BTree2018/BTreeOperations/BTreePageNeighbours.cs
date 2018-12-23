@@ -10,6 +10,8 @@ namespace BTree2018.BTreeOperations
     {
         public IBTreeIO<T> BTreeIO;
         
+        public IPage<T> ParentPage { get; private set; }
+        
         public bool GetNeighbours(IPage<T> page, out IPagePointer<T> leftNeighbourPtr, 
             out IPagePointer<T> rightNeighbourPtr, out IKey<T> parentKey)
         {
@@ -20,9 +22,9 @@ namespace BTree2018.BTreeOperations
             if (page.PageType == PageType.NULL || page.PageType == PageType.ROOT)
                 return false;
             
-            var parentPage = BTreeIO.GetPage(page.ParentPage);
+            ParentPage = BTreeIO.GetPage(page.ParentPage);
 
-            getNeighbours(page, ref leftNeighbourPtr, ref rightNeighbourPtr, ref parentKey, parentPage);
+            getNeighbours(page, ref leftNeighbourPtr, ref rightNeighbourPtr, ref parentKey, ParentPage);
 
             return leftNeighbourPtr != null || rightNeighbourPtr != null;
         }

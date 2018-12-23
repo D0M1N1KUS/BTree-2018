@@ -12,5 +12,22 @@ namespace BTree2018.BTreeStructure
             PointsToPageType = PageType.NULL, 
             Index = long.MinValue
         };
+        
+        public override bool Equals(object obj)
+        {
+            var pointer = obj as IPagePointer<T>;
+            if (pointer == null) return false;
+            return pointer.Index == Index && 
+                   pointer.PointsToPageType == PointsToPageType;
+        }
+
+        public override string ToString()
+        {
+            return string.Concat(
+                "[PagePointer(", base.ToString(),
+                ") Index(", Index,
+                ") PointsToPageType(", PointsToPageType.ToString("g"),
+                ")]");
+        }
     }
 }

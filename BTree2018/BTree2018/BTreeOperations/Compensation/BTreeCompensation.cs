@@ -5,7 +5,7 @@ using BTree2018.Interfaces.FileIO;
 
 namespace BTree2018.BTreeOperations
 {
-    public class BTreeCompensation<T> : IBTreeCompensation<T> where T : IComparable
+    public class BTreeCompensation<T> : BTreeCompensationPageModifier<T>, IBTreeCompensation<T> where T : IComparable
     {
         public IBTreeIO<T> BTreeIO;
         public IBTreeAdding<T> BTreeAdding;
@@ -13,16 +13,20 @@ namespace BTree2018.BTreeOperations
         
         public bool Compensate(IPage<T> page, IKey<T> keyToAdd)
         {
-            if (!BTreePageNeighbours.GetNeighbours(page, out var leftNeighbourPtr, out var rightNeighbourPtr, 
+            var overfilledPage = BTreeAdding.InsertKeyIntoPage(page, keyToAdd);
+            var parentPage = BTreePageNeighbours.ParentPage;
+            if (!BTreePageNeighbours.GetNeighbours(overfilledPage, out var leftNeighbourPtr, out var rightNeighbourPtr, 
                 out var parentKey))
                 return false;
             if (checkIfPageCanBeCompensated(leftNeighbourPtr, out var leftNeighbourPage))
             {
+                EvenOutKeys(ref parentPage, 0, ref leftNeighbourPage, ref overfilledPage);//TODO: get index of key referencing both pages!
                 return true;
             }
             else if (checkIfPageCanBeCompensated(rightNeighbourPtr, out var rightNeighbourPage))
             {
-                return false;
+                EvenOutKeys(ref parentPage, 0, ref overfilledPage, ref rightNeighbourPage);//TODO: get index of key referencing both pages!
+                return true;
             }
             else
                 return false;

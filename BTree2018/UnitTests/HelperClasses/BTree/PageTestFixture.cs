@@ -17,7 +17,7 @@ namespace UnitTests.HelperClasses.BTree
             var listOfNewKeys = new List<BTreeKey<T>>();
             foreach (var value in values)
             {
-                var key = new BTreeKey<T>() { Value = value };
+                var key = new BTreeKey<T>() { Value = value, RecordPointer = RecordPointer<T>.NullPointer};
                 if (listOfNewKeys.Contains(key))
                     throw new Exception("Duplicate values are not allowed!");
                 listOfNewKeys.Add(key);
@@ -36,6 +36,7 @@ namespace UnitTests.HelperClasses.BTree
 
         public T this[long index] => Keys[index].Value;
 
+        public bool OverFlown { get; set; }
         public long PageLength { get; set; }
         public long KeysInPage { get; set; }
         public IPagePointer<T> ParentPage { get; set; }
@@ -62,5 +63,22 @@ namespace UnitTests.HelperClasses.BTree
         }
 
         public PageType PageType { get; set; }
+        
+        
+        public override bool Equals(object o)
+        {
+            var otherPage = o as IPage<T>;
+            if (otherPage == null || KeysInPage != otherPage.KeysInPage || 
+                PageLength != otherPage.PageLength || PageType != otherPage.PageType) 
+                return false;
+            for (var i = 0; i < KeysInPage; i++)
+            {
+                if (!KeyAt(i).Equals(otherPage.KeyAt(i))) return false;
+                if (!PointerAt(i).Equals(otherPage.PointerAt(i))) return false;
+            }
+            if (!PointerAt(KeysInPage).Equals(otherPage.PointerAt(KeysInPage))) return false;
+
+            return true;
+        }
     }
 }

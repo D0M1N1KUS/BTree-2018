@@ -23,7 +23,7 @@ namespace BTree2018.BTreeOperations
         public IBTreeCompensation<T> BTreeCompensation;
         public IBTreeSplitting<T> BTreeSplitting;
         
-        public void Add(IKey<T> key)
+        public IPage<T> Add(IKey<T> key)
         {
             if (BTreeSearching.SearchForPair(key))
             {
@@ -31,25 +31,28 @@ namespace BTree2018.BTreeOperations
             }
 
             rightPointerOfAddedKey = null;
-            AddToPage(key, BTreeSearching.FoundPage);
+            return AddToPage(key, BTreeSearching.FoundPage);
         }
 
-        private void AddToPage(IKey<T> key, IPage<T> page)
+        private IPage<T> AddToPage(IKey<T> key, IPage<T> page, bool addWithOverflow = false)
         {
             currentPage = page;
             keyToAdd = key;
             
-            if (currentPage.KeysInPage < currentPage.PageLength)//m < 2d
+            if (currentPage.KeysInPage < currentPage.PageLength || 
+                currentPage.KeysInPage == currentPage.PageLength && addWithOverflow)//m < 2d
             {
-                BTreeIO.WritePage(addKeyToPage());
+                //BTreeIO.WritePage(addKeyToPage());
+                return addKeyToPage();
             }
             else if (currentPage.KeysInPage == currentPage.PageLength)//found page is full
             {
                 if (!BTreeCompensation.Compensate(currentPage, key))
                     BTreeSplitting.Split(page, key);
+                return null;//TODO: return page;
             }
-            else
-                throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!");
+
+            throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!");
         }
 
         private IPage<T> addKeyToPage()
@@ -57,24 +60,22 @@ namespace BTree2018.BTreeOperations
             var keyAdded = false;
             var pageBuilder = new BTreePageBuilder<T>((int) currentPage.PageLength)
                 .SetPageType(currentPage.PageType)
-                .SetParentPagePointer(currentPage.ParentPage);
+                .SetParentPagePointer(currentPage.ParentPage)
+                .AddPointer(currentPage.LeftPointerAt(0));
             for (var i = 0; i < currentPage.KeysInPage; i++)
             {
                 var currentKey = currentPage.KeyAt(i);
                 if (keyAdded || keyToAdd.CompareTo(currentKey) == (int) Comparison.GREATER) //currentKey < keyToAdd
                 {
-                    if (i == 0) pageBuilder.AddPointer(currentPage.LeftPointerAt(i));
-                    pageBuilder.AddKey(currentKey)
-                        .AddPointer(currentPage.PointerAt(i));
+                    pageBuilder.AddKey(currentKey); 
+                    pageBuilder.AddPointer(currentPage.RightPointerAt(i));
                 }
                 else if (!keyAdded && keyToAdd.CompareTo(currentKey) == (int) Comparison.LESS)
                 {
-                    if (i == 0) pageBuilder.AddPointer(currentPage.LeftPointerAt(i));
-                    //
                     pageBuilder.AddKey(keyToAdd)
                         .AddPointer(rightPointerOfAddedKey ?? BTreePagePointer<T>.NullPointer);
-                    pageBuilder.AddKey(currentKey)
-                        .AddPointer(currentPage.RightPointerAt(i));
+                    pageBuilder.AddKey(currentKey);
+                    pageBuilder.AddPointer(currentPage.RightPointerAt(i));
                     keyAdded = true;
                 }
                 else
@@ -96,10 +97,10 @@ namespace BTree2018.BTreeOperations
             return e;
         }
 
-        public void InsertKeyIntoPage(IPage<T> page, IKey<T> key, IPagePointer<T> rightPointerOfKey = null)
+        public IPage<T> InsertKeyIntoPage(IPage<T> page, IKey<T> key, IPagePointer<T> rightPointerOfKey = null)
         {
             rightPointerOfAddedKey = rightPointerOfKey;
-            AddToPage(key, page);
+            return AddToPage(key, page, addWithOverflow: true);
         }
     }
 }

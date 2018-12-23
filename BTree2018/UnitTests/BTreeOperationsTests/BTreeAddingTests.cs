@@ -76,28 +76,39 @@ namespace UnitTests.BTreeOperationsTests
             {
                 new BTreePagePointer<int>() {Index = 1, PointsToPageType = PageType.LEAF},
                 new BTreePagePointer<int>() {Index = 2, PointsToPageType = PageType.LEAF},
+                new BTreePagePointer<int>() {Index = 3, PointsToPageType = PageType.LEAF},
+                new BTreePagePointer<int>() {Index = 5, PointsToPageType = PageType.LEAF}
+            };
+            var expectedPagePointers = new IPagePointer<int>[]
+            {
+                new BTreePagePointer<int>() {Index = 1, PointsToPageType = PageType.LEAF},
+                new BTreePagePointer<int>() {Index = 2, PointsToPageType = PageType.LEAF},
+                new BTreePagePointer<int>() {Index = 3, PointsToPageType = PageType.LEAF},
                 new BTreePagePointer<int>() {Index = 4, PointsToPageType = PageType.LEAF},
                 new BTreePagePointer<int>() {Index = 5, PointsToPageType = PageType.LEAF}
             };
             var keyToInsert = new BTreeKey<int>() {Value = 3, RecordPointer = RecordPointer<int>.NullPointer};
-            var pointerToInsert = new BTreePagePointer<int>() {Index = 3, PointsToPageType = PageType.LEAF};
+            var pointerToInsert = new BTreePagePointer<int>() {Index = 4, PointsToPageType = PageType.LEAF};
 
-            var testPage = new PageTestFixture<int>();
-            testPage.PageLength = 4;
-            testPage.PageType = PageType.ROOT;
-            testPage.SetUpValues(1, 2, 4);
-            testPage.SetUpPointers(pagePointers);
+            var initialPage = new PageTestFixture<int>();
+            initialPage.PageLength = 4;
+            initialPage.PageType = PageType.ROOT;
+            initialPage.SetUpValues(1, 2, 4);
+            initialPage.SetUpPointers(pagePointers);
             var adder = new BTreeAdder<int>();
             var btreeIOInterceptor = new BTreeIOTestFixture<int>();
             adder.BTreeIO = btreeIOInterceptor;
+            var expectedPage = new PageTestFixture<int>();
+            expectedPage.PageLength = 4;
+            expectedPage.PageType = PageType.ROOT;
+            expectedPage.SetUpValues(1, 2, 3, 4);
+            expectedPage.SetUpPointers(expectedPagePointers);
             
-            adder.InsertKeyIntoPage(testPage, keyToInsert, pointerToInsert);
+            adder.InsertKeyIntoPage(initialPage, keyToInsert, pointerToInsert);
             var actualPage = btreeIOInterceptor.WrittenPage[0];
             
             Assert.IsTrue(btreeIOInterceptor.WritePageCalls == 1);
-            Assert.AreEqual(keyToInsert.Value, actualPage.KeyAt(2).Value);
-            Assert.AreEqual(keyToInsert.RecordPointer, actualPage.KeyAt(2).RecordPointer);
-            Assert.AreEqual(pointerToInsert, actualPage.RightPointerAt(2));
+            Assert.IsTrue(expectedPage.Equals(actualPage));
         }
         
         private static BTreeKey<int> preparePageWithOneEmptySpace(int valueToAdd, out BTreeIOTestFixture<int> btreeIOInterceptor,
