@@ -11,6 +11,7 @@ namespace BTree2018.Builders
     public class BTreePageBuilder<T> where T : IComparable
     {
         private IPage<T> page;
+        private IPagePointer<T> pagePointer;
         private List<IPagePointer<T>> pagePointers;
         private List<IKey<T>> keys;
         private int pageLength;
@@ -60,7 +61,8 @@ namespace BTree2018.Builders
                 PageType = PageType,
                 KeysInPage = keysInPage,
                 PageLength = pageLength == 0 ? keys.Count : pageLength - 1,
-                OverFlown = keys.Count == pageLength
+                OverFlown = keys.Count == pageLength,
+                PagePointer = pagePointer 
             };
 
             return page;
@@ -134,6 +136,12 @@ namespace BTree2018.Builders
             return this;
         }
 
+        public BTreePageBuilder<T> SetPagePointer(IPagePointer<T> pointer)
+        {
+            pagePointer = pointer;
+            return this;
+        }
+
 
         private IKey<T>[] KeysToArray()
         {
@@ -194,6 +202,11 @@ namespace BTree2018.Builders
             {
                 Logger.Log("BTreePageBuilder warning: Inconsistent number of keys or pointers detected! Keys: " + 
                            keys.Count + " Pointers: " + pagePointers.Count);
+            }
+
+            if (pagePointer == null)
+            {
+                Logger.Log("BTreePageBuilder warning: Pointer to self has not been set!");
             }
 
             if (keys.Count == 0)

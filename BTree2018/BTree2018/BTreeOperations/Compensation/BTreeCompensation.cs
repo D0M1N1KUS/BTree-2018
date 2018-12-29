@@ -16,16 +16,16 @@ namespace BTree2018.BTreeOperations
             var overfilledPage = BTreeAdding.InsertKeyIntoPage(page, keyToAdd);
             var parentPage = BTreePageNeighbours.ParentPage;
             if (!BTreePageNeighbours.GetNeighbours(overfilledPage, out var leftNeighbourPtr, out var rightNeighbourPtr, 
-                out var parentKey))
+                out var parentKey, out var parentKeyIndex))
                 return false;
             if (checkIfPageCanBeCompensated(leftNeighbourPtr, out var leftNeighbourPage))
             {
-                EvenOutKeys(ref parentPage, 0, ref leftNeighbourPage, ref overfilledPage);//TODO: get index of key referencing both pages!
+                EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref overfilledPage);
                 return true;
             }
             else if (checkIfPageCanBeCompensated(rightNeighbourPtr, out var rightNeighbourPage))
             {
-                EvenOutKeys(ref parentPage, 0, ref overfilledPage, ref rightNeighbourPage);//TODO: get index of key referencing both pages!
+                EvenOutKeys(ref parentPage, parentKeyIndex, ref overfilledPage, ref rightNeighbourPage);
                 return true;
             }
             else
@@ -41,9 +41,13 @@ namespace BTree2018.BTreeOperations
             }
 
             page = BTreeIO.GetPage(pointer);
-            if (page.PageType != PageType.NULL && page.KeysInPage < page.PageLength)
-                return true;
+            if (pageExistsAndIsNotFull(page)) return true;
             return false;
+        }
+
+        private static bool pageExistsAndIsNotFull(IPage<T> page)
+        {
+            return page.PageType != PageType.NULL && page.KeysInPage < page.PageLength;
         }
     }
 }

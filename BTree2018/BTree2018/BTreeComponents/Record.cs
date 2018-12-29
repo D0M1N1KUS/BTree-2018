@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using BTree2018.Enums;
 using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Logging;
@@ -36,6 +37,12 @@ namespace BTree2018.BTreeStructure
         {
             return other.CompareTo(Value);
         }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is IRecord<T> otherRecord)) return false;
+            return CompareTo(otherRecord) == (int) Comparison.EQUAL;
+        } 
 
         public override string ToString()
         {

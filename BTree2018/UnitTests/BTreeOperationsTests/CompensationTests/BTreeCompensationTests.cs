@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace UnitTests.BTreeOperationsTests
 {
     [TestFixture]
-    internal class CompensationIntegrationTests
+    internal class BTreeCompensationTests
     {
         [Test]
         public void compensate()

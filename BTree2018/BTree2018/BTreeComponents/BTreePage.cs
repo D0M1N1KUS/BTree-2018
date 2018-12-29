@@ -19,7 +19,7 @@ namespace BTree2018.BTreeStructure
         public T this[long index] => Keys[index].Value;
 
         public IPagePointer<T> ParentPage { get; set; }
-        public IPagePointer<T> PagePointer { get; }
+        public IPagePointer<T> PagePointer { get; set; }
 
         public PageType PageType { get; set; }
         

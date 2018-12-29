@@ -11,5 +11,14 @@ namespace BTree2018.BTreeStructure
 
         public static IRecordPointer<T> NullPointer => new RecordPointer<T>()
             {Index = long.MinValue, PointerType = RecordPointerType.NULL};
+        
+        public override string ToString()
+        {
+            return string.Concat(
+                "[RecordPointer(", base.ToString(),
+                ") Index(", Index,
+                ") Type(", PointerType.ToString("g"),
+                ")]");
+        }
     }
 }
