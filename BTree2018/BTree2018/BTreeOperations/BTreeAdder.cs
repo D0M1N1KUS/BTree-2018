@@ -97,6 +97,14 @@ namespace BTree2018.BTreeOperations
             return e;
         }
 
+        /// <summary>
+        /// Inserts key into page without checking, if this page is it's optimal destination.
+        /// Use this operation only during splitting or to insert a key into a page located in memory! 
+        /// </summary>
+        /// <param name="page">Page to insert the key into</param>
+        /// <param name="key">Key that needs to be inserted into the page</param>
+        /// <param name="rightPointerOfKey"></param>
+        /// <returns></returns>
         public IPage<T> InsertKeyIntoPage(IPage<T> page, IKey<T> key, IPagePointer<T> rightPointerOfKey = null)
         {
             rightPointerOfAddedKey = rightPointerOfKey;

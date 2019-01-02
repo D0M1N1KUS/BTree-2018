@@ -15,7 +15,13 @@ namespace UnitTests.HelperClasses
         public int GetRootPageCalls { get; private set; } = 0;
         public int WriteRecordCalls { get; private set; } = 0;
         public int GetRecordCalls { get; private set; } = 0;
-
+        
+        public void AddToWritePage(IPagePointer<T> pagePointer) {returnValuesOfWritePage.Add(pagePointer);}
+        public void AddToGetPage(IPage<T> page) {returnValuesOfGetPage.Add(page);}
+        public void AddToGetRootPage(IPage<T> page) {returnValuesOfGetPage.Add(page);}
+        public void AddToWriteRecord(IRecordPointer<T> recordPointer) {returnValuesOfWriteRecord.Add(recordPointer);}
+        public void AddToGetRecord(IRecord<T> record) {returnValuesOfGetRecord.Add(record);}
+        
         public List<IPage<T>> WrittenPage { get; private set; } = new List<IPage<T>>();
         public List<IPagePointer<T>> GottenPageFromPointer { get; private set; } = new List<IPagePointer<T>>();
         public List<IRecord<T>> WrittenRecord { get; private set; } = new List<IRecord<T>>();
@@ -35,6 +41,11 @@ namespace UnitTests.HelperClasses
                 : null;
             WritePageCalls++;
             return returnValue;
+        }
+
+        public IPagePointer<T> WriteNewRootPage(IPage<T> page)
+        {
+            throw new NotImplementedException();
         }
 
         public IPage<T> GetPage(IPagePointer<T> pointer)
