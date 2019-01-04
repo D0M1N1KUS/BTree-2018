@@ -58,11 +58,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeLeafKeyRemover.cs" />
+    <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeKeyRemover.cs" />
     <Compile Include="BTreeOperations\BTreePageSplitting\BTreePageSplitter.cs" />
     <Compile Include="BTreeOperations\Compensation\BTreeCompensation.cs" />
     <Compile Include="BTreeOperations\Compensation\BTreeCompensationPageModifier.cs" />
     <Compile Include="BTreeOperations\Compensation\BTreePageNeighbours.cs" />
     <Compile Include="Exceptions\DuplicateKeyException.cs" />
+    <Compile Include="Interfaces\BTreeOperations\IBTreeLeafKeyRemoval.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreePageNeighbours.cs" />
     <Compile Include="Logging\CollectionSerialization.cs" />
     <Compile Include="Sorting\BisectSearch.cs" />

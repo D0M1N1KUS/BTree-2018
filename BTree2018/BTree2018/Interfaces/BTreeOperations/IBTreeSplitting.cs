@@ -5,7 +5,7 @@ namespace BTree2018.Interfaces.BTreeOperations
 {
     public interface IBTreeSplitting<T> where T : IComparable
     {
-        void Split(IPage<T> page);
-        void Split(IPage<T> page, IKey<T> keyToInsert);
+        IPage<T> Split(IPage<T> page);
+        IPage<T> Split(IPage<T> page, IKey<T> keyToInsert);
     }
 }

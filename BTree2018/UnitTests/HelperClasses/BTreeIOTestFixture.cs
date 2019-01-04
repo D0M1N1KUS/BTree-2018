@@ -43,6 +43,12 @@ namespace UnitTests.HelperClasses
             return returnValue;
         }
 
+        public IPagePointer<T>[] WritePages(params IPage<T>[] pages)
+        {
+            WrittenPage.AddRange(pages);
+            return null; // complicated plus idk if I'll ever use this return value.
+        }
+
         public IPagePointer<T> WriteNewRootPage(IPage<T> page)
         {
             throw new NotImplementedException();
@@ -85,6 +91,16 @@ namespace UnitTests.HelperClasses
                 : null;
             GetRecordCalls++;
             return returnValue;
+        }
+
+        public void FreePage(IPage<T> page)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FreePage(IPagePointer<T> pointer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

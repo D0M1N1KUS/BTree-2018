@@ -33,7 +33,7 @@ namespace UnitTests.BTreeOperationsTests
             btreeSearcher.BTreeIO.GetPage(null).ReturnsForAnyArgs(nullPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
-            var success = btreeSearcher.SearchForPair(rootPage.KeyAt(7));
+            var success = btreeSearcher.SearchForKey(rootPage.KeyAt(7));
             
             Assert.IsTrue(success);
             Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKey.Value);
@@ -75,7 +75,7 @@ namespace UnitTests.BTreeOperationsTests
             btreeSearcher.BTreeIO.GetPage(null).ReturnsForAnyArgs(childPage, nullPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
-            var success = btreeSearcher.SearchForPair(childPage.KeyAt(4));
+            var success = btreeSearcher.SearchForKey(childPage.KeyAt(4));
             
             Assert.IsTrue(success);
             Assert.AreEqual(searchedRecord.Value, btreeSearcher.FoundKey.Value);
@@ -93,7 +93,7 @@ namespace UnitTests.BTreeOperationsTests
             btreeSearcher.BTreeIO.GetRootPage().Returns(rootPage);
             btreeSearcher.BisectSearch = new BisectSearch<int>();
 
-            var success = btreeSearcher.SearchForPair(nonExistingKey);
+            var success = btreeSearcher.SearchForKey(nonExistingKey);
             
             Assert.IsFalse(success);
             Assert.IsNull(btreeSearcher.FoundKey);

@@ -87,6 +87,7 @@ namespace BTree2018.Builders
             else throw new Exception("BTreePageBuilder: Page has already been cloned!");
             ParentPage = page.ParentPage;
             PageType = page.PageType;
+            pagePointer = page.PagePointer;
             return this;
         }
 

@@ -14,7 +14,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
         public IBTreeIO<T> BTreeIO;
         public IBTreeAdding<T> BTreeAdding;
         
-        public void Split(IPage<T> page)
+        public IPage<T> Split(IPage<T> page)
         {
             checkPage(page);
             var keysInSplittedPages = page.KeysInPage / 2;
@@ -31,7 +31,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
 
             leftPageBuilder.AddPointer(page.PointerAt(0));
             rightPageBuilder.AddPointer(page.PointerAt(keysInSplittedPages + 1));
-            for (var i = 0; i < keysInSplittedPages; i++) // TODO: check if this stuff lines up
+            for (var i = 0; i < keysInSplittedPages; i++)
             {
                 leftPageBuilder.AddKey(page.KeyAt(i));
                 leftPageBuilder.AddPointer(page.PointerAt(i + 1));
@@ -42,7 +42,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
             BTreeIO.WritePage(leftPageBuilder.Build());
             var rightPagePointer = BTreeIO.WritePage(rightPageBuilder.Build());
             if (page.PageType != PageType.ROOT)
-                BTreeAdding.InsertKeyIntoPage(BTreeIO.GetPage(page.ParentPage), page.KeyAt(keysInSplittedPages),
+                return BTreeAdding.InsertKeyIntoPage(BTreeIO.GetPage(page.ParentPage), page.KeyAt(keysInSplittedPages),
                     rightPagePointer);
             else
             {
@@ -54,6 +54,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
                     .AddPointer(rightPagePointer)
                     .Build();
                 BTreeIO.WriteNewRootPage(newRootPage);
+                return newRootPage;
             }
         }
 
@@ -66,7 +67,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
                            page);
         }
 
-        public void Split(IPage<T> page, IKey<T> keyToInsert)
+        public IPage<T> Split(IPage<T> page, IKey<T> keyToInsert)
         {
             throw new NotImplementedException();
         }

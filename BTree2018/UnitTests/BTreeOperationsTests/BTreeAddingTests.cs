@@ -127,7 +127,7 @@ namespace UnitTests.BTreeOperationsTests
             btreeAdder = new BTreeAdder<int>();
             btreeAdder.BTreeIO = btreeIOInterceptor;
             btreeAdder.BTreeSearching = Substitute.For<IBTreeSearching<int>>();
-            btreeAdder.BTreeSearching.SearchForPair(null).ReturnsForAnyArgs(false);
+            btreeAdder.BTreeSearching.SearchForKey(null).ReturnsForAnyArgs(false);
             btreeAdder.BTreeSearching.FoundPage.Returns(testPage);
             expectedModifiedPage = new PageTestFixture<int>();
             expectedModifiedPage.SetUpValues(addValueToArrayAndSort(valueToAdd, valuesInPage));

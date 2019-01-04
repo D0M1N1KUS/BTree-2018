@@ -11,6 +11,8 @@ namespace BTree2018.Interfaces.BTreeOperations
         IRecord<T> FoundRecord { get; }
         ///<summary>Contains the page where the searched key should be located, if it exists.</summary>
         IPage<T> FoundPage { get; }
-        bool SearchForPair(IKey<T> key);
+        /// <summary>Contains the found key's index in the page, if search was successful</summary>
+        long FoundKeyIndex { get; }
+        bool SearchForKey(IKey<T> key);
     }
 }

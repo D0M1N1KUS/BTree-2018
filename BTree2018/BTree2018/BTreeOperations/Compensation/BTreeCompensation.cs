@@ -14,18 +14,24 @@ namespace BTree2018.BTreeOperations
         public bool Compensate(IPage<T> page, IKey<T> keyToAdd)
         {
             var overfilledPage = BTreeAdding.InsertKeyIntoPage(page, keyToAdd);
+            return Compensate(overfilledPage);
+        }
+
+        public bool Compensate(IPage<T> page)
+        {
+            if (!BTreePageNeighbours.GetNeighbours(page, out var leftNeighbourPtr,
+                out var rightNeighbourPtr, out var parentKey, out var parentKeyIndex)) return false;
             var parentPage = BTreePageNeighbours.ParentPage;
-            if (!BTreePageNeighbours.GetNeighbours(overfilledPage, out var leftNeighbourPtr, out var rightNeighbourPtr, 
-                out var parentKey, out var parentKeyIndex))
-                return false;
             if (checkIfPageCanBeCompensated(leftNeighbourPtr, out var leftNeighbourPage))
             {
-                EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref overfilledPage);
+                EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref page);
+                BTreeIO.WritePages(parentPage, leftNeighbourPage, page);
                 return true;
             }
             else if (checkIfPageCanBeCompensated(rightNeighbourPtr, out var rightNeighbourPage))
             {
-                EvenOutKeys(ref parentPage, parentKeyIndex, ref overfilledPage, ref rightNeighbourPage);
+                EvenOutKeys(ref parentPage, parentKeyIndex, ref page, ref rightNeighbourPage);
+                BTreeIO.WritePages(parentPage, page, rightNeighbourPage);
                 return true;
             }
             else

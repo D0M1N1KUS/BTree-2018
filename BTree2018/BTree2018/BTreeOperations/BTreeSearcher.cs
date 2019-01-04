@@ -18,6 +18,8 @@ namespace BTree2018.BTreeOperations
 
         public IKey<T> FoundKey { get; private set; }
         public IPage<T> FoundPage { get; private set; }
+        public long FoundKeyIndex { get; private set; }
+
         public IRecord<T> FoundRecord
         {
             get
@@ -30,11 +32,12 @@ namespace BTree2018.BTreeOperations
             private set => foundRecord = value;
         }
 
-        public bool SearchForPair(IKey<T> key)
+        public bool SearchForKey(IKey<T> key)
         {
             FoundKey = null;
             FoundRecord = null;
             FoundPage = null;
+            FoundKeyIndex = -1;
             
             return SearchForPair(key, BTreeIO.GetRootPage());
         }
@@ -49,6 +52,7 @@ namespace BTree2018.BTreeOperations
                 {
                     FoundKey = currentPage.KeyAt(index);
                     FoundPage = currentPage;
+                    FoundKeyIndex = index;
                     return true;
                 }
 

@@ -25,7 +25,7 @@ namespace BTree2018.BTreeOperations
         
         public IPage<T> Add(IKey<T> key)
         {
-            if (BTreeSearching.SearchForPair(key))
+            if (BTreeSearching.SearchForKey(key))
             {
                 throw new Exception("Key already exists: " + key);
             }
@@ -48,8 +48,8 @@ namespace BTree2018.BTreeOperations
             else if (currentPage.KeysInPage == currentPage.PageLength)//found page is full
             {
                 if (!BTreeCompensation.Compensate(currentPage, key))
-                    BTreeSplitting.Split(page, key);
-                return null;//TODO: return page;
+                    return BTreeSplitting.Split(page, key);
+                return BTreeIO.GetPage(currentPage.PagePointer);//TODO: test return page;
             }
 
             throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!");
