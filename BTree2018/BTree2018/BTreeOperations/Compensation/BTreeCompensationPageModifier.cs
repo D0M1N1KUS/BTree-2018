@@ -7,21 +7,13 @@ namespace BTree2018.BTreeOperations
 {
     public class BTreeCompensationPageModifier<T> where T : IComparable
     {
-        public void EvenOutKeys(ref IPage<T> parentPage, int parentKeyIndex, ref IPage<T> leftPage,
+        public bool EvenOutKeys(ref IPage<T> parentPage, int parentKeyIndex, ref IPage<T> leftPage,
             ref IPage<T> rightPage)
         {
-            checkValues(parentPage, parentKeyIndex, leftPage, rightPage);
+            checkParameters(parentPage, parentKeyIndex, leftPage, rightPage);
+            if (!checkIfPagesContainEnoughValues(leftPage, rightPage)) return false;
             distributeKeysAcrossPages(ref parentPage, parentKeyIndex, ref leftPage, ref rightPage, out var parentKey);
-
-            
-            var parentPageBuilder = new BTreePageBuilder<T>();
-            for (var i = 0; i < parentPage.KeysInPage; i++)
-            {
-                parentPageBuilder.AddKey(i != parentKeyIndex ? parentPage.KeyAt(i) : parentKey);
-                parentPageBuilder.AddPointer(parentPage.PointerAt(i));
-            }
-            parentPageBuilder.AddPointer(parentPage.PointerAt(parentPage.KeysInPage));
-            
+            return true;
         }
         
         private void distributeKeysAcrossPages(ref IPage<T> parentPage, int parentKeyIndex, ref IPage<T> leftPage,
@@ -67,12 +59,13 @@ namespace BTree2018.BTreeOperations
                 .Build();
         }
 
-        private static void checkValues(IPage<T> parentPage, int parentKeyIndex, IPage<T> page1, IPage<T> page2)
+        private static void checkParameters(IPage<T> parentPage, int parentKeyIndex, IPage<T> page1, IPage<T> page2)
         {
             if (parentPage == null || parentPage.PageType == PageType.NULL ||
                 parentKeyIndex < 0 || parentKeyIndex > parentPage.KeysInPage - 1 ||
                 page1 == null || page1.PageType == PageType.NULL ||
-                page2 == null || page2.PageType == PageType.NULL)
+                page2 == null || page2.PageType == PageType.NULL ||
+                page1.PageLength != page2.PageLength)
             {
                 var e = new Exception("BTreeCompensationPageModifier: Invalid value(s) passed to method!");
                 e.Data.Add("parentPage", parentPage != null ? parentPage.ToString() : "NULL");
@@ -81,6 +74,11 @@ namespace BTree2018.BTreeOperations
                 e.Data.Add("page2", page2 != null ? page2.ToString() : "NULL");
                 throw e;
             }
+        }
+
+        private static bool checkIfPagesContainEnoughValues(IPage<T> page1, IPage<T> page2)
+        {
+            return page1.KeysInPage + page2.KeysInPage >= page1.PageLength;
         }
 
         private IKey<T>[] getListOfKeys(ref IPage<T> page1, IKey<T> parentKey, ref IPage<T> page2, 

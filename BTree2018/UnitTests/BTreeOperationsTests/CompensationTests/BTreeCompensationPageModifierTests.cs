@@ -21,11 +21,12 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                 createExpectedPages(out var expectedFullPage, out var expectedNotFullPage, out var expectedRootPage);
                 var compensationModifier = new BTreeCompensationPageModifier<int>();
 
-                compensationModifier.EvenOutKeys(ref rootPage, 0, ref fullPage, ref notFullPage);
+                var success = compensationModifier.EvenOutKeys(ref rootPage, 0, ref fullPage, ref notFullPage);
                 
                 Console.WriteLine(@"rootPage {0}", rootPage);
                 Console.WriteLine(@"fullPage {0}", fullPage);
-                Console.WriteLine(@"notFullPage {0}", notFullPage);           
+                Console.WriteLine(@"notFullPage {0}", notFullPage);
+                Assert.IsTrue(success);
                 Assert.IsTrue(rootPage.Equals(expectedRootPage));
                 Assert.IsTrue(fullPage.Equals(expectedFullPage));
                 Assert.IsTrue(notFullPage.Equals(expectedNotFullPage));

@@ -24,13 +24,15 @@ namespace BTree2018.BTreeOperations
             var parentPage = BTreePageNeighbours.ParentPage;
             if (checkIfPageCanBeCompensated(leftNeighbourPtr, out var leftNeighbourPage))
             {
-                EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref page);
+                if (!EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref page))
+                    return false;
                 BTreeIO.WritePages(parentPage, leftNeighbourPage, page);
                 return true;
             }
             else if (checkIfPageCanBeCompensated(rightNeighbourPtr, out var rightNeighbourPage))
             {
-                EvenOutKeys(ref parentPage, parentKeyIndex, ref page, ref rightNeighbourPage);
+                if (!EvenOutKeys(ref parentPage, parentKeyIndex, ref page, ref rightNeighbourPage))
+                    return false;
                 BTreeIO.WritePages(parentPage, page, rightNeighbourPage);
                 return true;
             }

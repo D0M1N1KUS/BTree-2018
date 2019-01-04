@@ -47,7 +47,7 @@ namespace BTree2018.BTreeOperations
             for (var i = 1; i < currentPage.KeysInPage; i++)
             {
                 newLeafPage.AddKey(currentPage.KeyAt(i));
-                newLeafPage.AddPointer(currentPage.PointerAt(i + 1));
+                newLeafPage.AddPointer(currentPage.PointerAt(i));
             }
             newLeafPage.AddPointer(currentPage.PointerAt(currentPage.KeysInPage));
 

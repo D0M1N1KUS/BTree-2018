@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeLeafKeyRemover.cs" />
     <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeKeyRemover.cs" />
+    <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeMerger.cs" />
     <Compile Include="BTreeOperations\BTreePageSplitting\BTreePageSplitter.cs" />
     <Compile Include="BTreeOperations\Compensation\BTreeCompensation.cs" />
     <Compile Include="BTreeOperations\Compensation\BTreeCompensationPageModifier.cs" />
