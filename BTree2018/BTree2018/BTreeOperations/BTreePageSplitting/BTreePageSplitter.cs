@@ -69,7 +69,8 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
 
         public IPage<T> Split(IPage<T> page, IKey<T> keyToInsert)
         {
-            throw new NotImplementedException();
+            var newPage = BTreeAdding.InsertKeyIntoPage(page, keyToInsert);
+            return Split(newPage);
         }
     }
 }

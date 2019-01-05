@@ -87,6 +87,10 @@ namespace UnitTests.BTreeOperationsTests
             var nonExistingKey = new BTreeKey<int>() {Value = 8};
             var rootPage = new PageTestFixture<int>();
             rootPage.SetUpValues(1, 2, 3, 4, 5, 6, 7, 9, 10);
+            rootPage.SetUpPointers(BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer,
+                BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer,
+                BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer,
+                BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer);
             rootPage.PageType = PageType.ROOT;
             rootPage.PageLength = 20;
             var btreeSearcher = new BTreeSearcher<int> {BTreeIO = Substitute.For<IBTreeIO<int>>()};

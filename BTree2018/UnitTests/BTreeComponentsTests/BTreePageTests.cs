@@ -25,12 +25,12 @@ namespace UnitTests.BTreeComponentsTests
             var page1 = new BTreePage<int>()
             {
                 KeysInPage = 2, PageType = PageType.ROOT, Keys = keys, Pointers = pointers,
-                ParentPage = BTreePagePointer<int>.NullPointer
+                ParentPage = BTreePagePointer<int>.NullPointer, PageLength = 2
             };
             var page2 = new BTreePage<int>()
             {
                 KeysInPage = 2, PageType = PageType.ROOT, Keys = keys, Pointers = pointers,
-                ParentPage = BTreePagePointer<int>.NullPointer
+                ParentPage = BTreePagePointer<int>.NullPointer, PageLength = 2
             };
 
             var iPage1 = page1 as IPage<int>;

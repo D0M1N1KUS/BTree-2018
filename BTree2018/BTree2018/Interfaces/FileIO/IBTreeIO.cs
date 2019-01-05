@@ -5,7 +5,7 @@ namespace BTree2018.Interfaces.FileIO
 {
     public interface IBTreeIO<T> where T : IComparable
     {
-        IPagePointer<T> WritePage(IPage<T> page);
+        IPagePointer<T> WritePage(IPage<T> page); //TODO: A page with a null-self-pointer is a new page
         IPagePointer<T>[] WritePages(params IPage<T>[] pages);
         IPagePointer<T> WriteNewRootPage(IPage<T> page);
         IPage<T> GetPage(IPagePointer<T> pointer);

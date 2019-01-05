@@ -7,6 +7,5 @@ namespace BTree2018.Interfaces.BTreeStructure
     {
         PageType PointsToPageType { get; }
         long Index { get; }
-        //TODO: Pointers shouldn't be responsible for loading pages, records etc from disk.
     }
 }

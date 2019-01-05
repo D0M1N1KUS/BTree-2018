@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BTree2018.BTreeStructure;
 using BTree2018.Enums;
 using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeOperations;
@@ -57,10 +58,18 @@ namespace BTree2018.BTreeOperations
                 }
 
                 if (currentPage.PageType == PageType.LEAF) return false;
-                if (key.CompareTo(currentPage.KeyAt(index)) == (int) Comparison.LESS)
+                if (key.CompareTo(currentPage.KeyAt(index)) == (int)Comparison.LESS)
+                {
+                    if (currentPage.RightPointerAt(index).Equals(BTreePagePointer<int>.NullPointer))
+                        return false; //RootPage failsave
                     currentPage = getRightPage(currentPage, index);
+                }
                 else
+                {
+                    if (currentPage.LeftPointerAt(index).Equals(BTreePagePointer<int>.NullPointer))
+                        return false; //RootPage failsave
                     currentPage = getLeftPage(currentPage, index);
+                }  
             }
 
             return false;

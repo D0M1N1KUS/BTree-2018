@@ -27,7 +27,7 @@ namespace UnitTests.BuilderTests
             var page = new BTreePage<int>()
             {
                 KeysInPage = 3, PageType = PageType.ROOT, Keys = keys, Pointers = pointers,
-                ParentPage = BTreePagePointer<int>.NullPointer
+                ParentPage = BTreePagePointer<int>.NullPointer, PageLength = 3
             };
 
             var pageCopy = new BTreePageBuilder<int>().ClonePage(page).Build();

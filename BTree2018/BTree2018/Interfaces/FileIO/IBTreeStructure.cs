@@ -7,6 +7,6 @@ namespace BTree2018.Interfaces.FileIO
     {
         long H { get; }
         long D { get; }
-        IPagePointer<T> Root { get; } //TODO: this may be a pointer
+        IPagePointer<T> Root { get; }
     }
 }

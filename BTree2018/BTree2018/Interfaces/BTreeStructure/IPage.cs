@@ -15,7 +15,7 @@ namespace BTree2018.Interfaces.BTreeStructure
         IPagePointer<T> LeftPointerAt(long keyIndex);
         IPagePointer<T> RightPointerAt(long keyIndex);
         IKey<T> KeyAt(long index);
-        PageType PageType { get; }//TODO: Questionable way of knowing if an IPage pointer is null or not.
+        PageType PageType { get; }
     }
 
     public enum PageType

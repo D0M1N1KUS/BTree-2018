@@ -59,7 +59,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                 var success = bTreePageNeighbours.GetNeighbours(leafPages[0], out var leftNeighbourPtr,
                     out var rightNeighbourPtr, out var parentKey, out var parentKeyIndex);
 
-                Assert.IsNull(leftNeighbourPtr);
+                Assert.AreEqual(BTreePagePointer<int>.NullPointer, leftNeighbourPtr);
                 Assert.IsTrue(expectedRightNeighbourPointer.Equals(rightNeighbourPtr));
                 Assert.AreEqual(expectedParentKeyIndex, parentKeyIndex);
                 Assert.IsTrue(expectedParentKey.Equals(parentKey));
@@ -88,7 +88,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                     out var rightNeighbourPtr, out var parentKey, out var parentKeyIndex);
 
                 Assert.IsTrue(expectedLeftNeighbourPointer.Equals(leftNeighbourPtr));
-                Assert.IsNull(rightNeighbourPtr);
+                Assert.AreEqual(BTreePagePointer<int>.NullPointer, rightNeighbourPtr);
                 Assert.AreEqual(expectedParentKeyIndex, parentKeyIndex);
                 Assert.IsTrue(expectedParentKey.Equals(parentKey));
             }

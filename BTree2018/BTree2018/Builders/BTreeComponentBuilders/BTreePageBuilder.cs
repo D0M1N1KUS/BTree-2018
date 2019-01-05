@@ -17,7 +17,7 @@ namespace BTree2018.Builders
         private int pageLength;
         private int keysInPage = -1;
         
-        private IPagePointer<T> ParentPage;
+        private IPagePointer<T> ParentPage = BTreePagePointer<T>.NullPointer;
         private PageType PageType = PageType.NULL;
 
         private bool pageCloned = false;
@@ -183,17 +183,12 @@ namespace BTree2018.Builders
         {
             if (pageLength <= 0) return pagePointers.ToArray();
             var array = new IPagePointer<T>[pageLength + 1];
-            if (pagePointers.Count > 0)
+            for (var i = 0; i < pageLength + 1; i++)
             {
-                for (var i = 0; i < pageLength + 1; i++)
-                {
-                    array[i] = i < pagePointers.Count ? pagePointers[i] : null;
-                }
-
-                return array;
+                array[i] = i < pagePointers.Count ? pagePointers[i] : BTreePagePointer<T>.NullPointer;
             }
-            
-            throw new Exception("BTreePageBuilder: No pointers provided!");
+
+            return array;
         }
 
         private bool checkIfAllNecessaryValuesInitialized()

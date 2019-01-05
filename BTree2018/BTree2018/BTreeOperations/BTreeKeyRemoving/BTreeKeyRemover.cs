@@ -13,19 +13,21 @@ namespace BTree2018.BTreeOperations
         public IBTreeIO<T> BTreeIO;
         public IBTreeSearching<T> BTreeSearching;
         public IBTreeLeafKeyRemoval<T> LeafKeyRemoval;
-        public IBTreeCompensation<T> BTreeCompensation;
+//        public IBTreeCompensation<T> BTreeCompensation;
+//        public IBTreeMerging<T> BTreeMerger;
+        public IBtreeReorganizing<T> BTreeReorganizer;
         
         public void RemoveKey(IKey<T> key)
         {
             if (!BTreeSearching.SearchForKey(key)) return;
-            if (getKeysLeftAndRightPage(BTreeSearching.FoundKeyIndex, BTreeSearching.FoundPage, 
+            if (getLeftAndRightPageOfKey(BTreeSearching.FoundKeyIndex, BTreeSearching.FoundPage, 
                 out var leftPage, out var rightPage)) //Non leaves
             {
                 removeKeyFromNonLeafPage(leftPage, rightPage, out var newPage, out var modifiedLeafPage);
                 if (modifiedLeafPage.KeysInPage < modifiedLeafPage.PageLength / 2)
-                    if (!BTreeCompensation.Compensate(modifiedLeafPage)) 
-                        ;//TODO: Merging
-                BTreeIO.WritePages(newPage, modifiedLeafPage);
+                    BTreeReorganizer.Reorganize(modifiedLeafPage);
+                else
+                    BTreeIO.WritePages(newPage, modifiedLeafPage);
             }
             else // Leaves
             {
@@ -67,7 +69,7 @@ namespace BTree2018.BTreeOperations
             newPage = newPageBuilder.Build();
         }
 
-        private bool getKeysLeftAndRightPage(long index, IPage<T> foundPage, out IPage<T> leftPage, out IPage<T> rightPage)
+        private bool getLeftAndRightPageOfKey(long index, IPage<T> foundPage, out IPage<T> leftPage, out IPage<T> rightPage)
         {
             leftPage = null;
             rightPage = null;
@@ -106,5 +108,6 @@ namespace BTree2018.BTreeOperations
             
             throw new Exception("BTreeKeyRemover error: left and right page of key are null!");
         }
+        
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using BTree2018.BTreeStructure;
 using BTree2018.Interfaces.BTreeOperations;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Interfaces.FileIO;
@@ -42,15 +43,14 @@ namespace BTree2018.BTreeOperations
 
         private bool checkIfPageCanBeCompensated(IPagePointer<T> pointer, out IPage<T> page)
         {
-            if (pointer == null || pointer.PointsToPageType == PageType.NULL)
+            if (pointer.Equals(BTreePagePointer<T>.NullPointer) || pointer.PointsToPageType == PageType.NULL)
             {
                 page = null;
                 return false;
             }
 
             page = BTreeIO.GetPage(pointer);
-            if (pageExistsAndIsNotFull(page)) return true;
-            return false;
+            return pageExistsAndIsNotFull(page);
         }
 
         private static bool pageExistsAndIsNotFull(IPage<T> page)

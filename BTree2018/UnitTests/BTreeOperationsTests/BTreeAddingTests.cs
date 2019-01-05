@@ -23,10 +23,8 @@ namespace UnitTests.BTreeOperationsTests
             var keyToAdd = preparePageWithOneEmptySpace(1, out var btreeIOInterceptor, out var btreeAdder,
                 out var expectedModifiedPage, 2, 3, 4);
 
-            btreeAdder.Add(keyToAdd);
-            var actualModifiedPage = btreeIOInterceptor.WrittenPage[0];
+            var actualModifiedPage = btreeAdder.Add(keyToAdd);
             
-            Assert.AreEqual(btreeIOInterceptor.WritePageCalls, 1);
             Assert.AreEqual(expectedModifiedPage.Length, actualModifiedPage.Length);
             for(var i = 0; i < expectedModifiedPage.Length; i++)
             {
@@ -40,11 +38,9 @@ namespace UnitTests.BTreeOperationsTests
         {
             var keyToAdd = preparePageWithOneEmptySpace(4, out var btreeIOInterceptor, out var btreeAdder,
                 out var expectedModifiedPage, 1, 2, 3);
-            
-            btreeAdder.Add(keyToAdd);
-            var actualModifiedPage = btreeIOInterceptor.WrittenPage[0];
-            
-            Assert.AreEqual(btreeIOInterceptor.WritePageCalls, 1);
+
+            var actualModifiedPage = btreeAdder.Add(keyToAdd);
+
             Assert.AreEqual(expectedModifiedPage.Length, actualModifiedPage.Length);
             for(var i = 0; i < expectedModifiedPage.Length; i++)
             {
@@ -58,10 +54,8 @@ namespace UnitTests.BTreeOperationsTests
             var keyToAdd = preparePageWithOneEmptySpace(3, out var btreeIOInterceptor, out var btreeAdder,
                 out var expectedModifiedPage, 1, 2, 4);
             
-            btreeAdder.Add(keyToAdd);
-            var actualModifiedPage = btreeIOInterceptor.WrittenPage[0];
-            
-            Assert.AreEqual(btreeIOInterceptor.WritePageCalls, 1);
+            var actualModifiedPage = btreeAdder.Add(keyToAdd);
+
             Assert.AreEqual(expectedModifiedPage.Length, actualModifiedPage.Length);
             for(var i = 0; i < expectedModifiedPage.Length; i++)
             {
@@ -104,10 +98,8 @@ namespace UnitTests.BTreeOperationsTests
             expectedPage.SetUpValues(1, 2, 3, 4);
             expectedPage.SetUpPointers(expectedPagePointers);
             
-            adder.InsertKeyIntoPage(initialPage, keyToInsert, pointerToInsert);
-            var actualPage = btreeIOInterceptor.WrittenPage[0];
-            
-            Assert.IsTrue(btreeIOInterceptor.WritePageCalls == 1);
+            var actualPage = adder.InsertKeyIntoPage(initialPage, keyToInsert, pointerToInsert);
+
             Assert.IsTrue(expectedPage.Equals(actualPage));
         }
         

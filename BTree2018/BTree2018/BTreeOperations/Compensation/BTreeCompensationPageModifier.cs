@@ -78,7 +78,7 @@ namespace BTree2018.BTreeOperations
 
         private static bool checkIfPagesContainEnoughValues(IPage<T> page1, IPage<T> page2)
         {
-            return page1.KeysInPage + page2.KeysInPage >= page1.PageLength;
+            return page1.KeysInPage != page2.KeysInPage && page1.KeysInPage + page2.KeysInPage >= page1.PageLength;
         }
 
         private IKey<T>[] getListOfKeys(ref IPage<T> page1, IKey<T> parentKey, ref IPage<T> page2, 

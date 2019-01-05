@@ -26,14 +26,15 @@ namespace BTree2018.BTreeOperations
             getNeighbours(page, ref leftNeighbourPtr, ref rightNeighbourPtr, ref parentKey, ParentPage, 
                 ref parentKeyIndex);
 
-            return leftNeighbourPtr != null || rightNeighbourPtr != null;
+            return !leftNeighbourPtr.Equals(BTreePagePointer<T>.NullPointer) || 
+                   !rightNeighbourPtr.Equals(BTreePagePointer<T>.NullPointer);
         }
 
         private static void setInitialValuesOfOutputVariables(out IPagePointer<T> leftNeighbourPtr,
             out IPagePointer<T> rightNeighbourPtr, out IKey<T> parentKey, out int parentKeyIndex)
         {
-            leftNeighbourPtr = null;
-            rightNeighbourPtr = null;
+            leftNeighbourPtr = BTreePagePointer<T>.NullPointer;
+            rightNeighbourPtr = BTreePagePointer<T>.NullPointer;
             parentKey = null;
             parentKeyIndex = -1;
         }
@@ -45,8 +46,8 @@ namespace BTree2018.BTreeOperations
             {
                 var currentPointer = parentPage.PointerAt(i);
                 if (!page.PagePointer.Equals(currentPointer)) continue;
-                leftNeighbourPtr = i > 0 ? parentPage.PointerAt(i - 1) : null;
-                rightNeighbourPtr = i < parentPage.KeysInPage ? parentPage.PointerAt(i + 1) : null;
+                leftNeighbourPtr = i > 0 ? parentPage.PointerAt(i - 1) : BTreePagePointer<T>.NullPointer;
+                rightNeighbourPtr = i < parentPage.KeysInPage ? parentPage.PointerAt(i + 1) : BTreePagePointer<T>.NullPointer;
                 parentKeyIndex = i < parentPage.KeysInPage ? i : i - 1;
                 parentKey = parentPage.KeyAt(parentKeyIndex);
                 break;
