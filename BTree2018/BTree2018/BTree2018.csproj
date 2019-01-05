@@ -58,6 +58,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BTreeIOComponents\BTreeIO.cs" />
+    <Compile Include="BTreeIOComponents\FileMap.cs" />
     <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeLeafKeyRemover.cs" />
     <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeKeyRemover.cs" />
     <Compile Include="BTreeOperations\BTreeKeyRemoving\BTreeMerger.cs" />
@@ -71,6 +73,9 @@
     <Compile Include="Interfaces\BTreeOperations\IBTreeLeafKeyRemoval.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreePageNeighbours.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBtreeReorganizing.cs" />
+    <Compile Include="Interfaces\FileIO\IBTreePageFile.cs" />
+    <Compile Include="Interfaces\FileIO\IRecordFile.cs" />
+    <Compile Include="Interfaces\FileIO\IFileBitmap.cs" />
     <Compile Include="Logging\CollectionSerialization.cs" />
     <Compile Include="Sorting\BisectSearch.cs" />
     <Compile Include="BTreeComponents\BTreeKey.cs" />
@@ -103,7 +108,6 @@
     <Compile Include="Interfaces\FileIO\IBTreeIO.cs" />
     <Compile Include="Interfaces\FileIO\IBTreePointer.cs" />
     <Compile Include="Interfaces\FileIO\IBTreeStructure.cs" />
-    <Compile Include="Interfaces\FileIO\IFileMap.cs" />
     <Compile Include="Interfaces\IBTree.cs" />
     <Compile Include="Interfaces\IRecord.cs" />
     <Compile Include="Logging\Logger.cs" />
@@ -129,6 +133,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BTreeIOComponents\BTreeFileClasses" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

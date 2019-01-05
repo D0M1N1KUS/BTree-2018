@@ -7,5 +7,6 @@ namespace BTree2018.Interfaces.BTreeOperations
     {
         bool Compensate(IPage<T> page, IKey<T> keyToAdd);
         bool Compensate(IPage<T> page);
+        IPage<T> Page { get; }
     }
 }

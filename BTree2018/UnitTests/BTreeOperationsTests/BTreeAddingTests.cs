@@ -17,6 +17,21 @@ namespace UnitTests.BTreeOperationsTests
     [TestFixture]
     public class BTreeAddingTests
     {
+//        [Test]
+//        public void addKey_PageIsNotFull()
+//        {
+//            
+//        }
+//
+//        private IPage<int> getTestInitialTestPage1()
+//        {
+//            return new BTreePageBuilder<int>(4)
+//                .SetPagePointer()
+//                .Build();
+//        }
+
+        #region OldTests
+
         [Test]
         public void addKey_KeyDoesNotExistInFoundPageAndFitsInPage_KeyNeedsToBeInsertedAtTheBeginningOfThePage()
         {
@@ -137,6 +152,7 @@ namespace UnitTests.BTreeOperationsTests
             sortList.Sort();
             return sortList.ToArray();
         }
-
+        
+        #endregion
     }
 }

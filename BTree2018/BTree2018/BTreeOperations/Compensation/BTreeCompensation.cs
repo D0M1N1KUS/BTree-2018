@@ -12,6 +12,8 @@ namespace BTree2018.BTreeOperations
         public IBTreeAdding<T> BTreeAdding;
         public IBTreePageNeighbours<T> BTreePageNeighbours;
         
+        public IPage<T> Page { get; private set; }
+        
         public bool Compensate(IPage<T> page, IKey<T> keyToAdd)
         {
             var overfilledPage = BTreeAdding.InsertKeyIntoPage(page, keyToAdd);
@@ -28,6 +30,7 @@ namespace BTree2018.BTreeOperations
                 if (!EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref page))
                     return false;
                 BTreeIO.WritePages(parentPage, leftNeighbourPage, page);
+                Page = page;
                 return true;
             }
             else if (checkIfPageCanBeCompensated(rightNeighbourPtr, out var rightNeighbourPage))
@@ -35,11 +38,13 @@ namespace BTree2018.BTreeOperations
                 if (!EvenOutKeys(ref parentPage, parentKeyIndex, ref page, ref rightNeighbourPage))
                     return false;
                 BTreeIO.WritePages(parentPage, page, rightNeighbourPage);
+                Page = page;
                 return true;
             }
             else
                 return false;
         }
+
 
         private bool checkIfPageCanBeCompensated(IPagePointer<T> pointer, out IPage<T> page)
         {
