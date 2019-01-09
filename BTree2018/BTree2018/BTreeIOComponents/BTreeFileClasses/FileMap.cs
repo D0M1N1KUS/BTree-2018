@@ -9,7 +9,7 @@ namespace BTree2018.BTreeIOComponents
         public byte CachedMapPiece => cachedMapPiece;
         public long CurrentMapSize => mapSize;
 
-        private const long FILE_INFO_LENGTH = 4;
+        private const long FILE_INFO_LENGTH = 8;
         
         private byte cachedMapPiece;
         private bool cacheEmpty = true;
@@ -29,7 +29,14 @@ namespace BTree2018.BTreeIOComponents
                 //TODO: create new FileIO
                 
             }
-            mapSize = BitConverter.ToInt64(FileIO.GetBytes(0, 8), 0);
+            mapSize = BitConverter.ToInt64(FileIO.GetBytes(0, FILE_INFO_LENGTH), 0);
+            if (mapSize != 0) return;
+            FileIO.WriteZeros(FILE_INFO_LENGTH, 1);
+            FileIO.WriteBytes(BitConverter.GetBytes((long)8), 0);
+            mapSize = 8;
+            cachedMapPiece = 0;
+            cachedMapPieceIndex = 0;
+            cacheEmpty = false;
         }
 
         ~FileMap()
@@ -41,23 +48,16 @@ namespace BTree2018.BTreeIOComponents
         {
             get
             {
-                if(index >= mapSize) 
+                if (index >= mapSize)
                     throw new ArgumentException("The index (" + index + ") is larger than map size (" + mapSize + ").");
                 getNewCachedMapPiece(index);
-                return bitIsSet(cachedMapPiece, (int) (7 - index % 8));
+                return bitIsSet(cachedMapPiece, (int)(7 - index % 8));
             }
             set
             {
                 getNewCachedMapPiece(index);
                 cachedMapChanged = true;
                 setBit(ref cachedMapPiece, (int)(7 - index % 8), value);
-                if (index >= mapSize)
-                {
-                    var newMapSize = index + 8 - index % 8;
-                    FileIO.WriteZeros(mapSize, newMapSize);
-                    FileIO.WriteBytes(BitConverter.GetBytes(newMapSize), 0);
-                    mapSize = newMapSize;
-                }
             }
         }
 
@@ -65,12 +65,16 @@ namespace BTree2018.BTreeIOComponents
         {
             if (cacheEmpty || index / 8 != cachedMapPieceIndex)
             {
-                if (!cacheEmpty && cachedMapChanged) 
-                    FileIO.WriteBytes(new[] {cachedMapPiece}, cachedMapPieceIndex + FILE_INFO_LENGTH);
+                if (!cacheEmpty && cachedMapChanged) Flush();
                 cachedMapPieceIndex = index / 8;
-                cachedMapPiece = FileIO.GetByte(cachedMapPieceIndex + FILE_INFO_LENGTH);
                 cacheEmpty = false;
-                
+                if (index >= mapSize)
+                {
+                    increaceMapSize(index);
+                    cachedMapPiece = 0;
+                    return;
+                }
+                cachedMapPiece = FileIO.GetByte(cachedMapPieceIndex + FILE_INFO_LENGTH);
             }
         }
 
@@ -78,23 +82,14 @@ namespace BTree2018.BTreeIOComponents
         {
             long position = 0;
 
-            long freeBit;
+            var freeBit = getFreeBit(cachedMapPiece);
+            if (freeBit != -1) return cachedMapPieceIndex * 8 + freeBit;
             while (true)
             {
-                if (cacheEmpty)
-                {
-                    if(position > mapSize || mapSize == 0) 
-                    cachedMapPiece = FileIO.GetByte(position + FILE_INFO_LENGTH);
-                    cacheEmpty = false;
-                }
-
-                freeBit = getFreeBit(cachedMapPiece);
-                if (freeBit != -1) break;
-
+                getNewCachedMapPiece(position);
+                if (!this[position]) return position;
                 position++;
             }
-
-            return position * 8 + freeBit - 1;
         }
 
         public void Flush()
@@ -106,7 +101,7 @@ namespace BTree2018.BTreeIOComponents
         {
             for (var i = 0; i < 8; i++)
             {
-                if (bitIsSet(mapPiece, i))
+                if (!bitIsSet(mapPiece, 7 - i))
                     return i;
             }
 
@@ -127,6 +122,17 @@ namespace BTree2018.BTreeIOComponents
                 b |= setByte;
             else
                 b &= unsetByte;
+        }
+
+        private void increaceMapSize(long index)
+        {
+            if (index >= mapSize)
+            {
+                var newMapSize = index + 8 - index % 8;
+                FileIO.WriteZeros(mapSize, newMapSize);
+                FileIO.WriteBytes(BitConverter.GetBytes(newMapSize), 0);
+                mapSize = newMapSize;
+            }
         }
     }
 }

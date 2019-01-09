@@ -6,11 +6,13 @@ namespace BTree2018.Interfaces.FileIO
     public interface IBTreePageFile<T> where T : IComparable
     {
         long TreeHeight { get; }
-        IPagePointer<T> RootPage { get; set; }
+        IPagePointer<T> RootPage { get; }
         long D { get; }
         IPage<T> this[IPagePointer<T> index] { get; }
         IPagePointer<T> this[IPage<T> page] { set; }
         IPage<T> PageAt(IPagePointer<T> index);
         void SetPage(IPage<T> page);
+        void RemovePage(IPage<T> page);
+        void RemovePage(IPagePointer<T> pointer);
     }
 }

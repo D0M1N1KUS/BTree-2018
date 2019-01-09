@@ -8,11 +8,16 @@ namespace BTree2018.Interfaces.FileIO
         IPagePointer<T> WritePage(IPage<T> page); //TODO: A page with a null-self-pointer is a new page
         IPagePointer<T>[] WritePages(params IPage<T>[] pages);
         IPagePointer<T> WriteNewRootPage(IPage<T> page);
+        
         IPage<T> GetPage(IPagePointer<T> pointer);
         IPage<T> GetRootPage();
         IRecordPointer<T> WriteRecord(IRecord<T> record);
         IRecord<T> GetRecord(IRecordPointer<T> pointer);
+        
         void FreePage(IPage<T> page);
         void FreePage(IPagePointer<T> pointer);
+
+        void IncreaseTreeHeight(long value = 1);
+        void DecreaseTreeHeight(long value = 2);
     }
 }

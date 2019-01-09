@@ -9,5 +9,7 @@ namespace BTree2018.Interfaces.FileIO
         IRecord<T> GetRecord(IRecordPointer<T> pointer);
         void SetRecord(IRecord<T> record);
         IRecordPointer<T> AddRecord(IRecord<T> record);
+        void RemoveRecord(IRecord<T> record);
+        void RemoveRecord(IRecordPointer<T> pointer);
     }
 }

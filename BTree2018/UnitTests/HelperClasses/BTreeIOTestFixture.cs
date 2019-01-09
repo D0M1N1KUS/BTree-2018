@@ -102,5 +102,15 @@ namespace UnitTests.HelperClasses
         {
             throw new NotImplementedException();
         }
+
+        public void IncreaseTreeHeight(long value = 1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DecreaseTreeHeight(long value = 2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

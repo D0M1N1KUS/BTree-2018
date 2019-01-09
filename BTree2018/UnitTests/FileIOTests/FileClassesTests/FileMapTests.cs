@@ -12,7 +12,7 @@ namespace UnitTests.FileIOTests.FileClassesTests
         [Test]
         public void getBitAtIndex()
         {
-            const long FILE_INFO_LENGTH = 4;
+            const long FILE_INFO_LENGTH = 8;
             var fileIO = Substitute.For<IFileIO>();
             fileIO.GetByte(0 + FILE_INFO_LENGTH).Returns((byte) 0b1111_1111);
             fileIO.GetByte(1 + FILE_INFO_LENGTH).Returns((byte) 0b0000_0000);
@@ -78,12 +78,12 @@ namespace UnitTests.FileIOTests.FileClassesTests
             var fileIO = Substitute.For<IFileIO>();
             fileIO.GetBytes(0, 8).Returns(new byte[]
             {
-                0b0000_0001, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                0b0000_1000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
                 0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
             });
             var fileMap = new FileMap(fileIO);
-            var expectedMapSize1 = 8;
-            var expectedMapSize2 = 16;
+            const int expectedMapSize1 = 8;
+            const int expectedMapSize2 = 16;
 
             for (var i = 0; i < 8; i++)
             {
@@ -99,6 +99,31 @@ namespace UnitTests.FileIOTests.FileClassesTests
             
             Assert.AreEqual(expectedMapSize1, actualMapSize1);
             Assert.AreEqual(expectedMapSize2, actualMapSize2);
+        }
+
+        [Test]
+        public void getNextFreeIndexTest_CompletelyNewObjectAndFile()
+        {
+            const long FILE_INFO_LENGTH = 8;
+            var fileIO = Substitute.For<IFileIO>();
+            fileIO.GetByte(Arg.Any<long>()).Returns((byte) 0b0000_0000);
+            fileIO.GetBytes(0, 8).Returns(new byte[]
+            {
+                0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000,
+                0b0000_0000, 0b0000_0000, 0b0000_0000, 0b0000_0000
+            });
+            var expectedIndexes = new long[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+            var actualIndexes = new long[10];
+            
+            var fileMap = new FileMap(fileIO);
+            for (var i = 0; i < 10; i++)
+            {
+                actualIndexes[i] = fileMap.GetNextFreeIndex();
+                fileMap[actualIndexes[i]] = true;
+            }
+            
+            CollectionAssert.AreEqual(expectedIndexes, actualIndexes);
+            fileIO.Received().WriteBytes(Arg.Any<byte[]>(), 0 + FILE_INFO_LENGTH);
         }
     }
 }
