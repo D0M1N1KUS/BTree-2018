@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Text;
+using BTree2018.BTreeIOComponents;
 using BTree2018.BTreeIOComponents.BTreeFileClasses;
 using BTree2018.BTreeStructure;
 using BTree2018.Interfaces.BTreeStructure;
@@ -33,7 +35,9 @@ namespace UnitTests.FileIOTests.FileClassesTests
                     0b0000_1010, 0b0000_0000, 0b0000_1011, 0b0000_0000, 0b0000_1100, 0b0000_0000,
                     0b0000_1101, 0b0000_0000, 0b0000_1110, 0b0000_0000, 0b0000_1111, 0b0000_0000
                 });
-            fileIO.GetBytes(Arg.Is<long>(x => x != pointer.Index + TYPE_STRING_PREAMBLE), Arg.Is<long>(x => x != sizeof(short)))
+            fileIO.GetBytes(0, TYPE_STRING_PREAMBLE).Returns(TypeConverter<short>.TypeTo64ByteString());
+            fileIO.GetBytes(Arg.Is<long>(x => x != pointer.Index + TYPE_STRING_PREAMBLE && x != 0), 
+                    Arg.Is<long>(x => x != sizeof(short) && x != TYPE_STRING_PREAMBLE))
                 .Throws(new ArgumentException("Unforeseen arguments"));
             var expectedRecord = new Record<short>(new short[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
                 pointer);

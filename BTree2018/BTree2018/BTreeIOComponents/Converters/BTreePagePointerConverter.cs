@@ -18,7 +18,7 @@ namespace BTree2018.BTreeIOComponents.Converters
             return new BTreePagePointer<T>()
             {
                 Index = BitConverter.ToInt64(bytes, begin),
-                PointsToPageType = (PageType) bytes[SIZE_OF_PAGE_POINTER - 1]
+                PointsToPageType = (PageType) bytes[begin + SIZE_OF_PAGE_POINTER - 1]
             };
         }
 
