@@ -9,38 +9,13 @@ using BTree2018.Interfaces.FileIO;
 namespace BTree2018.BTreeIOComponents.Converters
 {
     //KeysInPage[long], ParentPagePointer[...], PageType[byte], FirstPointer, FirstKey, ...
-    public class BTreePageConverter<T> : IBTreePageConversion<T> where T : IComparable
+    public class BTreePageConverter<T> : BTreePageStructureInfo<T>, IBTreePageConversion<T> where T : IComparable
     {
-        private const long KEYS_IN_PAGE_SIZE = sizeof(long);
-        private const long PAGE_TYPE_SIZE = sizeof(byte);
-
-        private readonly long LocationOfFirstPointer;
-        private readonly long LocationOfFirstKey;
-
-        private int sizeOfType;
-        
-        public readonly long SizeOfPagePointer = BTreePagePointerConverter<T>.SIZE_OF_PAGE_POINTER;
-        public readonly long SizeOfPageKey;
-        public readonly long PageSize;
-        public readonly long PageLengthN;
-        public readonly long D;
-
         public IBTreePagePointerConversion<T> PagePointerConverter = new BTreePagePointerConverter<T>();
         public IBTreeKeyConversion<T> KeyConverter;
 
-        public BTreePageConverter(long d, int sizeOfType)
+        public BTreePageConverter(long d, int sizeOfType) : base(d, sizeOfType)
         {
-            this.sizeOfType = sizeOfType;
-            
-            D = d;
-            PageLengthN = 2 * D;
-            SizeOfPageKey = sizeOfType + BTreeKeyConverter<T>.SizeOfRecordPointer;
-            PageSize = KEYS_IN_PAGE_SIZE + PAGE_TYPE_SIZE + 
-                       PageLengthN * SizeOfPageKey + PageLengthN * SizeOfPagePointer + 2 * SizeOfPagePointer;
-
-            LocationOfFirstPointer = KEYS_IN_PAGE_SIZE + SizeOfPagePointer + PAGE_TYPE_SIZE;
-            LocationOfFirstKey = LocationOfFirstPointer + SizeOfPagePointer;
-            
             KeyConverter = new BTreeKeyConverter<T>(sizeOfType);
         }
         

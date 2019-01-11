@@ -8,10 +8,12 @@ namespace BTree2018.Interfaces.FileIO
         long TreeHeight { get; }
         IPagePointer<T> RootPage { get; }
         long D { get; }
-        IPage<T> this[IPagePointer<T> index] { get; }
-        IPagePointer<T> this[IPage<T> page] { set; }
-        IPage<T> PageAt(IPagePointer<T> index);
+        
+        IPage<T> PageAt(IPagePointer<T> pointer);
         void SetPage(IPage<T> page);
+
+        IPagePointer<T> AddNewPage(IPage<T> page);
+        
         void RemovePage(IPage<T> page);
         void RemovePage(IPagePointer<T> pointer);
     }

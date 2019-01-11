@@ -1,5 +1,6 @@
 using System;
 using BTree2018.Interfaces.FileIO;
+using BTree2018.Logging;
 
 namespace BTree2018.BTreeIOComponents
 {
@@ -131,6 +132,7 @@ namespace BTree2018.BTreeIOComponents
                 var newMapSize = index + 8 - index % 8;
                 FileIO.WriteZeros(mapSize, newMapSize);
                 FileIO.WriteBytes(BitConverter.GetBytes(newMapSize), 0);
+                Logger.Log("Map size increased from [" + mapSize + "] to [" + newMapSize + "]");
                 mapSize = newMapSize;
             }
         }

@@ -45,7 +45,7 @@ namespace BTree2018.Builders
 
         public static IPage<T> BuildNullPage()
         {
-            return new BTreePage<T>();
+            return new BTreePage<T> {PageType = PageType.NULL};
         }
 
         public IPage<T> Build()

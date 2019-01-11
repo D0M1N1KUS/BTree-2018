@@ -87,14 +87,14 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
             FileMap[pointer.Index] = false;
         }
 
-        private byte[] recordToByteArray(IReadOnlyCollection<T> valueComponents)
+        private byte[] recordToByteArray(T[] valueComponents)
         {
-            var bytesList = new List<byte>(valueComponents.Count);
+            var bytesList = new List<byte>(valueComponents.Length);
             foreach (var value in valueComponents)
             {
                 bytesList.AddRange(TypeConverter<T>.ToBytes(value));
             }
-            for (var i = 0; i < MAX_VALUES_IN_RECORD - valueComponents.Count; i++)
+            for (var i = 0; i < MAX_VALUES_IN_RECORD - valueComponents.Length; i++)
             {
                 bytesList.AddRange(TypeConverter<T>.ToBytes((T)(object)0));
             }
