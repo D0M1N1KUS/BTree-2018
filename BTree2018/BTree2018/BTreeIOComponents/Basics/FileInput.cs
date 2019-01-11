@@ -10,6 +10,7 @@ namespace BTree2018.BTreeIOComponents.Basics
     public class FileInput : IFileInput
     {
         private string filePath;
+        private FileInfo fileInfo;
 
         /// <summary>
         /// Opens or creates file for writing
@@ -19,6 +20,7 @@ namespace BTree2018.BTreeIOComponents.Basics
         {
             this.filePath = filePath;
             checkFilePath();
+            fileInfo = new FileInfo(filePath);
         }
 
         private void checkFilePath()
@@ -43,39 +45,29 @@ namespace BTree2018.BTreeIOComponents.Basics
         
         public void WriteBytes(byte[] bytes, long begin)
         {
-            using (var stream = File.Open(filePath, FileMode.Open))
+            if (begin + bytes.Length > fileInfo.Length)
+                append(bytes, begin);
+            else
+                overwrite(bytes, begin);
+        }
+
+        private void append(byte[] bytes, long begin)
+        {
+            using (var stream = File.Open(filePath, FileMode.Append))
             {
-                if (begin + bytes.Length > stream.Length)
-                {
-                    for (var i = 0; i < begin - stream.Length; i++)
-                        stream.WriteByte(0);
-                    stream.Write(bytes, 0, bytes.Length);
-                }
-                else
-                {
-                    stream.Position = begin;
-                    stream.Write(bytes, 0, bytes.Length);
-                }
+                for (var i = 0; i < begin - stream.Length; i++)
+                    stream.WriteByte(0);
+                stream.Write(bytes, 0, bytes.Length);
             }
         }
 
-//        private void append(byte[] bytes, long begin)
-//        {
-//            using (var stream = File.Open(filePath, FileMode.Append))
-//            {
-//                for (var i = 0; i < begin - stream.Length; i++)
-//                    stream.WriteByte(0);
-//                stream.Write(bytes, 0, bytes.Length);
-//            }
-//        }
-//
-//        private void overwrite(byte[] bytes, long begin)
-//        {
-//            using (var stream = File.Open(filePath, FileMode.Open))
-//            {
-//                stream.Position = begin;
-//                stream.Write(bytes, 0, bytes.Length);
-//            }
-//        }
+        private void overwrite(byte[] bytes, long begin)
+        {
+            using (var stream = File.Open(filePath, FileMode.Open))
+            {
+                stream.Position = begin;
+                stream.Write(bytes, 0, bytes.Length);
+            }
+        }
     }
 }

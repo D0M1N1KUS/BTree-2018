@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTree2018", "BTree2018\BTre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{9CFCE82D-92FA-4B54-841C-27E79DF5BA9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{6F7C3CE0-4921-4B95-86A4-CA57D2F053ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9CFCE82D-92FA-4B54-841C-27E79DF5BA9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CFCE82D-92FA-4B54-841C-27E79DF5BA9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CFCE82D-92FA-4B54-841C-27E79DF5BA9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F7C3CE0-4921-4B95-86A4-CA57D2F053ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F7C3CE0-4921-4B95-86A4-CA57D2F053ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F7C3CE0-4921-4B95-86A4-CA57D2F053ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F7C3CE0-4921-4B95-86A4-CA57D2F053ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
