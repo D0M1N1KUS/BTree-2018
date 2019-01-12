@@ -4,7 +4,6 @@ using NUnit.Framework;
 
 namespace UnitTests.HelperClasses
 {
-    [TestFixture]
     public class CustomCollection<T> : ICustomCollection<T> where T : IComparable
     {
         private T[] values;

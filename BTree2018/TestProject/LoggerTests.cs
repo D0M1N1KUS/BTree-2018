@@ -12,7 +12,7 @@ namespace UnitTests
         public void addMessagesToLogClass()
         {
             Logger.Log("Som Ting Wong");
-            Logger.Log("Gon Na Krash");
+            Logger.Log("Gon Na Crash");
             Logger.Log("Out Ta Luck");
             
             Assert.AreEqual(3, Logger.Messages);

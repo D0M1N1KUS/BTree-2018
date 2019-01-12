@@ -18,6 +18,6 @@ namespace BTree2018.Interfaces.FileIO
         void FreePage(IPagePointer<T> pointer);
 
         void IncreaseTreeHeight(long value = 1);
-        void DecreaseTreeHeight(long value = 2);
+        void DecreaseTreeHeight(long value = 1);
     }
 }

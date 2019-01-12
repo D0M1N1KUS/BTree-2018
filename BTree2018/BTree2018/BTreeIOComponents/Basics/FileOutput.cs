@@ -12,11 +12,13 @@ namespace BTree2018.BTreeIOComponents.Basics
     public class FileOutput : IFileOutput
     {
         private string filePath;
+        private FileInfo fileInfo;
         
         public FileOutput(string filePath)
         {
             this.filePath = filePath;
             checkFilePath();
+            fileInfo = new FileInfo(filePath);
         }
 
         private void checkFilePath()
@@ -30,15 +32,22 @@ namespace BTree2018.BTreeIOComponents.Basics
                 throw new Exception("Cannot access file for reading \"" + filePath + "\"");
         }
         
+        public long Length => fileInfo.Length;
+        public string FilePath => filePath;
+
         public byte[] GetBytes(long begin, long n)
         {
             var listOfBytes = new byte[n];
             using (var stream = File.Open(filePath, FileMode.Open))
             {
                 stream.Position = begin;
-                stream.Read(listOfBytes, 0, (int)n);
+                var bytesRead = stream.Read(listOfBytes, 0, (int)n);
+                if(bytesRead < n) throw new EndOfStreamException("End of stream reached after reading [" + 
+                                                                 bytesRead + " / " + n + "] bytes");
             }
-
+            
+            fileInfo.Refresh();
+            
             return listOfBytes.ToArray();
         }
     }

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 namespace UnitTests.HelperClasses
 {
-    [TestFixture]
     public class BTreeIOTestFixture<T> : IBTreeIO<T> where T : IComparable
     {
         public int WritePageCalls { get; private set; } = 0;
@@ -95,22 +94,22 @@ namespace UnitTests.HelperClasses
 
         public void FreePage(IPage<T> page)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void FreePage(IPagePointer<T> pointer)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void IncreaseTreeHeight(long value = 1)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void DecreaseTreeHeight(long value = 2)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

@@ -14,6 +14,9 @@ namespace BTree2018.BTreeIOComponents
 
         public readonly long LocationOfFirstPointer;
         public readonly long LocationOfFirstKey;
+        public readonly long LocationOfRootPagePointer;
+        public readonly long LocationOfTreeHeight;
+        public readonly long LocationOfD;
 
         public readonly int SizeOfType;
 
@@ -43,6 +46,9 @@ namespace BTree2018.BTreeIOComponents
             
             LocationOfFirstPointer = KEYS_IN_PAGE_SIZE + SizeOfPagePointer + PAGE_TYPE_SIZE;
             LocationOfFirstKey = LocationOfFirstPointer + SizeOfPagePointer;
+            LocationOfTreeHeight = SIZE_OF_TYPE_STRING;
+            LocationOfRootPagePointer = SIZE_OF_TYPE_STRING + SIZE_OF_HEIGHT_CONSTANT + SIZE_OF_D;
+            LocationOfD = SIZE_OF_TYPE_STRING + SIZE_OF_HEIGHT_CONSTANT;
         }
     }
 }

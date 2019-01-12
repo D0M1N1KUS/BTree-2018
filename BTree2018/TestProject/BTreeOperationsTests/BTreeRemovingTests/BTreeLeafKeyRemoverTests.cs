@@ -44,6 +44,7 @@ namespace UnitTests.BTreeOperationsTests.BTreeRemovingTests
         {
             var pointerToBranch = new BTreePagePointer<int>() {Index = 10, PointsToPageType = PageType.BRANCH};
             var pointerToLeaf =  new BTreePagePointer<int>() {Index = 20, PointsToPageType = PageType.LEAF};
+            var pointerToRoot =  new BTreePagePointer<int>() {Index = 0, PointsToPageType = PageType.LEAF};
             
             beginningPage = new BTreePage<int>()
             {
@@ -59,7 +60,8 @@ namespace UnitTests.BTreeOperationsTests.BTreeRemovingTests
                     BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer,
                     BTreePagePointer<int>.NullPointer, pointerToBranch
                 },
-                KeysInPage = 3, PageLength = 4, PageType = PageType.ROOT, ParentPage = BTreePagePointer<int>.NullPointer
+                KeysInPage = 3, PageLength = 4, PageType = PageType.ROOT, ParentPage = BTreePagePointer<int>.NullPointer,
+                PagePointer = pointerToRoot
             };
             
             var branchPage = new BTreePage<int>()
@@ -76,7 +78,8 @@ namespace UnitTests.BTreeOperationsTests.BTreeRemovingTests
                     BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer,
                     BTreePagePointer<int>.NullPointer, pointerToLeaf
                 },
-                KeysInPage = 3, PageLength = 4, PageType = PageType.BRANCH, ParentPage = BTreePagePointer<int>.NullPointer
+                KeysInPage = 3, PageLength = 4, PageType = PageType.BRANCH, 
+                ParentPage = pointerToRoot
             };
             
             var leafPage = new BTreePage<int>()
@@ -93,7 +96,7 @@ namespace UnitTests.BTreeOperationsTests.BTreeRemovingTests
                     BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer,
                     BTreePagePointer<int>.NullPointer, BTreePagePointer<int>.NullPointer
                 },
-                KeysInPage = 4, PageLength = 4, PageType = PageType.LEAF, ParentPage = BTreePagePointer<int>.NullPointer
+                KeysInPage = 4, PageLength = 4, PageType = PageType.LEAF, ParentPage = pointerToBranch
             };
 
             var bTreeIO = Substitute.For<IBTreeIO<int>>();

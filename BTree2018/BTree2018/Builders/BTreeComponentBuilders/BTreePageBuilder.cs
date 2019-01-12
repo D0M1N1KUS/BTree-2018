@@ -176,7 +176,7 @@ namespace BTree2018.Builders
 
                 return array;
             }
-            throw new Exception("No keys provided!");
+            throw new Exception("BTreePageBuilder error: No keys provided!");
         }
 
         private IPagePointer<T>[] PointersToArray()
@@ -194,7 +194,7 @@ namespace BTree2018.Builders
         private bool checkIfAllNecessaryValuesInitialized()
         {
             bool allNecessaryValuesInitialized = true;
-            if (keys.Count + 1 != pagePointers.Count)
+            if (keys.Count + 1 != pagePointers.Count && PageType != PageType.LEAF && PageType != PageType.ROOT)
             {
                 Logger.Log("BTreePageBuilder warning: Inconsistent number of keys or pointers detected! Keys: " + 
                            keys.Count + " Pointers: " + pagePointers.Count);
@@ -216,7 +216,7 @@ namespace BTree2018.Builders
                 allNecessaryValuesInitialized = false;
             }
 
-            if (PageType != PageType.ROOT && ParentPage == null)
+            if (PageType != PageType.ROOT && ParentPage.Equals(BTreePagePointer<T>.NullPointer))
             {
                 Logger.Log("BTreePageBuilder error: Page has no pointer to parent page!");
                 allNecessaryValuesInitialized = false;

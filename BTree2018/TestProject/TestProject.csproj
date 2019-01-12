@@ -70,6 +70,8 @@
         <Compile Include="BTreeOperationsTests\CompensationTests\BTreeCompensationTests.cs" />
         <Compile Include="BTreeOperationsTests\CompensationTests\BTreePageNeighboursTests.cs" />
         <Compile Include="BuilderTests\PageBuilderTests.cs" />
+        <Compile Include="FileIOTests\BasicIOTests\FileInputTests.cs" />
+        <Compile Include="FileIOTests\BasicIOTests\FileIOTests.cs" />
         <Compile Include="FileIOTests\BasicIOTests\FileOutputTests.cs" />
         <Compile Include="FileIOTests\ConverterTests\BTreeKeyConverterTests.cs" />
         <Compile Include="FileIOTests\ConverterTests\BTreePageConverterTests.cs" />
@@ -77,12 +79,14 @@
         <Compile Include="FileIOTests\ConverterTests\GenericArithmeticTests.cs" />
         <Compile Include="FileIOTests\ConverterTests\TypeConverterTests.cs" />
         <Compile Include="FileIOTests\FileClassesTests\BitTesting.cs" />
+        <Compile Include="FileIOTests\FileClassesTests\BTreePageFileTests.cs" />
         <Compile Include="FileIOTests\FileClassesTests\FileMapTests.cs" />
         <Compile Include="FileIOTests\FileClassesTests\RecordFileTests.cs" />
-        <Compile Include="HelperClasses\BTreeIOTestFixture.cs" />
+        <Compile Include="HelperClasses\BTree\BTreeIOTestFixture.cs" />
         <Compile Include="HelperClasses\BTree\PageTestFixture.cs" />
         <Compile Include="HelperClasses\CustomCollection.cs" />
-        <Compile Include="HelperClasses\SubstituteForSampleBTree.cs" />
+        <Compile Include="HelperClasses\MemoryFileIO.cs" />
+        <Compile Include="HelperClasses\MemoryFileMap.cs" />
         <Compile Include="ITestInterface.cs" />
         <Compile Include="LoggerTests.cs" />
         <Compile Include="NSubstituteTests.cs" />

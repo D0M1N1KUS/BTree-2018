@@ -48,6 +48,7 @@ namespace BTree2018.BTreeOperations
 
             ParentPage = newParentPage;
             BTreeIO.WritePages(newParentPage, mergedPage);
+            BTreeIO.DecreaseTreeHeight();
         }
 
 

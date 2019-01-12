@@ -6,7 +6,6 @@ using NUnit.Framework;
 
 namespace UnitTests.HelperClasses.BTree
 {
-    [TestFixture]
     public class PageTestFixture<T> : IPage<T> where T : IComparable
     {
         private BTreeKey<T>[] Keys;

@@ -55,7 +55,7 @@ namespace UnitTests.BTreeOperationsTests
                 .AddPointer(expectedLeftPagePointer)
                 .AddPointer(BTreePagePointer<int>.NullPointer)
                 .AddKey(new BTreeKey<int>(){RecordPointer = RecordPointer<int>.NullPointer, Value = 6})
-                .SetPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetPagePointer(new BTreePagePointer<int>() {Index = 123, PointsToPageType = PageType.ROOT})
                 .SetPageType(PageType.ROOT)
                 .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
                 .Build();
@@ -110,7 +110,7 @@ namespace UnitTests.BTreeOperationsTests
                 .AddPointer(BTreePagePointer<int>.NullPointer)
                 .SetPageType(PageType.LEAF)
                 .SetPagePointer(expectedLeftPagePointer)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 123, PointsToPageType = PageType.ROOT})
                 .Build();
 
             expectedRightPage = new BTreePageBuilder<int>(4)
@@ -121,7 +121,7 @@ namespace UnitTests.BTreeOperationsTests
                 .AddPointer(BTreePagePointer<int>.NullPointer)
                 .SetPageType(PageType.LEAF)
                 .SetPagePointer(expectedRightPagePointer)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 123, PointsToPageType = PageType.ROOT})
                 .Build();
         }
     }

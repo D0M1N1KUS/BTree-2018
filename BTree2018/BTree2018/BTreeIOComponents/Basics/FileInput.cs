@@ -9,6 +9,8 @@ namespace BTree2018.BTreeIOComponents.Basics
 {
     public class FileInput : IFileInput
     {
+        private readonly byte[] ZERO_BYTE = {0b0000_0000};
+        
         private string filePath;
         private FileInfo fileInfo;
 
@@ -42,22 +44,46 @@ namespace BTree2018.BTreeIOComponents.Basics
                 File.Create(filePath);
             }
         }
-        
+
+        public long Length => fileInfo.Length;
+        public string FilePath => filePath;
+
         public void WriteBytes(byte[] bytes, long begin)
         {
-            if (begin + bytes.Length > fileInfo.Length)
-                append(bytes, begin);
-            else
+            if (bytes.Length == 0) return;
+            if (begin + bytes.Length <= fileInfo.Length)
                 overwrite(bytes, begin);
+            else if (begin < fileInfo.Length && begin + bytes.Length > fileInfo.Length)
+            {
+                splitBytesArray(bytes, begin, out var bytesThatFit, out var bytesThatDontFit);
+                overwrite(bytesThatFit, begin);
+                append(bytesThatDontFit, fileInfo.Length);
+            }
+            else
+                append(bytes, begin);
+            
+            fileInfo.Refresh();
+        }
+
+        private void splitBytesArray(byte[] bytes, long begin, out byte[] bytes1, out byte[] bytes2)
+        {
+            var bytesThatFit = fileInfo.Length - begin;
+            var bytesThatDontFit = bytes.Length - bytesThatFit;
+            bytes1 = new byte[bytesThatFit];
+            bytes2 = new byte[bytesThatDontFit];
+            Array.Copy(bytes, 0, bytes1, 0, bytesThatFit);
+            Array.Copy(bytes, bytesThatFit, bytes2, 0, bytesThatDontFit);
         }
 
         private void append(byte[] bytes, long begin)
         {
             using (var stream = File.Open(filePath, FileMode.Append))
             {
-                for (var i = 0; i < begin - stream.Length; i++)
-                    stream.WriteByte(0);
+                var currentFileLength = stream.Length;
+                for (var i = 0; i < begin - currentFileLength; i++)
+                    stream.Write(ZERO_BYTE, 0, ZERO_BYTE.Length);
                 stream.Write(bytes, 0, bytes.Length);
+                stream.Flush();
             }
         }
 
@@ -67,6 +93,7 @@ namespace BTree2018.BTreeIOComponents.Basics
             {
                 stream.Position = begin;
                 stream.Write(bytes, 0, bytes.Length);
+                stream.Flush();
             }
         }
     }

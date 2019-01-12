@@ -42,8 +42,11 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
             BTreeIO.WritePage(leftPageBuilder.Build());
             var rightPagePointer = BTreeIO.WritePage(rightPageBuilder.Build());
             if (page.PageType != PageType.ROOT)
+            {
+                BTreeIO.IncreaseTreeHeight();
                 return BTreeAdding.InsertKeyIntoPage(BTreeIO.GetPage(page.ParentPage), page.KeyAt(keysInSplittedPages),
                     rightPagePointer);
+            }
             else
             {
                 var newRootPage = new BTreePageBuilder<T>((int) page.PageLength)
@@ -54,6 +57,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
                     .AddPointer(rightPagePointer)
                     .Build();
                 BTreeIO.WriteNewRootPage(newRootPage);
+                BTreeIO.IncreaseTreeHeight();
                 return newRootPage;
             }
         }

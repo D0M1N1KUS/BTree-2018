@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 namespace UnitTests.HelperClasses
 {
-    [TestFixture]
     public class BTreeIOTestFixture<T> : IBTreeIO<T> where T : IComparable
     {
         public int WritePageCalls { get; private set; } = 0;

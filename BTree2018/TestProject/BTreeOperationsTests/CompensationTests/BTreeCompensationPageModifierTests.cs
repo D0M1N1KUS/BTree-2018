@@ -61,7 +61,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                     new BTreePagePointer<int>() {Index = 5, PointsToPageType = PageType.LEAF}
                 }))
                 .SetPageType(PageType.BRANCH)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 1234, PointsToPageType = PageType.ROOT})
                 .Build();
             notFullPage = new BTreePageBuilder<int>().AddKeyRange(new List<IKey<int>>(new IKey<int>[]
                 {
@@ -77,7 +77,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                     null, null
                 }))
                 .SetPageType(PageType.BRANCH)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 123, PointsToPageType = PageType.ROOT})
                 .Build();
             rootPage = new BTreePageBuilder<int>().AddKeyRange(new List<IKey<int>>(new IKey<int>[]
                 {
@@ -120,7 +120,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                     null
                 }))
                 .SetPageType(PageType.BRANCH)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 1234, PointsToPageType = PageType.ROOT})
                 .Build();
             notFullPage = new BTreePageBuilder<int>().AddKeyRange(new List<IKey<int>>(new IKey<int>[]
                 {
@@ -138,7 +138,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                     null
                 }))
                 .SetPageType(PageType.BRANCH)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 123, PointsToPageType = PageType.ROOT})
                 .Build();
             rootPage = new BTreePageBuilder<int>().AddKeyRange(new List<IKey<int>>(new IKey<int>[]
                 {
@@ -206,7 +206,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                 .SetPageType(PageType.ROOT)
                 .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
                 .Build();
-            
+
             leftPage = new BTreePageBuilder<int>().AddKeyRange(new List<IKey<int>>(new IKey<int>[]
                 {
                     new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 1},
@@ -223,9 +223,9 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                     new BTreePagePointer<int>() {Index = 9, PointsToPageType = PageType.NULL}
                 }))
                 .SetPageType(PageType.BRANCH)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 123, PointsToPageType = PageType.ROOT})
                 .Build();
-            
+
             rightPage = new BTreePageBuilder<int>().AddKeyRange(new List<IKey<int>>(new IKey<int>[]
                 {
                     new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 6},
@@ -242,7 +242,7 @@ namespace UnitTests.BTreeOperationsTests.CompensationTests
                     new BTreePagePointer<int>() {Index = 14, PointsToPageType = PageType.NULL}
                 }))
                 .SetPageType(PageType.BRANCH)
-                .SetParentPagePointer(BTreePagePointer<int>.NullPointer)
+                .SetParentPagePointer(new BTreePagePointer<int>() {Index = 123, PointsToPageType = PageType.ROOT})
                 .Build();
         }
         
