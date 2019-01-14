@@ -42,8 +42,10 @@ namespace BTree2018.BTreeIOComponents.Basics
             {
                 stream.Position = begin;
                 var bytesRead = stream.Read(listOfBytes, 0, (int)n);
-                if(bytesRead < n) throw new EndOfStreamException("End of stream reached after reading [" + 
-                                                                 bytesRead + " / " + n + "] bytes");
+                if(bytesRead < n) 
+                    throw new EndOfStreamException("End of stream reached after reading [" + bytesRead + 
+                                                   " / " + n + "] bytes starting from [" + begin + "]. The file is [" + 
+                                                   stream.Length + "] bytes long.");
             }
             
             fileInfo.Refresh();

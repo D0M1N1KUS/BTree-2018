@@ -19,7 +19,7 @@ namespace BTree2018.BTreeIOComponents.Converters
             KeyConverter = new BTreeKeyConverter<T>(sizeOfType);
         }
         
-        
+        //TODO: fill up page with zeros or change the converter to output a constant page size
         public IPage<T> ConvertToPage(byte[] bytes, IPagePointer<T> pointerToPage)
         {
             if(bytes.Length != PageSize)

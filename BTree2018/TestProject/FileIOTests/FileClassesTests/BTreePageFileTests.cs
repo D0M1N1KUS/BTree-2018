@@ -28,15 +28,11 @@ namespace UnitTests.FileIOTests.FileClassesTests
         {
             var fileMap = Substitute.For<IFileBitmap>();
             var fileIO = Substitute.For<IFileIO>();
-            var bTreePageFile = new BTreePageFile<int>(sizeof(int), 2)
-            {
-                PageConverter = new BTreePageConverter<int>(2, sizeof(int)),
-                PagePointerConverter = new BTreePagePointerConverter<int>(),
-                FileIO = fileIO, FileMap = fileMap
-            };
             var expectedBytesInFile = getInitialPageFilePreambleBytesList(2, 1);
 
-            bTreePageFile.WriteInitialValuesToFile();
+            var bTreePageFile = new BTreePageFile<int>(sizeof(int), 2, fileIO, fileMap,
+                new BTreePageConverter<int>(2, sizeof(int)), new BTreePagePointerConverter<int>());
+
 
             fileIO.Received().WriteBytes(Arg.Is<byte[]>(b => b.SequenceEqual(expectedBytesInFile.ToArray())), 0);
         }
@@ -48,7 +44,7 @@ namespace UnitTests.FileIOTests.FileClassesTests
             expectedBytesInFile.AddRange(BitConverter.GetBytes(h));
             expectedBytesInFile.AddRange(BitConverter.GetBytes(d));
             expectedBytesInFile.AddRange(new BTreePagePointerConverter<int>().ConvertToBytes( //RootPointer
-                BTreePagePointer<int>.NullPointer));
+                new BTreePagePointer<int>() { Index = 0, PointsToPageType = PageType.ROOT }));
             return expectedBytesInFile;
         }
 
@@ -59,13 +55,9 @@ namespace UnitTests.FileIOTests.FileClassesTests
             {
                 var fileMap = new MemoryFileMap(100);
                 var fileIO = new MemoryFileIO();
-                var bTreePageFile = new BTreePageFile<int>(sizeof(int), 2)
-                {
-                    PageConverter = new BTreePageConverter<int>(2, sizeof(int)), FileIO = fileIO, FileMap = fileMap,
-                    PagePointerConverter = new BTreePagePointerConverter<int>()
-                };
+                var bTreePageFile = new BTreePageFile<int>(sizeof(int), 2, fileIO, fileMap,
+                    new BTreePageConverter<int>(2, sizeof(int)), new BTreePagePointerConverter<int>());
                 var rootPage = getRootPage(2);
-                bTreePageFile.WriteInitialValuesToFile();
                 var rootPagePointer = bTreePageFile.AddNewRootPage(rootPage);
                 getLeafPages(rootPagePointer, 2, out var leftPage, out var rightPage);
                 rootPage.PagePointer = rootPagePointer;

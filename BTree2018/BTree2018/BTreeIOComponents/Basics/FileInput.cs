@@ -41,7 +41,7 @@ namespace BTree2018.BTreeIOComponents.Basics
             {
                 if (new Regex("[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]").IsMatch(filePath))
                     throw new FileLoadException("The provided file path is invalid \"" + filePath + "\"");
-                File.Create(filePath);
+                File.Create(filePath).Close();
             }
         }
 

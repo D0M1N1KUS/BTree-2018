@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using BTree2018.BTreeIOComponents.Basics;
 using BTree2018.Interfaces.FileIO;
 using BTree2018.Logging;
 
@@ -10,7 +12,7 @@ namespace BTree2018.BTreeIOComponents
         public byte CachedMapPiece => cachedMapPiece;
         public long CurrentMapSize => mapSize;
 
-        private const long FILE_INFO_LENGTH = 8;
+        private const long FILE_INFO_LENGTH = sizeof(long);
         
         private byte cachedMapPiece;
         private bool cacheEmpty = true;
@@ -19,31 +21,42 @@ namespace BTree2018.BTreeIOComponents
 
         private long mapSize;
 
-        public FileMap(IFileIO fileIO = null)
+        public FileMap(string filePath)
         {
-            if (fileIO != null)
+            FileIO = new FileIO(filePath);
+            writeInitialMapSize();
+        }
+
+        public FileMap(IFileIO fileIO)
+        {
+            FileIO = fileIO;
+            try
             {
-                FileIO = fileIO;
+                mapSize = BitConverter.ToInt64(FileIO.GetBytes(0, FILE_INFO_LENGTH), 0);
             }
-            else
+            catch (EndOfStreamException e)
             {
-                //TODO: create new FileIO
-                
+                mapSize = 0; //file if empty
             }
-            mapSize = BitConverter.ToInt64(FileIO.GetBytes(0, FILE_INFO_LENGTH), 0);
             if (mapSize != 0) return;
+            writeInitialMapSize();
+        }
+
+        private void writeInitialMapSize()
+        {
             FileIO.WriteZeros(FILE_INFO_LENGTH, 1);
-            FileIO.WriteBytes(BitConverter.GetBytes((long)8), 0);
+            FileIO.WriteBytes(BitConverter.GetBytes((long) 8), 0);
             mapSize = 8;
             cachedMapPiece = 0;
             cachedMapPieceIndex = 0;
             cacheEmpty = false;
         }
-
+        
         ~FileMap()
         {
             Flush();
         }
+        
         
         public bool this[long index]
         {

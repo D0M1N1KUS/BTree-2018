@@ -16,6 +16,8 @@ namespace BTree2018.Interfaces.FileIO
         
         void FreePage(IPage<T> page);
         void FreePage(IPagePointer<T> pointer);
+        void FreeRecord(IRecord<T> record);
+        void FreeRecord(IRecordPointer<T> pointer);
 
         void IncreaseTreeHeight(long value = 1);
         void DecreaseTreeHeight(long value = 1);

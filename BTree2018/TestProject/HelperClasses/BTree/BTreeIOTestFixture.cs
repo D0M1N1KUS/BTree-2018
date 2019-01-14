@@ -102,6 +102,16 @@ namespace UnitTests.HelperClasses
             
         }
 
+        public void FreeRecord(IRecord<T> record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FreeRecord(IRecordPointer<T> pointer)
+        {
+            throw new NotImplementedException();
+        }
+
         public void IncreaseTreeHeight(long value = 1)
         {
             

@@ -48,6 +48,21 @@ namespace BTree2018.Builders
             return new BTreePage<T> {PageType = PageType.NULL};
         }
 
+        public static IPage<T> BuildEmptyPage(long pageLength, PageType pageType, 
+            IPagePointer<T> currentPagePointer = null, IPagePointer<T> parentPagePointer = null)
+        {
+            return new BTreePage<T>()
+            {
+                PageType = pageType,
+                PagePointer = currentPagePointer ?? BTreePagePointer<T>.NullPointer,
+                ParentPage = parentPagePointer ?? BTreePagePointer<T>.NullPointer,
+                KeysInPage = 0, OverFlown = false, 
+                Keys = new IKey<T>[0], 
+                Pointers = new IPagePointer<T>[0],
+                PageLength = pageLength
+            };
+        }
+
         public IPage<T> Build()
         {
             if (!checkIfAllNecessaryValuesInitialized())
@@ -176,7 +191,8 @@ namespace BTree2018.Builders
 
                 return array;
             }
-            throw new Exception("BTreePageBuilder error: No keys provided!");
+            return new IKey<T>[0];
+            //throw new Exception("BTreePageBuilder error: No keys provided!");
         }
 
         private IPagePointer<T>[] PointersToArray()

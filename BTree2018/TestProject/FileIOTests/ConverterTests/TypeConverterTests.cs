@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Text;
 using BTree2018.BTreeIOComponents;
 using NUnit.Framework;
@@ -59,6 +61,17 @@ namespace UnitTests.FileIOTests
             }
 
             return stringBuilder.ToString();
+        }
+
+        [Test]
+        public void typeToStringTest()
+        {
+            var expectedByteArray = Enumerable.Repeat((byte) 0, 64).ToArray();
+            Encoding.ASCII.GetBytes(typeof(int).ToString()).CopyTo(expectedByteArray, 0);
+
+            var actualByteArray = TypeConverter<int>.TypeTo64ByteString();
+            
+            CollectionAssert.AreEqual(expectedByteArray, actualByteArray);
         }
     }
 }

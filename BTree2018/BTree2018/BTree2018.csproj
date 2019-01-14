@@ -64,6 +64,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BTreeComponents\BTree.cs" />
     <Compile Include="BTreeIOComponents\Basics\FileInput.cs" />
     <Compile Include="BTreeIOComponents\Basics\FileIO.cs" />
     <Compile Include="BTreeIOComponents\Basics\FileOutput.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="BTreeOperations\Compensation\BTreeCompensationPageModifier.cs" />
     <Compile Include="BTreeOperations\Compensation\BTreePageNeighbours.cs" />
     <Compile Include="Exceptions\DuplicateKeyException.cs" />
+    <Compile Include="BTreeBuilder.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreeLeafKeyRemoval.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreePageNeighbours.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBtreeReorganizing.cs" />
@@ -104,7 +106,6 @@
     <Compile Include="BTreeComponents\BTreeStructure.cs" />
     <Compile Include="BTreeComponents\Record.cs" />
     <Compile Include="BTreeComponents\RecordPointer.cs" />
-    <Compile Include="BTreeComponents\BTree.cs" />
     <Compile Include="BTreeOperations\BTreeAdder.cs" />
     <Compile Include="BTreeOperations\BTreeSearcher.cs" />
     <Compile Include="Builders\BTreeComponentBuilders\BTreeKeyBuilder.cs" />

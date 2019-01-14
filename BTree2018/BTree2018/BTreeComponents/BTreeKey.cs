@@ -40,7 +40,7 @@ namespace BTree2018.BTreeStructure
         public override bool Equals(object o)
         {
             var otherKey = o as IKey<T>;
-            if (otherKey == null || !Value.Equals(otherKey.Value) || !RecordPointer.Equals(otherKey.RecordPointer))
+            if (otherKey == null || !Value.Equals(otherKey.Value)) //removing  || !RecordPointer.Equals(otherKey.RecordPointer)
                 return false;
             return true;
         }

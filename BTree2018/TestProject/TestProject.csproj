@@ -87,6 +87,7 @@
         <Compile Include="HelperClasses\CustomCollection.cs" />
         <Compile Include="HelperClasses\MemoryFileIO.cs" />
         <Compile Include="HelperClasses\MemoryFileMap.cs" />
+        <Compile Include="IntegrationTests\NewBTreeTests.cs" />
         <Compile Include="ITestInterface.cs" />
         <Compile Include="LoggerTests.cs" />
         <Compile Include="NSubstituteTests.cs" />

@@ -9,7 +9,6 @@ namespace BTree2018.BTreeIOComponents
 {
     public class BTreeIO<T> : IBTreeIO<T> where T : IComparable
     {
-        public IFileIO FileIO;
         public IBTreePageFile<T> BTreePageFile;
         public IRecordFile<T> RecordFile;
         
@@ -68,6 +67,16 @@ namespace BTree2018.BTreeIOComponents
         public void FreePage(IPagePointer<T> pointer)
         {
             BTreePageFile.RemovePage(pointer);
+        }
+
+        public void FreeRecord(IRecord<T> record)
+        {
+            RecordFile.RemoveRecord(record);
+        }
+
+        public void FreeRecord(IRecordPointer<T> pointer)
+        {
+            RecordFile.RemoveRecord(pointer);
         }
 
         public void IncreaseTreeHeight(long value = 1)

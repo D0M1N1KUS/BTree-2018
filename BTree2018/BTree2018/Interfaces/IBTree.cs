@@ -17,9 +17,8 @@ namespace BTree2018.Interfaces.BTreeStructure
         void Remove(T key);
 
         bool HasKey(T key);//Searching
-        void Get(IKey<T> key); //Getting
+        IRecord<T> Get(IKey<T> key); //Getting
+        void Set(IKey<T> key, IRecord<T> record);
         IRecord<T> this[IKey<T> key] { get; set; }//Getting/Altering
-
-        void Reorganize(); //Reorganizing on demand
     }
 }

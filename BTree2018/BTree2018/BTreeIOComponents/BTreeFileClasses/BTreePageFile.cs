@@ -26,15 +26,43 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
         /// <summary>
         /// Creates new file with empty root.
         /// </summary>
-        /// <param name="fileIO">IFileIO object initialized with empty file</param>
-        /// <param name="fileMap">IFileBitmap object initialized with map file</param>
         /// <param name="sizeOfType">Size of generic value type</param>
         /// <param name="d">d - parameter of the BTree (2d = max. amount of keys in page)</param>
-        public BTreePageFile(int sizeOfType, long d) : base(d, sizeOfType)
+        /// <param name="pageFilePath">Location of the new page file</param>
+        /// <param name="pageFileMapPath">Location of the new map file</param>
+        public BTreePageFile(int sizeOfType, long d, string pageFilePath, string pageFileMapPath) : base(d, sizeOfType)
         {
             TreeHeight = 1;
-            RootPage = BTreePagePointer<T>.NullPointer;
+            RootPage = new BTreePagePointer<T>() { Index = 0, PointsToPageType = PageType.ROOT };
             D = d;
+            FileIO = new FileIO(pageFilePath);
+            FileMap = new FileMap(pageFileMapPath);
+            PageConverter = new BTreePageConverter<T>(d, sizeOfType);
+            PagePointerConverter = new BTreePagePointerConverter<T>();
+            writeInitialValuesToFile();
+        }
+        
+        /// <summary>
+        /// Creates new file with empty root.
+        /// </summary>
+        /// <param name="sizeOfType">Size of generic value type</param>
+        /// <param name="d">d - parameter of the BTree (2d = max. amount of keys in page)</param>
+        /// <param name="fileIO">IFileIO object initialized with existing file</param>
+        /// <param name="fileMap">IFileBitmap object initialized with map file</param>
+        /// <param name="pageConverter">IBTreePageConversion object</param>
+        /// <param name="pagePointerConverter">IBTreePagePointerConversion object</param>
+        public BTreePageFile(int sizeOfType, long d, IFileIO fileIO, IFileBitmap fileMap,
+            IBTreePageConversion<T> pageConverter, IBTreePagePointerConversion<T> pagePointerConverter)
+            : base(d, sizeOfType)
+        {
+            TreeHeight = 1;
+            RootPage = new BTreePagePointer<T>() { Index = 0, PointsToPageType = PageType.ROOT };
+            D = d;
+            FileIO = fileIO;
+            FileMap = fileMap;
+            PageConverter = pageConverter;
+            PagePointerConverter = pagePointerConverter;
+            writeInitialValuesToFile();
         }
 
         /// <summary>
@@ -47,7 +75,7 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
         {
             initializeObjectFields(fileIO, fileMap, sizeOfType);
 
-            TreeHeight = BitConverter.ToInt64(FileIO.GetBytes(LocationOfTreeHeight, SIZE_OF_HEIGHT_CONSTANT),
+            TreeHeight = BitConverter.ToInt64(FileIO.GetBytes(LocationOfTreeHeight, SIZE_OF_HEIGHT_VARIABLE),
                 0);
             D = BitConverter.ToInt64(FileIO.GetBytes(LocationOfD, SIZE_OF_D), 0);
             RootPage = PagePointerConverter.ConvertToPointer(FileIO.GetBytes(LocationOfRootPagePointer,
@@ -63,16 +91,19 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
             FileMap = fileMap;
         }
 
-        public void WriteInitialValuesToFile()
+        private void writeInitialValuesToFile()
         {
             if(FileIO == null || FileMap == null || PageConverter == null || PagePointerConverter == null)
                 throw new Exception("Object is not initialized properly!");
             var bytesList = new List<byte>((int) LengthOfPreamble);
             bytesList.AddRange(TypeConverter<T>.TypeTo64ByteString());
-            bytesList.AddRange(BitConverter.GetBytes((long)1));
+            bytesList.AddRange(BitConverter.GetBytes(TreeHeight));
             bytesList.AddRange(BitConverter.GetBytes(D));
-            bytesList.AddRange(PagePointerConverter.ConvertToBytes(BTreePagePointer<T>.NullPointer));
+            bytesList.AddRange(PagePointerConverter.ConvertToBytes(RootPage));
+            bytesList.AddRange(PageConverter.ConvertToBytes(
+                BTreePageBuilder<T>.BuildEmptyPage(PageLengthN, PageType.ROOT, RootPage)));
             FileIO.WriteBytes(bytesList.ToArray(), 0);
+            FileMap[RootPage.Index] = true;
         }
 
         public IPage<T> PageAt(IPagePointer<T> pointer)

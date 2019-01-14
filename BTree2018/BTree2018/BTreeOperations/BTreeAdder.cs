@@ -34,7 +34,7 @@ namespace BTree2018.BTreeOperations
             return AddToPage(key, BTreeSearching.FoundPage);
         }
 
-        private IPage<T> AddToPage(IKey<T> key, IPage<T> page)
+        public IPage<T> AddToPage(IKey<T> key, IPage<T> page)
         {
             if (page.KeysInPage < page.PageLength || 
                 page.KeysInPage == page.PageLength)//m < 2d

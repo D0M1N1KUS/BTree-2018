@@ -8,32 +8,47 @@ using BTree2018.Logging;
 
 namespace BTree2018.BTreeIOComponents.BTreeFileClasses
 {
+    //TypeString[64*char]
     public class RecordFile<T> : IRecordFile<T> where T : IComparable
     {
         private const long MAX_VALUES_IN_RECORD = 15;
-        private const long TYPE_STRING_PREAMBLE_SIZE = 64 * sizeof(char);
+        private const long TYPE_STRING_PREAMBLE_SIZE = 64 * sizeof(byte);
         
         public IFileIO FileIO;
         public IFileBitmap FileMap;
 
         private readonly int sizeOfType;
 
-        public RecordFile(IFileIO fileIO, IFileBitmap fileMap, int sizeOfType, bool createNewRecordFile = false)
+        /// <summary>
+        /// For creating a new record file
+        /// </summary>
+        /// <param name="sizeOfType"></param>
+        public RecordFile(int sizeOfType)
+        {
+            this.sizeOfType = sizeOfType;
+        }
+
+        public void WriteInitialValuesToFile()
+        {
+            FileIO.WriteBytes(TypeConverter<T>.TypeTo64ByteString(), 0);
+        }
+        
+        /// <summary>
+        /// Opens existing record file
+        /// </summary>
+        /// <param name="fileIO">Initialized FileIO object</param>
+        /// <param name="fileMap">Initialized FileBitmap object</param>
+        /// <param name="sizeOfType">Size of file type</param>
+        /// <exception cref="Exception"></exception>
+        public RecordFile(IFileIO fileIO, IFileBitmap fileMap, int sizeOfType)
         {
             FileIO = fileIO;
             this.sizeOfType = sizeOfType;
             FileMap = fileMap;
             var typeStringBytes = FileIO.GetBytes(0, TYPE_STRING_PREAMBLE_SIZE);
-            if (typeStringBytes.Length == TYPE_STRING_PREAMBLE_SIZE)
-            {
-                var typeOfRecordsInFile = TypeConverter<T>.TypeStringToType(typeStringBytes);
-                if(typeof(T) != typeOfRecordsInFile) throw new Exception("Record file of type [" + typeOfRecordsInFile +
-                    "] does not match the current object type [" + typeof(T) + "]");
-            }
-            else if (createNewRecordFile)
-            {
-                FileIO.WriteBytes(TypeConverter<T>.TypeTo64ByteString(), 0);
-            }
+            var typeOfRecordsInFile = TypeConverter<T>.TypeStringToType(typeStringBytes);
+            if(typeof(T) != typeOfRecordsInFile) throw new Exception("Record file of type [" + typeOfRecordsInFile +
+                "] does not match the current object type [" + typeof(T) + "]");
         }
         
         public IRecord<T> this[IRecordPointer<T> pointer]
@@ -65,14 +80,26 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
 
         public IRecordPointer<T> AddRecord(IRecord<T> record)
         {
-            if (record.RecordPointer != RecordPointer<T>.NullPointer)
-                throw new NullReferenceException(record.ToString());
-            var index = record.RecordPointer.Index;
-            if (index >= FileMap.CurrentMapSize || FileMap[index])
-                index = FileMap.GetNextFreeIndex();
+            var index = getIndexForNewRecord(record); 
             FileIO.WriteBytes(recordToByteArray(record.ValueComponents), index);
             FileMap[index] = true;
             return new RecordPointer<T>(){Index = index, PointerType = RecordPointerType.NOT_NULL};
+        }
+
+        private long getIndexForNewRecord(IRecord<T> record)
+        {
+            long index;
+            if (!record.RecordPointer.Equals(RecordPointer<T>.NullPointer))
+            {
+                Logger.Log("RecordFile warning: Adding record with already initialized pointer. " + record);
+                index = record.RecordPointer.Index;
+                if (index >= FileMap.CurrentMapSize || FileMap[index])
+                    index = FileMap.GetNextFreeIndex();
+            }
+            else
+                index = FileMap.GetNextFreeIndex();
+
+            return index;
         }
 
         public void RemoveRecord(IRecord<T> record)
