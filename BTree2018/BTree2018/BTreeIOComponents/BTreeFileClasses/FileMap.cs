@@ -109,6 +109,7 @@ namespace BTree2018.BTreeIOComponents
         public void Flush()
         {
             if (!cacheEmpty) FileIO.WriteBytes(new[] {cachedMapPiece}, cachedMapPieceIndex + FILE_INFO_LENGTH);
+            FileIO.WriteBytes(BitConverter.GetBytes(mapSize),0);
         }
 
         private static long getFreeBit(byte mapPiece)

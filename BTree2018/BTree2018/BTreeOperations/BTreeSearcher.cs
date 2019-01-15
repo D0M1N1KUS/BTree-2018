@@ -49,7 +49,7 @@ namespace BTree2018.BTreeOperations
             {
                 FoundPage = currentPage;
                 var index = BisectSearch.GetClosestIndexTo(currentPage, key.Value);
-                if (index <= 0) return false;
+                if (index < 0) return false;
                 if (key.Equals(currentPage.KeyAt(index)))
                 {
                     FoundKey = currentPage.KeyAt(index);
@@ -59,7 +59,7 @@ namespace BTree2018.BTreeOperations
                 }
 
                 if (currentPage.PageType == PageType.LEAF) return false;
-                if (key.CompareTo(currentPage.KeyAt(index)) == (int)Comparison.LESS)
+                if (key.CompareTo(currentPage.KeyAt(index)) == (int)Comparison.GREATER)
                 {
                     if (currentPage.RightPointerAt(index).Equals(BTreePagePointer<int>.NullPointer))
                         return false; //RootPage failsave

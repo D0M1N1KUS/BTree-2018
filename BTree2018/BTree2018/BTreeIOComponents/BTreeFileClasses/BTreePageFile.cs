@@ -155,7 +155,8 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
 
         public IPagePointer<T> AddNewPage(IPage<T> page)
         {
-            if(page.PagePointer != null && !page.PagePointer.Equals(BTreePagePointer<T>.NullPointer))
+            if(page.PagePointer != null && !page.PagePointer.Equals(BTreePagePointer<T>.NullPointer) && 
+               page.PageType != PageType.ROOT)
                 Logger.Log("BTreePageFile warning: Adding page with already initialized pointer - " + page);
             
             var newPagePointer = new BTreePagePointer<T>()

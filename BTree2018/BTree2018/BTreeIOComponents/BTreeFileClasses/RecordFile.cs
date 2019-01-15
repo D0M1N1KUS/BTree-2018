@@ -13,6 +13,7 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
     {
         private const long MAX_VALUES_IN_RECORD = 15;
         private const long TYPE_STRING_PREAMBLE_SIZE = 64 * sizeof(byte);
+        private readonly long SizeOfRecord;
         
         public IFileIO FileIO;
         public IFileBitmap FileMap;
@@ -26,6 +27,7 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
         public RecordFile(int sizeOfType)
         {
             this.sizeOfType = sizeOfType;
+            SizeOfRecord = MAX_VALUES_IN_RECORD * sizeOfType;
         }
 
         public void WriteInitialValuesToFile()
@@ -66,7 +68,8 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
             if(pointer.PointerType == RecordPointerType.NULL) throw new NullReferenceException(pointer.ToString());
             if(pointer.Index < FileMap.CurrentMapSize && !FileMap[pointer.Index])
                 Logger.Log("RecordFile: Possible inconsistency detected at " + pointer);
-            var bytes = FileIO.GetBytes(pointer.Index + TYPE_STRING_PREAMBLE_SIZE, sizeOfType * MAX_VALUES_IN_RECORD);
+            var bytes = FileIO.GetBytes(pointer.Index * SizeOfRecord + 
+                                        TYPE_STRING_PREAMBLE_SIZE, sizeOfType * MAX_VALUES_IN_RECORD);
             return new Record<T>(byteArrayToRecord(bytes), pointer);
         }
         
@@ -75,13 +78,15 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
         {
             if (record.RecordPointer != RecordPointer<T>.NullPointer)
                 throw new NullReferenceException(record.ToString());
-            FileIO.WriteBytes(recordToByteArray(record.ValueComponents), record.RecordPointer.Index);
+            FileIO.WriteBytes(recordToByteArray(record.ValueComponents), 
+                TYPE_STRING_PREAMBLE_SIZE + record.RecordPointer.Index * SizeOfRecord);
         }
 
         public IRecordPointer<T> AddRecord(IRecord<T> record)
         {
             var index = getIndexForNewRecord(record); 
-            FileIO.WriteBytes(recordToByteArray(record.ValueComponents), index);
+            FileIO.WriteBytes(recordToByteArray(record.ValueComponents), 
+                TYPE_STRING_PREAMBLE_SIZE + index * SizeOfRecord);
             FileMap[index] = true;
             return new RecordPointer<T>(){Index = index, PointerType = RecordPointerType.NOT_NULL};
         }

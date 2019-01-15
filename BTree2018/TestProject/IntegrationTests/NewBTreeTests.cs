@@ -1,6 +1,7 @@
 using System;
 using BTree2018;
 using BTree2018.BTreeStructure;
+using BTree2018.Interfaces;
 using BTree2018.Logging;
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace TestProject.IntegrationTests
         private const string recordMapFilePath = "D:\\RecordMap";
 
         [Test]
-        public void addKeysToRoot()
+        public void addKeysToRootAndRootSplit()
         {
             try
             {
@@ -42,6 +43,12 @@ namespace TestProject.IntegrationTests
                 Logger.Log(e);
                 Assert.Fail(Logger.GetLog());
             }
+        }
+
+        private IRecord<int> getNewRecord(int value)
+        {
+            return new Record<int>(new int[] {value, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                RecordPointer<int>.NullPointer);
         }
     }
 }
