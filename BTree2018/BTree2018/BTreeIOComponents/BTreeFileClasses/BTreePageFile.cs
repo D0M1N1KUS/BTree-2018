@@ -77,7 +77,7 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
 
             TreeHeight = BitConverter.ToInt64(FileIO.GetBytes(LocationOfTreeHeight, SIZE_OF_HEIGHT_VARIABLE),
                 0);
-            D = BitConverter.ToInt64(FileIO.GetBytes(LocationOfD, SIZE_OF_D), 0);
+            D = BitConverter.ToInt64(FileIO.GetBytes(LocationOfDInFile, SIZE_OF_D), 0);
             RootPage = PagePointerConverter.ConvertToPointer(FileIO.GetBytes(LocationOfRootPagePointer,
                 SizeOfPagePointer));
             

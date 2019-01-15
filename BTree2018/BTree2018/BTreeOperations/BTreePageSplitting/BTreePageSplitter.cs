@@ -50,8 +50,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
             else
             {
                 var newRootPage = new BTreePageBuilder<T>((int) page.PageLength)
-                    .SetPageType(PageType.ROOT)
-                    .SetParentPagePointer(BTreePagePointer<T>.NullPointer)
+                    .CreateEmptyCloneFromPage(page)
                     .AddKey(page.KeyAt(keysInSplittedPages))
                     .AddPointer(page.LeftPointerAt(keysInSplittedPages))
                     .AddPointer(rightPagePointer)
@@ -66,7 +65,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
         {
             if(page.KeysInPage < page.PageLength)
                 Logger.Log("BTreeSplitter warning: The provided page isn't full: " + page);
-            if(page.KeysInPage % 2 == 1)
+            if(page.KeysInPage % 2 == 0)
                 Logger.Log("BTreeSplitter waring: The provided page has an even number of keys: " + 
                            page);
         }

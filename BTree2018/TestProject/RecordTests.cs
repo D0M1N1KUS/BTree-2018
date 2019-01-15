@@ -57,5 +57,17 @@ namespace UnitTests
             
             Assert.IsTrue(comparison == 1);
         }
+
+        [Test]
+        public void recordValueCalculationTest()
+        {
+            var expectedValue = 10;
+            
+            var actualValue = new Record<int>(new []{-10,2,3,4,5,6,10}, 
+                RecordPointer<int>.NullPointer).Value;
+            
+            
+            Assert.AreEqual(expectedValue, actualValue);
+        }
     }
 }

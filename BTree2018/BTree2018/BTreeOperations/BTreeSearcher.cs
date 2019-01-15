@@ -21,22 +21,21 @@ namespace BTree2018.BTreeOperations
         public IPage<T> FoundPage { get; private set; }
         public long FoundKeyIndex { get; private set; }
 
-        public IRecord<T> FoundRecord
-        {
-            get
-            {
-                if (foundRecord != null) return foundRecord;
-                if(FoundKey == null) throw new Exception("Can't find record! No key was found yet.");
-                foundRecord = BTreeIO.GetRecord(FoundKey.RecordPointer);
-                return foundRecord;
-            }
-            private set => foundRecord = value;
-        }
+//        public IRecord<T> FoundRecord
+//        {
+//            get
+//            {
+//                if (foundRecord != null) return foundRecord;
+//                if(FoundKey == null) throw new Exception("Can't find record! No key was found yet.");
+//                foundRecord = BTreeIO.GetRecord(FoundKey.RecordPointer);
+//                return foundRecord;
+//            }
+//            private set => foundRecord = value;
+//        }
 
         public bool SearchForKey(IKey<T> key)
         {
             FoundKey = null;
-            FoundRecord = null;
             FoundPage = null;
             FoundKeyIndex = -1;
             
@@ -48,7 +47,9 @@ namespace BTree2018.BTreeOperations
             var currentPage = beginningPage;
             while (currentPage.PageType != PageType.NULL)
             {
+                FoundPage = currentPage;
                 var index = BisectSearch.GetClosestIndexTo(currentPage, key.Value);
+                if (index <= 0) return false;
                 if (key.Equals(currentPage.KeyAt(index)))
                 {
                     FoundKey = currentPage.KeyAt(index);

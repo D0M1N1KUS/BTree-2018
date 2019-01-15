@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BTree2018.BTreeIOComponents.BTreeFileClasses;
 using BTree2018.BTreeStructure;
 using BTree2018.Builders;
@@ -11,12 +12,17 @@ namespace BTree2018.BTreeIOComponents.Converters
     //KeysInPage[long], ParentPagePointer[...], PageType[byte], FirstPointer, FirstKey, ...
     public class BTreePageConverter<T> : BTreePageStructureInfo<T>, IBTreePageConversion<T> where T : IComparable
     {
+        private readonly byte[] zeroKey;
+        private readonly byte[] zeroPointer;
+        
         public IBTreePagePointerConversion<T> PagePointerConverter = new BTreePagePointerConverter<T>();
         public IBTreeKeyConversion<T> KeyConverter;
 
         public BTreePageConverter(long d, int sizeOfType) : base(d, sizeOfType)
         {
             KeyConverter = new BTreeKeyConverter<T>(sizeOfType);
+            zeroKey = Enumerable.Repeat((byte) 0, (int) SizeOfPageKey).ToArray();
+            zeroPointer = Enumerable.Repeat((byte) 0, (int) SizeOfPagePointer).ToArray();
         }
         
         //TODO: fill up page with zeros or change the converter to output a constant page size
@@ -35,7 +41,7 @@ namespace BTree2018.BTreeIOComponents.Converters
             var pageType = (PageType)bytes[KEYS_IN_PAGE_SIZE + SizeOfPagePointer];    
             pageBuilder.SetPageType(pageType);
 
-            var byteArrayPointer = (int)LocationOfFirstPointer;
+            var byteArrayPointer = (int)FirstPointerInPageOffset;
             if(pageType != PageType.LEAF && keysInPage > 0)
                 pageBuilder.AddPointer(PagePointerConverter.ConvertToPointer(bytes, byteArrayPointer));
             byteArrayPointer += (int)SizeOfPagePointer;
@@ -65,7 +71,9 @@ namespace BTree2018.BTreeIOComponents.Converters
             byteList.AddRange(PagePointerConverter.ConvertToBytes(page.ParentPage));
             byteList.Add((byte)page.PageType);
             
-            if(page.KeysInPage > 0) byteList.AddRange(PagePointerConverter.ConvertToBytes(page.PointerAt(0)));
+            byteList.AddRange(PagePointerConverter.ConvertToBytes(page.KeysInPage > 0 
+                ? page.PointerAt(0)
+                : BTreePagePointer<T>.NullPointer));
             for (var i = 0; i < PageLengthN; i++)
             {
                 byteList.AddRange(KeyConverter.ConvertToBytes(i < page.KeysInPage

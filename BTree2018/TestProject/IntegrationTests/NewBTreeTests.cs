@@ -1,5 +1,7 @@
+using System;
 using BTree2018;
 using BTree2018.BTreeStructure;
+using BTree2018.Logging;
 using NUnit.Framework;
 
 namespace TestProject.IntegrationTests
@@ -15,23 +17,31 @@ namespace TestProject.IntegrationTests
         [Test]
         public void addKeysToRoot()
         {
-            var bTree = BTreeBuilder<int>.New(sizeof(int), 2, pageFilePath, recordFilePath, pageMapFilePath,
-                recordMapFilePath);
-            var expectedRecord = new Record<int>(new int[] {4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                RecordPointer<int>.NullPointer);
-            bTree.Add(new Record<int>(new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                RecordPointer<int>.NullPointer));
-            bTree.Add(new Record<int>(new int[] {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                RecordPointer<int>.NullPointer));
-            bTree.Add(new Record<int>(new int[] {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                RecordPointer<int>.NullPointer));
-            bTree.Add(expectedRecord);
-            bTree.Add(new Record<int>(new int[] {5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                RecordPointer<int>.NullPointer)); //split
+            try
+            {
+                var bTree = BTreeBuilder<int>.New(sizeof(int), 2, pageFilePath, recordFilePath, pageMapFilePath,
+                    recordMapFilePath);
+                var expectedRecord = new Record<int>(new int[] {4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    RecordPointer<int>.NullPointer);
+                bTree.Add(new Record<int>(new int[] {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    RecordPointer<int>.NullPointer));
+                bTree.Add(new Record<int>(new int[] {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    RecordPointer<int>.NullPointer));
+                bTree.Add(new Record<int>(new int[] {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    RecordPointer<int>.NullPointer));
+                bTree.Add(expectedRecord);
+                bTree.Add(new Record<int>(new int[] {5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    RecordPointer<int>.NullPointer)); //split
             
-            var actualRecord = bTree.Get(new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 4});
+                var actualRecord = bTree.Get(new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 4});
             
-            Assert.AreEqual(expectedRecord, actualRecord);
+                Assert.AreEqual(expectedRecord, actualRecord);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e);
+                Assert.Fail(Logger.GetLog());
+            }
         }
     }
 }

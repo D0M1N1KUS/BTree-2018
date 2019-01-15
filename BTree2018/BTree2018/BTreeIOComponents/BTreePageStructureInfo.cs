@@ -18,15 +18,19 @@ namespace BTree2018.BTreeIOComponents
         public readonly long PAGE_TYPE_SIZE;
 
         /// <summary>Contains the location of the first BTree page pointer's first byte in the file</summary>
-        public readonly long LocationOfFirstPointer;
+        public readonly long LocationOfFirstPointerInFile;
         /// <summary>Contains the location of the first BTree page key's first byte in the file</summary>
-        public readonly long LocationOfFirstKey;
+        public readonly long LocationOfFirstKeyInFile;
         /// <summary>Contains the location of the Root page pointer's first byte in the file</summary>
         public readonly long LocationOfRootPagePointer;
         /// <summary>Contains the location of the Tree height's first byte in the file</summary>
         public readonly long LocationOfTreeHeight;
         /// <summary>Contains the location of the BTree's D property's first byte in the file</summary>
-        public readonly long LocationOfD;
+        public readonly long LocationOfDInFile;
+        /// <summary>Contains the offset of a BTree page's first pointer's location from the beginning of the current page</summary>
+        public readonly long FirstPointerInPageOffset;
+        /// <summary>Contains the offset of a BTree page's first key's location from the beginning of the current page</summary>
+        public readonly long FirstKeyInPageOffset;
 
         /// <summary>Describes the size of the value type in bytes</summary>
         public readonly int SizeOfType;
@@ -44,6 +48,8 @@ namespace BTree2018.BTreeIOComponents
         public readonly long PageLengthN;
         /// <summary>The BTree's D property</summary>
         public readonly long D;
+        /// <summary>Describes the BTree page's length of the info section</summary>
+        public readonly long LengthOfPagePreamble;
 
         public BTreePageStructureInfo(long d, int sizeOfType)
         {
@@ -61,12 +67,15 @@ namespace BTree2018.BTreeIOComponents
                        PageLengthN * SizeOfPageKey + PageLengthN * SizeOfPagePointer + 2 * SizeOfPagePointer;
 
             LengthOfPreamble = SIZE_OF_TYPE_STRING + SIZE_OF_HEIGHT_VARIABLE + SIZE_OF_D + SizeOfPagePointer;
-            
-            LocationOfFirstPointer = LengthOfPreamble;
-            LocationOfFirstKey = LocationOfFirstPointer + SizeOfPagePointer;
+            LengthOfPagePreamble = KEYS_IN_PAGE_SIZE + SizeOfPagePointer + PAGE_TYPE_SIZE;
+
+            FirstPointerInPageOffset = LengthOfPagePreamble;
+            FirstKeyInPageOffset = FirstPointerInPageOffset + SizeOfPagePointer;
+            LocationOfFirstPointerInFile = LengthOfPreamble;
+            LocationOfFirstKeyInFile = LocationOfFirstPointerInFile + SizeOfPagePointer;
             LocationOfTreeHeight = SIZE_OF_TYPE_STRING;
             LocationOfRootPagePointer = SIZE_OF_TYPE_STRING + SIZE_OF_HEIGHT_VARIABLE + SIZE_OF_D;
-            LocationOfD = SIZE_OF_TYPE_STRING + SIZE_OF_HEIGHT_VARIABLE;
+            LocationOfDInFile = SIZE_OF_TYPE_STRING + SIZE_OF_HEIGHT_VARIABLE;
         }
     }
 }

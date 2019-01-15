@@ -36,8 +36,7 @@ namespace BTree2018.BTreeOperations
 
         public IPage<T> AddToPage(IKey<T> key, IPage<T> page)
         {
-            if (page.KeysInPage < page.PageLength || 
-                page.KeysInPage == page.PageLength)//m < 2d
+            if (page.KeysInPage < page.PageLength) //|| page.KeysInPage == page.PageLength)//m < 2d
             {
                 var newPage = addKeyToPage(page, key);
                 BTreeIO.WritePage(newPage);
@@ -58,8 +57,7 @@ namespace BTree2018.BTreeOperations
         {
             var keyAdded = false;
             var pageBuilder = new BTreePageBuilder<T>((int) currentPage.PageLength)
-                .SetPageType(currentPage.PageType)
-                .SetParentPagePointer(currentPage.ParentPage)
+                .CreateEmptyCloneFromPage(currentPage)
                 .AddPointer(currentPage.LeftPointerAt(0));
             for (var i = 0; i < currentPage.KeysInPage; i++)
             {

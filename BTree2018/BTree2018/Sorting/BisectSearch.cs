@@ -9,6 +9,7 @@ namespace BTree2018.Bisection
         
         public long GetClosestIndexTo(ICustomCollection<T> collection, T searchedValue)
         {
+            if (collection.Length <= 0) return -1;
             var lowerEnd = (long)0;
             var higherEnd = collection.Length;
             while (true)

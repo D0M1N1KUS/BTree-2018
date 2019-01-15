@@ -18,10 +18,11 @@ namespace BTree2018.BTreeStructure
         public Record(T[] valueComponents, IRecordPointer<T> pointer)
         {
             ValueComponents = valueComponents;
-            Value = GenericArithmetic<T>.ConvertToGeneric(0);
+            Value = valueComponents[0];
             foreach (var value in valueComponents)
             {
-                Value = GenericArithmetic<T>.Sum(Value, value);
+                if (value.CompareTo(Value) == (int) Comparison.GREATER)
+                    Value = value;
             }
 
             RecordPointer = pointer;
