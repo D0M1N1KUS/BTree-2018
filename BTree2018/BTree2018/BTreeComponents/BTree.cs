@@ -19,7 +19,10 @@ namespace BTree2018.BTreeStructure
         public IBTreeSearching<T> Searcher;
         
         private IKey<T> lastSearchedKey = null;
-        
+
+        public long D => BTreeIO.D;
+        public long H => BTreeIO.H;
+
         public void Add(IRecord<T> record)
         {
             var newKey = new BTreeKey<T>(){RecordPointer = RecordPointer<T>.NullPointer, Value = record.Value};

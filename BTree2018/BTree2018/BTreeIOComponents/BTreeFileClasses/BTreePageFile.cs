@@ -37,7 +37,7 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
             D = d;
             FileIO = new FileIO(pageFilePath);
             FileMap = new FileMap(pageFileMapPath);
-            PageConverter = new BTreePageConverter<T>(d, sizeOfType);
+            PageConverter = new BTreePageConverter<T>(D, sizeOfType);
             PagePointerConverter = new BTreePagePointerConverter<T>();
             writeInitialValuesToFile();
         }
@@ -78,11 +78,14 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
             TreeHeight = BitConverter.ToInt64(FileIO.GetBytes(LocationOfTreeHeight, SIZE_OF_HEIGHT_VARIABLE),
                 0);
             D = BitConverter.ToInt64(FileIO.GetBytes(LocationOfDInFile, SIZE_OF_D), 0);
-            RootPage = PagePointerConverter.ConvertToPointer(FileIO.GetBytes(LocationOfRootPagePointer,
-                SizeOfPagePointer));
             
             PageConverter = new BTreePageConverter<T>(D, sizeOfType);
             PagePointerConverter = new BTreePagePointerConverter<T>();
+            
+            RootPage = PagePointerConverter.ConvertToPointer(FileIO.GetBytes(LocationOfRootPagePointer,
+                SizeOfPagePointer));
+            
+            CalculateSizesAndLocations(D, sizeOfType);
         }
         
         private void initializeObjectFields(IFileIO fileIO, IFileBitmap fileMap, int sizeOfType)

@@ -33,29 +33,32 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
                 .SetParentPagePointer(page.ParentPage)
                 .SetPageType(page.PageType);
 
-            distributeKeys(page, leftPageBuilder, rightPageBuilder, keysInSplittedPages);
+            distributeKeysAndPointers(page, leftPageBuilder, rightPageBuilder, keysInSplittedPages);
 
             BTreeIO.WritePage(leftPageBuilder.Build());
             var rightPagePointer = BTreeIO.WritePage(rightPageBuilder.Build());
-            BTreeIO.IncreaseTreeHeight();
-            return BTreeAdding.InsertKeyIntoPage(BTreeIO.GetPage(page.ParentPage), page.KeyAt(keysInSplittedPages),
-                rightPagePointer);
+            var modifiedParentPage = BTreeAdding.InsertKeyIntoPage(BTreeIO.GetPage(page.ParentPage), 
+                page.KeyAt(keysInSplittedPages), rightPagePointer);
+            BTreeIO.WritePage(modifiedParentPage);
+            return modifiedParentPage;
         }
 
         
 
         private IPage<T> splitRootPage(IPage<T> rootPage, long keysInSplittedPages)
         {
+            var newChildrenPageType = BTreeIO.H < 2 ? PageType.LEAF : PageType.BRANCH;
+            
             var leftPageBuilder = new BTreePageBuilder<T>((int)rootPage.PageLength)
                 .SetPagePointer(BTreePagePointer<T>.NullPointer)
                 .SetParentPagePointer(rootPage.PagePointer)
-                .SetPageType(PageType.LEAF);
+                .SetPageType(newChildrenPageType);
             var rightPageBuilder = new BTreePageBuilder<T>((int)rootPage.PageLength)
                 .SetPagePointer(BTreePagePointer<T>.NullPointer)
                 .SetParentPagePointer(rootPage.PagePointer)
-                .SetPageType(PageType.LEAF);
+                .SetPageType(newChildrenPageType);
 
-            distributeKeys(rootPage, leftPageBuilder, rightPageBuilder, keysInSplittedPages);
+            distributeKeysAndPointers(rootPage, leftPageBuilder, rightPageBuilder, keysInSplittedPages);
 
             var leftPagePointer = BTreeIO.WritePage(leftPageBuilder.Build());
             var rightPagePointer = BTreeIO.WritePage(rightPageBuilder.Build());
@@ -82,7 +85,7 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
                            page);
         }
         
-        private static void distributeKeys(IPage<T> page, BTreePageBuilder<T> leftPageBuilder, BTreePageBuilder<T> rightPageBuilder,
+        private static void distributeKeysAndPointers(IPage<T> page, BTreePageBuilder<T> leftPageBuilder, BTreePageBuilder<T> rightPageBuilder,
             long keysInSplittedPages)
         {
             leftPageBuilder.AddPointer(page.PointerAt(0));

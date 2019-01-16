@@ -23,6 +23,7 @@ namespace BTree2018.BTreeOperations
                 out var rootPage, out var leftLeafPage, out var rightLeafPage))
             {
                 mergeSpecificRootConfiguration(rootPage, leftLeafPage, rightLeafPage);
+                BTreeIO.DecreaseTreeHeight();
                 return;
             }
 
@@ -48,7 +49,6 @@ namespace BTree2018.BTreeOperations
 
             ParentPage = newParentPage;
             BTreeIO.WritePages(newParentPage, mergedPage);
-            BTreeIO.DecreaseTreeHeight();
         }
 
 

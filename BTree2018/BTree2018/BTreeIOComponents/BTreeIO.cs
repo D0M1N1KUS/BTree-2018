@@ -11,7 +11,10 @@ namespace BTree2018.BTreeIOComponents
     {
         public IBTreePageFile<T> BTreePageFile;
         public IRecordFile<T> RecordFile;
-        
+
+        public long D => BTreePageFile.D;
+        public long H => BTreePageFile.TreeHeight;
+
         public IPagePointer<T> WritePage(IPage<T> page)
         {
             if (page.PagePointer.Equals(BTreePagePointer<T>.NullPointer))

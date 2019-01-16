@@ -31,7 +31,10 @@ namespace UnitTests.HelperClasses
         private List<IPage<T>> returnValuesOfGetRootPage = new List<IPage<T>>();
         private List<IRecordPointer<T>> returnValuesOfWriteRecord = new List<IRecordPointer<T>>();
         private List<IRecord<T>> returnValuesOfGetRecord = new List<IRecord<T>>();
-        
+
+        public long D { get; }
+        public long H { get; }
+
         public IPagePointer<T> WritePage(IPage<T> page)
         {
             WrittenPage.Add(page);

@@ -25,10 +25,9 @@ namespace BTree2018.BTreeOperations
                 out var leftPage, out var rightPage)) //Non leaves
             {
                 recordPointer = removeKeyFromNonLeafPage(leftPage, rightPage, out var newPage, out var modifiedLeafPage);
+                BTreeIO.WritePages(newPage, modifiedLeafPage);
                 if (modifiedLeafPage.KeysInPage < modifiedLeafPage.PageLength / 2)
                     BTreeReorganizer.Reorganize(modifiedLeafPage);
-                else
-                    BTreeIO.WritePages(newPage, modifiedLeafPage);
                 
             }
             else // Leaves
@@ -36,6 +35,9 @@ namespace BTree2018.BTreeOperations
                 recordPointer = BTreeSearching.FoundPage.KeyAt(BTreeSearching.FoundKeyIndex).RecordPointer;
                 var newPage = RemoveKeyFromLeafPage(BTreeSearching.FoundKeyIndex, BTreeSearching.FoundPage);
                 BTreeIO.WritePage(newPage);
+                if (newPage.KeysInPage < newPage.PageLength / 2)
+                    BTreeReorganizer.Reorganize(newPage);
+                    
             }
 
             return recordPointer;
@@ -67,8 +69,8 @@ namespace BTree2018.BTreeOperations
             var newPageBuilder = new BTreePageBuilder<T>((int) BTreeSearching.FoundPage.PageLength)
                 .ClonePage(BTreeSearching.FoundPage);
             var removedKey = smallerPageReturned
-                ? LeafKeyRemoval.RemoveSmallestKey(pageWithMoreKeys, out modifiedLeafPage)
-                : LeafKeyRemoval.RemoveBiggestKey(pageWithMoreKeys, out modifiedLeafPage);
+                ? LeafKeyRemoval.RemoveBiggestKey(pageWithMoreKeys, out modifiedLeafPage)
+                : LeafKeyRemoval.RemoveSmallestKey(pageWithMoreKeys, out modifiedLeafPage);
 
             var recordPointer = BTreeSearching.FoundPage.KeyAt((int) BTreeSearching.FoundKeyIndex).RecordPointer;
             newPageBuilder.ModifyKeyAt((int) BTreeSearching.FoundKeyIndex, removedKey);
@@ -81,9 +83,9 @@ namespace BTree2018.BTreeOperations
             leftPage = null;
             rightPage = null;
 
-            if (foundPage.LeftPointerAt(index).Equals(BTreePagePointer<T>.NullPointer))
+            if (!foundPage.LeftPointerAt(index).Equals(BTreePagePointer<T>.NullPointer))
                 leftPage = BTreeIO.GetPage(foundPage.LeftPointerAt(index));
-            if (foundPage.RightPointerAt(index).Equals(BTreePagePointer<T>.NullPointer))
+            if (!foundPage.RightPointerAt(index).Equals(BTreePagePointer<T>.NullPointer))
                 rightPage = BTreeIO.GetPage(foundPage.RightPointerAt(index));
 
             return leftPage != null || rightPage != null;

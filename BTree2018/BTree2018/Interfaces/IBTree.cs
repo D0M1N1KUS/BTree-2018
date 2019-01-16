@@ -11,6 +11,9 @@ namespace BTree2018.Interfaces.BTreeStructure
         //Splitting class is required
         //Merging required
 
+        long D { get; }
+        long H { get; }
+
         void Add(IRecord<T> record); //Adding
         void Remove(IRecord<T> record); //Removing
         void Remove(IKey<T> key);

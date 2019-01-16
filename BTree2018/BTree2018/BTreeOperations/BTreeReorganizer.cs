@@ -18,7 +18,8 @@ namespace BTree2018.BTreeOperations
                 {
                     BTreeMerger.Merge(currentPage);
                     if (BTreeMerger.ParentPage != null &&
-                        BTreeMerger.ParentPage.KeysInPage < BTreeMerger.ParentPage.PageLength / 2)
+                        BTreeMerger.ParentPage.KeysInPage < BTreeMerger.ParentPage.PageLength / 2 &&
+                        BTreeMerger.ParentPage.PageType != PageType.ROOT)
                     {
                         currentPage = BTreeMerger.ParentPage;
                         continue;

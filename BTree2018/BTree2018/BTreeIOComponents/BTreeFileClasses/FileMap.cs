@@ -10,9 +10,11 @@ namespace BTree2018.BTreeIOComponents
     {
         public IFileIO FileIO;
         public byte CachedMapPiece => cachedMapPiece;
+        ///<summary>Map size in bits</summary>
         public long CurrentMapSize => mapSize;
 
         private const long FILE_INFO_LENGTH = sizeof(long);
+        private const long CACHED_MAP_SIZE = sizeof(byte);
         
         private byte cachedMapPiece;
         private bool cacheEmpty = true;
@@ -94,6 +96,7 @@ namespace BTree2018.BTreeIOComponents
 
         public long GetNextFreeIndex()
         {
+            if(cacheEmpty) getNewCachedMapPiece(0);
             long position = 0;
 
             var freeBit = getFreeBit(cachedMapPiece);
@@ -144,7 +147,7 @@ namespace BTree2018.BTreeIOComponents
             if (index >= mapSize)
             {
                 var newMapSize = index + 8 - index % 8;
-                FileIO.WriteZeros(mapSize, newMapSize);
+                FileIO.WriteZeros(FILE_INFO_LENGTH + mapSize / CACHED_MAP_SIZE, newMapSize - mapSize);
                 FileIO.WriteBytes(BitConverter.GetBytes(newMapSize), 0);
                 Logger.Log("Map size increased from [" + mapSize + "] to [" + newMapSize + "]");
                 mapSize = newMapSize;

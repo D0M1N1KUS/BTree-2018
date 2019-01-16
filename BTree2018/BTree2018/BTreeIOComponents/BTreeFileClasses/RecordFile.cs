@@ -45,8 +45,9 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
         public RecordFile(IFileIO fileIO, IFileBitmap fileMap, int sizeOfType)
         {
             FileIO = fileIO;
-            this.sizeOfType = sizeOfType;
             FileMap = fileMap;
+            this.sizeOfType = sizeOfType;
+            SizeOfRecord = MAX_VALUES_IN_RECORD * sizeOfType;
             var typeStringBytes = FileIO.GetBytes(0, TYPE_STRING_PREAMBLE_SIZE);
             var typeOfRecordsInFile = TypeConverter<T>.TypeStringToType(typeStringBytes);
             if(typeof(T) != typeOfRecordsInFile) throw new Exception("Record file of type [" + typeOfRecordsInFile +

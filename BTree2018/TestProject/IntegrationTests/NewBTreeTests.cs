@@ -1,6 +1,9 @@
 using System;
+using System.IO;
 using BTree2018;
+using BTree2018.BTreeIOComponents.Basics;
 using BTree2018.BTreeStructure;
+using BTree2018.Exceptions;
 using BTree2018.Interfaces;
 using BTree2018.Logging;
 using NUnit.Framework;
@@ -16,7 +19,7 @@ namespace TestProject.IntegrationTests
         private const string recordMapFilePath = "D:\\RecordMap";
 
         [Test]
-        public void addKeysToRootAndRootSplit()
+        public void addKeysToRootAndRootSplit_CreateNewFiles()
         {
             try
             {
@@ -36,7 +39,90 @@ namespace TestProject.IntegrationTests
             
                 var actualRecord = bTree.Get(new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 4});
             
+                Console.WriteLine(Logger.GetLog());
                 Assert.AreEqual(expectedRecord, actualRecord);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e);
+                Assert.Fail(Logger.GetLog());
+            }
+
+            //cleanUp();
+        }
+
+        [Test]
+        public void readBTreeFromExistingFile()
+        {
+            try
+            {
+                var bTree = BTreeBuilder<int>.Open(sizeof(int), pageFilePath, recordFilePath, pageMapFilePath,
+                    recordMapFilePath);
+                var expectedRecord = getNewRecord(4);
+
+                var actualRecord =
+                    bTree.Get(new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 4});
+                
+                Console.WriteLine(Logger.GetLog());
+                Assert.AreEqual(expectedRecord, actualRecord);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e);
+                Assert.Fail(Logger.GetLog());
+            }
+            //cleanUp();
+        }
+
+        [Test]
+        public void compensationTest()//TODO: recordmap is not being saved properly
+        {
+            var bTree = BTreeBuilder<int>.Open(sizeof(int), pageFilePath, recordFilePath, pageMapFilePath,
+                recordMapFilePath);
+
+            Assert.Throws<DuplicateKeyException>(() => bTree.Add(getNewRecord(5)));
+            
+            bTree.Add(getNewRecord(6));
+            bTree.Add(getNewRecord(7));
+            bTree.Add(getNewRecord(8)); //Compensation
+            bTree.Add(getNewRecord(9)); //Compensation
+            bTree.Add(getNewRecord(10)); //Split
+
+            for (var i = 0; i < 10; i++)
+            {
+                if(!bTree.HasKey(i+1))
+                    Assert.Fail("Key [" + (i+1).ToString() + "] not found!");
+            }
+            
+            Console.WriteLine(Logger.GetLog());
+            Assert.AreEqual(2, bTree.H);
+        }
+
+        [Test]
+        public void deletingRecordsTest()
+        {
+            try
+            {
+                var bTree = BTreeBuilder<int>.New(sizeof(int), 2, pageFilePath, recordFilePath, pageMapFilePath,
+                    recordMapFilePath);
+                bTree.Add(getNewRecord(1));
+                bTree.Add(getNewRecord(2));
+                bTree.Add(getNewRecord(3));
+                bTree.Add(getNewRecord(4));
+                bTree.Add(getNewRecord(5)); //split
+                bTree.Add(getNewRecord(6));
+                bTree.Add(getNewRecord(7));
+                bTree.Add(getNewRecord(8)); //Compensation
+                bTree.Add(getNewRecord(9)); //Compensation
+                bTree.Add(getNewRecord(10)); //Split
+
+                bTree.Remove(4); //Just delete
+
+                bTree.Remove(8); //Gets key from leaf -> merge
+                bTree.Add(getNewRecord(11));
+
+                Console.WriteLine(Logger.GetLog());
+                Assert.AreEqual(2, bTree.H);
             }
             catch (Exception e)
             {
@@ -49,6 +135,14 @@ namespace TestProject.IntegrationTests
         {
             return new Record<int>(new int[] {value, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                 RecordPointer<int>.NullPointer);
+        }
+        
+        private static void cleanUp()
+        {
+            File.Delete(pageFilePath);
+            File.Delete(pageMapFilePath);
+            File.Delete(recordFilePath);
+            File.Delete(recordMapFilePath);
         }
     }
 }

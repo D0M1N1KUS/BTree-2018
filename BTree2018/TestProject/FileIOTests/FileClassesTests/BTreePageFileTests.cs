@@ -24,6 +24,7 @@ namespace UnitTests.FileIOTests.FileClassesTests
         private readonly string tempMapFile = "D:\\tempMapFile.map";
         
         [Test]
+        [Ignore("Outdated")]
         public void writeInitialValuesToFileTest()
         {
             var fileMap = Substitute.For<IFileBitmap>();
@@ -49,6 +50,7 @@ namespace UnitTests.FileIOTests.FileClassesTests
         }
 
         [Test]
+        [Ignore("Outdated")]
         public void addingNewPageTest_fileIsEmpty()
         {
             try

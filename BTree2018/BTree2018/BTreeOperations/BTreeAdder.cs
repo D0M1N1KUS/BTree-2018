@@ -46,7 +46,7 @@ namespace BTree2018.BTreeOperations
             {
                 if (!BTreeCompensation.Compensate(page, key))
                     return BTreeSplitting.Split(page, key);
-                return BTreeCompensation.Page; //TODO: test return page;
+                return BTreeCompensation.Page;
             }
 
             throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!",
