@@ -132,7 +132,7 @@ namespace TestProject.IntegrationTests
         }
 
         [Test]
-        public void fillUpTreeAndEmptyItAgain()
+        public void fillUpTreeAndEmptyItAgain_RotatingLeft()
         {
             try
             {
@@ -157,8 +157,34 @@ namespace TestProject.IntegrationTests
                 Logger.Log(e);
                 Assert.Fail(Logger.GetLog());
             }
-            
-            
+        }
+        
+        [Test]
+        public void fillUpTreeAndEmptyItAgain_RotatingRight()
+        {
+            try
+            {
+                var bTree = BTreeBuilder<int>.New(sizeof(int), 1, pageFilePath, recordFilePath, pageMapFilePath,
+                    recordMapFilePath);
+
+                for (var i = 31; i >= 0; i--)
+                {
+                    bTree.Add(getNewRecord(i+1));
+                }
+
+                for (var i = 31; i >= 0; i--)
+                {
+                    bTree.Remove(i+1);
+                }
+                
+                Console.WriteLine(Logger.GetLog());
+                Assert.IsTrue(true);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e);
+                Assert.Fail(Logger.GetLog());
+            }
         }
 
         private IRecord<int> getNewRecord(int value)

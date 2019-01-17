@@ -98,6 +98,7 @@ namespace BTree2018.BTreeOperations
             BTreeIO.FreePage(rightPage);
             BTreeIO.FreePage(rootPage);
             var newRootPagePointer = BTreeIO.WriteNewRootPage(newRootPage);
+            BTreeIO.FreePage(rightPage);//TODO: Some pages aren't being freed properly
             updateParentPagePointersAfterMerge(newRootPagePointer);
             ParentPage = newRootPage;
         }
