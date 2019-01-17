@@ -11,7 +11,7 @@ namespace BTree2018.BTreeStructure
         public IPagePointer<T>[] Pointers;
         public IKey<T>[] Keys;
 
-        public bool OverFlown { get; set; }
+        public bool OverFlown => KeysInPage > PageLength;
         public long PageLength { get; set; }
         public long KeysInPage { get; set; }
 

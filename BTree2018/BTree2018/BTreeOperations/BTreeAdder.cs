@@ -20,8 +20,9 @@ namespace BTree2018.BTreeOperations
         
         public IBTreeIO<T> BTreeIO;
         public IBTreeSearching<T> BTreeSearching;
-        public IBTreeCompensation<T> BTreeCompensation;
-        public IBTreeSplitting<T> BTreeSplitting;
+//        public IBTreeCompensation<T> BTreeCompensation;
+//        public IBTreeSplitting<T> BTreeSplitting;
+        public IBtreeReorganizing<T> Reorganizer;
         
         public IPage<T> Add(IKey<T> key)
         {
@@ -44,9 +45,10 @@ namespace BTree2018.BTreeOperations
             }
             else if (page.KeysInPage == page.PageLength)//found page is full
             {
-                if (!BTreeCompensation.Compensate(page, key))
-                    return BTreeSplitting.Split(page, key);
-                return BTreeCompensation.Page;
+//                if (!BTreeCompensation.Compensate(page, key))
+//                    return BTreeSplitting.Split(page, key);
+//                return BTreeCompensation.Page;
+                return Reorganizer.Reorganize(page, key);
             }
 
             throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!",

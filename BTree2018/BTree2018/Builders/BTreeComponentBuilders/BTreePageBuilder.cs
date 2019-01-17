@@ -15,7 +15,7 @@ namespace BTree2018.Builders
         private List<IPagePointer<T>> pagePointers;
         private List<IKey<T>> keys;
         private int pageLength;
-        private int keysInPage = -1;
+        private int keysInPage = 0;//TODO: check if changing this from -1 to 0 breaks everything
         
         private IPagePointer<T> ParentPage = BTreePagePointer<T>.NullPointer;
         private PageType PageType = PageType.NULL;
@@ -56,7 +56,7 @@ namespace BTree2018.Builders
                 PageType = pageType,
                 PagePointer = currentPagePointer ?? BTreePagePointer<T>.NullPointer,
                 ParentPage = parentPagePointer ?? BTreePagePointer<T>.NullPointer,
-                KeysInPage = 0, OverFlown = false, 
+                KeysInPage = 0,
                 Keys = new IKey<T>[0], 
                 Pointers = new IPagePointer<T>[0],
                 PageLength = pageLength
@@ -76,7 +76,6 @@ namespace BTree2018.Builders
                 PageType = PageType,
                 KeysInPage = keysInPage,
                 PageLength = pageLength == 0 ? keys.Count : pageLength - 1,
-                OverFlown = keys.Count == pageLength,
                 PagePointer = pagePointer 
             };
 

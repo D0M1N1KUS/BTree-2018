@@ -92,5 +92,10 @@ namespace BTree2018.BTreeIOComponents
         {
             BTreePageFile.SetTreeHeight(BTreePageFile.TreeHeight - value);
         }
+
+        public void SetPageParentPointer(IPagePointer<T> targetPage, IPagePointer<T> parentPage)
+        {
+            BTreePageFile.SetPageParent(targetPage, parentPage);
+        }
     }
 }

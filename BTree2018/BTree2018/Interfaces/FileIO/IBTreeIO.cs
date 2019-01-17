@@ -24,5 +24,7 @@ namespace BTree2018.Interfaces.FileIO
 
         void IncreaseTreeHeight(long value = 1);
         void DecreaseTreeHeight(long value = 1);
+
+        void SetPageParentPointer(IPagePointer<T> targetPage, IPagePointer<T> parentPage);
     }
 }

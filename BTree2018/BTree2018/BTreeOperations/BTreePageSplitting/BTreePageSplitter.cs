@@ -35,11 +35,15 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
 
             distributeKeysAndPointers(page, leftPageBuilder, rightPageBuilder, keysInSplittedPages);
 
-            BTreeIO.WritePage(leftPageBuilder.Build());
+            var leftPagePointer = BTreeIO.WritePage(leftPageBuilder.Build());
             var rightPagePointer = BTreeIO.WritePage(rightPageBuilder.Build());
-            var modifiedParentPage = BTreeAdding.InsertKeyIntoPage(BTreeIO.GetPage(page.ParentPage), 
+            
+            updateParentPagePointersAfterSplit(leftPagePointer);
+            updateParentPagePointersAfterSplit(rightPagePointer);
+            
+            var modifiedParentPage = BTreeAdding.InsertKeyIntoPage(BTreeIO.GetPage(page.ParentPage),
                 page.KeyAt(keysInSplittedPages), rightPagePointer);
-            BTreeIO.WritePage(modifiedParentPage);
+            if(!modifiedParentPage.OverFlown) BTreeIO.WritePage(modifiedParentPage);
             return modifiedParentPage;
         }
 
@@ -62,6 +66,9 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
 
             var leftPagePointer = BTreeIO.WritePage(leftPageBuilder.Build());
             var rightPagePointer = BTreeIO.WritePage(rightPageBuilder.Build());
+            
+            updateParentPagePointersAfterSplit(leftPagePointer);
+            updateParentPagePointersAfterSplit(rightPagePointer);
             
             var newRootPage = new BTreePageBuilder<T>((int) rootPage.PageLength)
                 .CreateEmptyCloneFromPage(rootPage)
@@ -97,6 +104,20 @@ namespace BTree2018.BTreeOperations.BTreeSplitting
                 rightPageBuilder.AddKey(page.KeyAt(i + keysInSplittedPages + 1));
                 rightPageBuilder.AddPointer(page.PointerAt(i + keysInSplittedPages + 2));
             }
+        }
+        
+        
+
+        private void updateParentPagePointersAfterSplit(IPagePointer<T> newPagePointer)
+        {
+            if (newPagePointer.Equals(BTreePagePointer<T>.NullPointer)) 
+                throw new NullReferenceException("BTreePageSplitter error: Tried to access page with null pointer:" +
+                                                 newPagePointer);
+            var newPage = BTreeIO.GetPage(newPagePointer);
+
+            if (newPage.PageType == PageType.LEAF) return;
+            for (var i = 0; i <= newPage.KeysInPage; i++)
+                BTreeIO.SetPageParentPointer(newPage.PointerAt(i), newPagePointer);
         }
 
         public IPage<T> Split(IPage<T> page, IKey<T> keyToInsert)

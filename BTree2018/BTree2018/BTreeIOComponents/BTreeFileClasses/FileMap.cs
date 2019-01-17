@@ -22,9 +22,11 @@ namespace BTree2018.BTreeIOComponents
         private long cachedMapPieceIndex = -1;
 
         private long mapSize;
+        private string filePath;
 
         public FileMap(string filePath)
         {
+            this.filePath = filePath;
             FileIO = new FileIO(filePath);
             writeInitialMapSize();
         }
@@ -149,7 +151,7 @@ namespace BTree2018.BTreeIOComponents
                 var newMapSize = index + 8 - index % 8;
                 FileIO.WriteZeros(FILE_INFO_LENGTH + mapSize / CACHED_MAP_SIZE, newMapSize - mapSize);
                 FileIO.WriteBytes(BitConverter.GetBytes(newMapSize), 0);
-                Logger.Log("Map size increased from [" + mapSize + "] to [" + newMapSize + "]");
+                Logger.Log("Map size increased from [" + mapSize + "] to [" + newMapSize + "] " + filePath);
                 mapSize = newMapSize;
             }
         }

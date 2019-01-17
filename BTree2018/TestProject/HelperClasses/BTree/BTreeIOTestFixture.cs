@@ -124,5 +124,10 @@ namespace UnitTests.HelperClasses
         {
             
         }
+
+        public void SetPageParentPointer(IPagePointer<T> targetPage, IPagePointer<T> parentPage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

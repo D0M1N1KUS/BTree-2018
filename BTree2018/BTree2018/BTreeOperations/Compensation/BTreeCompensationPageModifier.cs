@@ -1,18 +1,27 @@
 using System;
 using System.Collections.Generic;
+using BTree2018.BTreeStructure;
 using BTree2018.Builders;
+using BTree2018.Interfaces.BTreeOperations;
 using BTree2018.Interfaces.BTreeStructure;
+using BTree2018.Interfaces.FileIO;
 
 namespace BTree2018.BTreeOperations
 {
     public class BTreeCompensationPageModifier<T> where T : IComparable
     {
+        public IBTreeIO<T> BTreeIO;
+        public IBTreeAdding<T> BTreeAdding;
+        public IBTreePageNeighbours<T> BTreePageNeighbours;
+        
         public bool EvenOutKeys(ref IPage<T> parentPage, int parentKeyIndex, ref IPage<T> leftPage,
             ref IPage<T> rightPage)
         {
             checkParameters(parentPage, parentKeyIndex, leftPage, rightPage);
             if (!checkIfPagesContainEnoughValues(leftPage, rightPage)) return false;
             distributeKeysAcrossPages(ref parentPage, parentKeyIndex, ref leftPage, ref rightPage, out var parentKey);
+//            updateParentPagePointersAfterCompensation(leftPage.PagePointer);
+//            updateParentPagePointersAfterCompensation(rightPage.PagePointer);
             return true;
         }
         
@@ -76,9 +85,10 @@ namespace BTree2018.BTreeOperations
             }
         }
 
-        private static bool checkIfPagesContainEnoughValues(IPage<T> page1, IPage<T> page2)
+        private bool checkIfPagesContainEnoughValues(IPage<T> page1, IPage<T> page2)
         {
-            return page1.KeysInPage != page2.KeysInPage && page1.KeysInPage + page2.KeysInPage >= page1.PageLength;
+            return page1.KeysInPage != page2.KeysInPage && page1.KeysInPage + page2.KeysInPage <= 4 * BTreeIO.D &&
+                page1.KeysInPage + page2.KeysInPage >= 2 * BTreeIO.D;
         }
 
         private IKey<T>[] getListOfKeys(ref IPage<T> page1, IKey<T> parentKey, ref IPage<T> page2, 
@@ -104,6 +114,18 @@ namespace BTree2018.BTreeOperations
 
             pagePointers = listOfPointers.ToArray();
             return listOfKeys.ToArray();
+        }
+        
+        protected void updateParentPagePointersAfterCompensation(IPagePointer<T> newPagePointer)
+        {
+            if (newPagePointer.Equals(BTreePagePointer<T>.NullPointer)) 
+                throw new NullReferenceException("BTreePageSplitter error: Tried to access page with null pointer:" +
+                                                 newPagePointer);
+            var newPage = BTreeIO.GetPage(newPagePointer);
+
+            if (newPage.PageType == PageType.LEAF) return;
+            for (var i = 0; i <= newPage.KeysInPage; i++)
+                BTreeIO.SetPageParentPointer(newPage.PointerAt(i), newPagePointer);
         }
     }
 }

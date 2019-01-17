@@ -8,10 +8,6 @@ namespace BTree2018.BTreeOperations
 {
     public class BTreeCompensation<T> : BTreeCompensationPageModifier<T>, IBTreeCompensation<T> where T : IComparable
     {
-        public IBTreeIO<T> BTreeIO;
-        public IBTreeAdding<T> BTreeAdding;
-        public IBTreePageNeighbours<T> BTreePageNeighbours;
-        
         public IPage<T> Page { get; private set; }
         
         public bool Compensate(IPage<T> page, IKey<T> keyToAdd)
@@ -19,7 +15,8 @@ namespace BTree2018.BTreeOperations
             var overfilledPage = BTreeAdding.InsertKeyIntoPage(page, keyToAdd);
             return Compensate(overfilledPage);
         }
-
+        //TODO: A BTree with D = 1 is a special occasion, where an underfilled page is an empty page.
+        //TODO: There is a parentPagePointer bug while splitting. Every parent page points to root
         public bool Compensate(IPage<T> page)
         {
             if (!BTreePageNeighbours.GetNeighbours(page, out var leftNeighbourPtr,
@@ -29,7 +26,9 @@ namespace BTree2018.BTreeOperations
             {
                 if (!EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref page))
                     return false;
-                BTreeIO.WritePages(parentPage, leftNeighbourPage, page);
+                var pointers = BTreeIO.WritePages(parentPage, leftNeighbourPage, page);
+                updateParentPagePointersAfterCompensation(pointers[1]);
+                updateParentPagePointersAfterCompensation(pointers[2]);
                 Page = page;
                 return true;
             }
@@ -37,8 +36,10 @@ namespace BTree2018.BTreeOperations
             {
                 if (!EvenOutKeys(ref parentPage, parentKeyIndex, ref page, ref rightNeighbourPage))
                     return false;
-                BTreeIO.WritePages(parentPage, page, rightNeighbourPage);
+                var pointers = BTreeIO.WritePages(parentPage, page, rightNeighbourPage);
                 Page = page;
+                updateParentPagePointersAfterCompensation(pointers[1]);
+                updateParentPagePointersAfterCompensation(pointers[2]);
                 return true;
             }
             else
@@ -55,7 +56,7 @@ namespace BTree2018.BTreeOperations
             }
 
             page = BTreeIO.GetPage(pointer);
-            return pageExistsAndIsNotFull(page);
+            return page.PageType != PageType.NULL; //pageExistsAndIsNotFull(page);
         }
 
         private static bool pageExistsAndIsNotFull(IPage<T> page)

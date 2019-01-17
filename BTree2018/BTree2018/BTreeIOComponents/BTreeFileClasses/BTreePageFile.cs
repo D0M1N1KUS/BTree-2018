@@ -139,6 +139,14 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
                 LengthOfPreamble + PageSize * page.PagePointer.Index);
         }
 
+        public void SetPageParent(IPagePointer<T> targetPage, IPagePointer<T> parentPagePointer)
+        {
+            checkPointer(targetPage);
+            checkPointer(parentPagePointer);
+            FileIO.WriteBytes(PagePointerConverter.ConvertToBytes(parentPagePointer), 
+                LengthOfPreamble + targetPage.Index * PageSize + KEYS_IN_PAGE_SIZE);
+        }
+
         public IPagePointer<T> AddNewRootPage(IPage<T> newRootPage)
         {
             if(newRootPage.PageType != PageType.ROOT) throw new Exception("The page " + newRootPage + 

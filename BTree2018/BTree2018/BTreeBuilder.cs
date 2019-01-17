@@ -87,7 +87,7 @@ namespace BTree2018
             {
                 BTreeIO = BTreeIO,
                 BTreeSearching = Searcher
-                //compensation, splitter added later
+                //Reorganizer added later
             };
 
             Remover = new BTreeKeyRemover<T>()
@@ -101,14 +101,19 @@ namespace BTree2018
             initializeMerger();
             initializeSplitter();
 
-            Adder.BTreeSplitting = Splitter;
-            Adder.BTreeCompensation = Compensator;
+//            Adder.BTreeSplitting = Splitter;
+//            Adder.BTreeCompensation = Compensator;
 
             initializeLeafRemover();
             initializeReorganizer();
 
             Remover.LeafKeyRemoval = LeafRemover;
             Remover.BTreeReorganizer = Reorganizer;
+
+            Reorganizer.BTreeAdder = Adder;
+            Reorganizer.BTreeSplitter = Splitter;
+
+            Adder.Reorganizer = Reorganizer;
 
             return new BTree<T>()
             {
@@ -121,7 +126,7 @@ namespace BTree2018
             Reorganizer = new BTreeReorganizer<T>()
             {
                 BTreeCompensation = Compensator,
-                BTreeMerger = Merger
+                BTreeMerger = Merger,
             };
         }
 

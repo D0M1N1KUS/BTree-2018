@@ -8,9 +8,6 @@ namespace BTree2018.BTreeOperations
 {
     public class BTreeMerger<T> : BTreePageMergerBase<T>, IBTreeMerging<T> where T : IComparable
     {
-        public IBTreeIO<T> BTreeIO;
-        public IBTreePageNeighbours<T> BTreePageNeighbours;
-        
         public IPage<T> ParentPage { get; private set; }
         
         public void Merge(IPage<T> pageWithShortage)
@@ -48,7 +45,12 @@ namespace BTree2018.BTreeOperations
                                     "aren't suitable for merging!");
 
             ParentPage = newParentPage;
-            BTreeIO.WritePages(newParentPage, mergedPage);
+            var mergedPagePointer = BTreeIO.WritePage(mergedPage);
+            if (newParentPage.PageType == PageType.ROOT)
+                BTreeIO.WriteNewRootPage(newParentPage);
+            else
+                BTreeIO.WritePage(newParentPage);
+            updateParentPagePointersAfterMerge(mergedPagePointer);
         }
 
 
@@ -95,7 +97,8 @@ namespace BTree2018.BTreeOperations
             var newRootPage = MergePagesAndKey(leftPage, rootPage.KeyAt(0), rightPage, PageType.ROOT);
             BTreeIO.FreePage(rightPage);
             BTreeIO.FreePage(rootPage);
-            BTreeIO.WriteNewRootPage(newRootPage);
+            var newRootPagePointer = BTreeIO.WriteNewRootPage(newRootPage);
+            updateParentPagePointersAfterMerge(newRootPagePointer);
             ParentPage = newRootPage;
         }
         

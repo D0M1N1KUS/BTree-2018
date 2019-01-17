@@ -69,7 +69,7 @@ namespace UnitTests.BTreeOperationsTests
                     new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 4},
                     new BTreeKey<int>() {RecordPointer = RecordPointer<int>.NullPointer, Value = 5}
                 },
-                KeysInPage = 5, OverFlown = true, PageType = PageType.LEAF, PagePointer = expectedLeftPagePointer,
+                KeysInPage = 5, PageType = PageType.LEAF, PagePointer = expectedLeftPagePointer,
                 PageLength = 4, ParentPage = parentPage.PagePointer,
                 Pointers = new IPagePointer<int>[]
                 {

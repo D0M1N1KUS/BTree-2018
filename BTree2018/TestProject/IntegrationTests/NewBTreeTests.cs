@@ -131,6 +131,36 @@ namespace TestProject.IntegrationTests
             }
         }
 
+        [Test]
+        public void fillUpTreeAndEmptyItAgain()
+        {
+            try
+            {
+                var bTree = BTreeBuilder<int>.New(sizeof(int), 1, pageFilePath, recordFilePath, pageMapFilePath,
+                    recordMapFilePath);
+
+                for (var i = 0; i < 32; i++)
+                {
+                    bTree.Add(getNewRecord(i+1));
+                }
+
+                for (var i = 0; i < 32; i++)
+                {
+                    bTree.Remove(i+1);
+                }
+                
+                Console.WriteLine(Logger.GetLog());
+                Assert.IsTrue(true);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e);
+                Assert.Fail(Logger.GetLog());
+            }
+            
+            
+        }
+
         private IRecord<int> getNewRecord(int value)
         {
             return new Record<int>(new int[] {value, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

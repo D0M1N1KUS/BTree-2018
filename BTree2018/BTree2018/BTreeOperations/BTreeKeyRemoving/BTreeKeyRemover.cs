@@ -35,9 +35,8 @@ namespace BTree2018.BTreeOperations
                 recordPointer = BTreeSearching.FoundPage.KeyAt(BTreeSearching.FoundKeyIndex).RecordPointer;
                 var newPage = RemoveKeyFromLeafPage(BTreeSearching.FoundKeyIndex, BTreeSearching.FoundPage);
                 BTreeIO.WritePage(newPage);
-                if (newPage.KeysInPage < newPage.PageLength / 2)
+                if (newPage.KeysInPage < newPage.PageLength / 2 && newPage.PageType != PageType.ROOT)
                     BTreeReorganizer.Reorganize(newPage);
-                    
             }
 
             return recordPointer;

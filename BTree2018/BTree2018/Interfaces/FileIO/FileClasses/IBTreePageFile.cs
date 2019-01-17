@@ -11,6 +11,7 @@ namespace BTree2018.Interfaces.FileIO
         
         IPage<T> PageAt(IPagePointer<T> pointer);
         void SetPage(IPage<T> page);
+        void SetPageParent(IPagePointer<T> targetPage, IPagePointer<T> parentPagePointer);
         IPagePointer<T> AddNewRootPage(IPage<T> newRootPage);
         void SetTreeHeight(long newTreeHeight);
 

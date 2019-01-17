@@ -13,11 +13,10 @@ namespace BTree2018.Logging
         {
             var valueComponentsStringBuilder = new StringBuilder();
             valueComponentsStringBuilder.Append(beginMarker);
-            var lastValue = collection.Last();
-            foreach (var value in collection)
+            for (var i = 0; i < collection.Length; i++)
             {
-                valueComponentsStringBuilder.Append(value);
-                if (!value.Equals(lastValue)) valueComponentsStringBuilder.Append(", ");
+                valueComponentsStringBuilder.Append(collection[i]);
+                if (i != collection.Length - 1) valueComponentsStringBuilder.Append(", ");
             }
 
             valueComponentsStringBuilder.Append("]");
@@ -30,11 +29,11 @@ namespace BTree2018.Logging
         {
             var valueComponentsStringBuilder = new StringBuilder();
             valueComponentsStringBuilder.Append(beginMarker);
-            var lastValue = collection[collection.Length - 1];
+            //var lastValue = collection[collection.Length - 1];
             for (var i = 0; i < collection.Length; i++)
             {
                 valueComponentsStringBuilder.Append(collection[i]);
-                if (!collection[i].Equals(lastValue)) valueComponentsStringBuilder.Append(", ");
+                if (i != collection.Length - 1) valueComponentsStringBuilder.Append(", ");
             }
 
             valueComponentsStringBuilder.Append("]");

@@ -8,8 +8,10 @@ namespace BTree2018.BTreeOperations
     {
         public IBTreeCompensation<T> BTreeCompensation;
         public IBTreeMerging<T> BTreeMerger;
+        public IBTreeAdding<T> BTreeAdder;
+        public IBTreeSplitting<T> BTreeSplitter;
         
-        public void Reorganize(IPage<T> modifiedLeafPage)
+        public IPage<T> Reorganize(IPage<T> modifiedLeafPage)
         {
             var currentPage = modifiedLeafPage;
             while (true)
@@ -27,6 +29,28 @@ namespace BTree2018.BTreeOperations
                 }
                 break;
             }
+
+            return currentPage;
+        }
+
+        public IPage<T> Reorganize(IPage<T> fullPage, IKey<T> keyToInsert)
+        {
+            var currentPage = BTreeAdder.InsertKeyIntoPage(fullPage, keyToInsert);
+            while (true)
+            {
+                if (!BTreeCompensation.Compensate(currentPage))
+                {
+                    var parentPage = BTreeSplitter.Split(currentPage);
+                    if (parentPage != null && parentPage.OverFlown)
+                    {
+                        currentPage = parentPage;
+                        continue;
+                    }
+                }
+                break;
+            }
+
+            return currentPage;
         }
     }
 }
