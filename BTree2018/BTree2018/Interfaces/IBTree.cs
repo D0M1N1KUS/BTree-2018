@@ -18,6 +18,9 @@ namespace BTree2018.Interfaces.BTreeStructure
         void Remove(IRecord<T> record); //Removing
         void Remove(IKey<T> key);
         void Remove(T key);
+        void Replace(T currentKey, IRecord<T> newRecord);
+        void Replace(IKey<T> currentKey, IRecord<T> newRecord);
+        void Replace(IRecord<T> currentRecord, IRecord<T> newRecord);
 
         bool HasKey(T key);//Searching
         IRecord<T> Get(IKey<T> key); //Getting

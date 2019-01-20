@@ -61,43 +61,54 @@
                             <Canvas Height="40">
                                 <Label x:Name="label8" Content="Record value" Foreground="#FFB2B2B2" Height="30" Width="84"/>
                                 <TextBox x:Name="RecordValueTextBox" FocusManager.LostFocus="checkValueOfValueTextBox" TextWrapping="Wrap" Text="0" Background="#3EFFFFFF" Foreground="White" Height="30" Width="226" Canvas.Left="89" VerticalContentAlignment="Center"/>
-                                <Button x:Name="ClearRecordButton"  Content="Clear" Width="90" Canvas.Left="355" Height="30" Background="#FF721D1D" BorderBrush="White" Foreground="White"/>
+                                <Button x:Name="ClearRecordButton" Click="clearValueTextBoxes" Content="Clear" Width="90" Canvas.Left="355" Height="30" Background="#FF721D1D" BorderBrush="White" Foreground="White"/>
                             </Canvas>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox x:Name="OperationsGroupBox" Header="Operations" Margin="10,0,10,10" Foreground="White" Height="171.04" VerticalAlignment="Bottom">
                         <Canvas Margin="0">
-                            <Button x:Name="AddRecordButton" Content="Add" Width="116" Canvas.Left="10" Canvas.Top="10" Height="30" Background="#FF195D26" BorderBrush="White" Foreground="White"/>
-                            <Button x:Name="RemoveRecordButton" Content="Remove" Width="116" Canvas.Left="131" Canvas.Top="10" Height="30" Background="#FF780000" Foreground="White" BorderBrush="White"/>
-                            <Button x:Name="SearchValueButton" Content="Search for value" Width="116" Canvas.Left="466" Canvas.Top="10" Height="30" Background="#FF007878" Foreground="White" BorderBrush="White"/>
-                            <Button x:Name="AlterRecordButton" Content="Search for value" Width="116" Canvas.Left="252" Canvas.Top="10" Height="30" Background="#FFBCC500" Foreground="#FF040404" BorderBrush="White"/>
-                            <TextBlock x:Name="RecordOperationInfoTextBlock" TextWrapping="Wrap" Canvas.Left="10" Canvas.Top="45" Height="90" Width="572"/>
+                            <Button x:Name="AddRecordButton" Click="addRecord" Content="Add" Width="116" Canvas.Left="10" Canvas.Top="10" Height="30" Background="#FF2DBB49" BorderBrush="White" Foreground="Black"/>
+                            <Button x:Name="RemoveRecordButton" Click="removeRecord" Content="Remove" Width="116" Canvas.Left="131" Canvas.Top="10" Height="30" Background="#FFCF3131" Foreground="Black" BorderBrush="White"/>
+                            <Button x:Name="SearchValueButton" Content="Search for value" Width="116" Canvas.Left="466" Canvas.Top="10" Height="30" Background="#FF3AE0E0" Foreground="Black" BorderBrush="White"/>
+                            <Button x:Name="AlterRecordButton" Content="Replace" Width="116" Canvas.Left="252" Canvas.Top="10" Height="30" Background="#FFBCC500" Foreground="#FF040404" BorderBrush="White"/>
+                            <TextBlock x:Name="RecordOperationInfoTextBlock" TextWrapping="Wrap" Canvas.Left="10" Canvas.Top="74" Height="61" Width="572"/>
+                            <CheckBox x:Name="RefreshTreeViewCheckBox" Content="Refresh tree view after completing operation" Canvas.Left="10" Canvas.Top="53.901" Width="311.395" Foreground="White"/>
                         </Canvas>
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="MultipleOperationsTab" Header="Multiple operations">
+            <TabItem x:Name="MultipleOperationsTab" GotFocus="commandTabFocused" Header="Multiple operations">
                 <Grid Background="#FF1F1F1F">
                     <GroupBox x:Name="MultipleOperationsGroupBox" Header="GroupBox" Margin="10,0,10,47.04" Foreground="White">
-                        <TextBox x:Name="MultipleOperationsScriptTextBox" Margin="5,0" TextWrapping="Wrap" Text="add 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5&#xD;&#xA;rem 9&#xD;&#xA;add 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5&#xD;&#xA;alt 9, 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5" Background="#FF323232" Foreground="#FFD4D4D4"/>
+                        <ScrollViewer Margin="0">
+                            <TextBox x:Name="MultipleOperationsScriptTextBox" AcceptsReturn="True" TextWrapping="Wrap" Text="add 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5&#xA;rem 9&#xA;add 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5&#xA;alt 9 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5" Background="#FF323232" Foreground="#FFD4D4D4" Height="531.04" Width="582"/>
+                        </ScrollViewer>
                     </GroupBox>
-                    <Button x:Name="ClearRecordButton_Copy" Content="Execute" Width="90" Height="30" Background="#FF1D7248" BorderBrush="White" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Foreground="White"/>
+                    <Button x:Name="ExecuteMultipleOperationsButton" Click="executeCommands" Content="Execute" Width="90" Height="30" Background="#FF3CDA8C" BorderBrush="White" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Foreground="Black"/>
+                    <Label x:Name="MultipleOperationsInfo" Content="" Margin="10,0,115,10" VerticalAlignment="Bottom" Height="30" Foreground="White"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="LogTab" GotFocus="DisplayLog" Header="Log">
-                <Grid Background="Black">
-                    <TextBlock x:Name="LogTextBlock" TextWrapping="Wrap" Text="TextBlock" Foreground="#FFB0B0B0"/>
+                <Grid Background="#FF1F1F1F">
+                    <ScrollViewer Margin="0,0,0,51" Background="Black">
+                        <TextBlock x:Name="LogTextBlock" Width="{Binding ViewportWidth, ElementName=Scroller}" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="#FFB0B0B0" Height="601.04"/>
+                    </ScrollViewer>
+                    <Button x:Name="ClearLogButton" Click="clearLog" Content="Clear log" Width="90" Height="30" Background="#FF721D1D" BorderBrush="White" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Foreground="Black"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Border BorderThickness="1" Height="25" VerticalAlignment="Bottom" Background="#FF00647D"/>
+        <Border BorderThickness="1" Height="25" VerticalAlignment="Bottom" Background="#FF00647D">
+            <Label x:Name="StatusLabel" Content="" Foreground="White"/>
+        </Border>
         <GroupBox x:Name="TreeViewGroupBox" Header="BTree view" Margin="645,35,10,30" Foreground="White">
-            <TreeView x:Name="BTreeViewTreeView" Background="{x:Null}" d:LayoutOverrides="LeftPosition, RightPosition, TopPosition, BottomPosition"/>
+            <TreeView x:Name="BTreeViewTreeView" Background="{x:Null}" Margin="0,0.98,-2,-0.98">
+                <TreeViewItem x:Name="RootTreeViewItem" Header="Root" Height="591.04" Width="597" Foreground="White" HorizontalAlignment="Left"/>
+            </TreeView>
         </GroupBox>
         <Menu x:Name="menu" Height="30" VerticalAlignment="Top">
             <MenuItem Header="BTree" Height="30" Width="45">
                 <MenuItem Header="New/Open..." Click="showNewBTreeDialog" Height="20"/>
-                <MenuItem Header="Refresh tree view" Height="20"/>
+                <MenuItem Header="Refresh tree view" Click="refreshTreeView" Height="20"/>
             </MenuItem>
         </Menu>
 

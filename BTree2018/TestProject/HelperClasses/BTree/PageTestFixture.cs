@@ -62,8 +62,12 @@ namespace UnitTests.HelperClasses.BTree
         }
 
         public PageType PageType { get; set; }
-        
-        
+        public string ToString(string format = "")
+        {
+            throw new NotImplementedException();
+        }
+
+
         public override bool Equals(object o)
         {
             var otherPage = o as IPage<T>;

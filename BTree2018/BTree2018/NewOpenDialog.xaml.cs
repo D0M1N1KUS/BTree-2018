@@ -93,10 +93,10 @@ namespace BTree2018
         {
             OpenButton.IsEnabled = PageFileSet && PageMapFileSet && RecordFileSet && RecordMapFileSet &&
                                    
-                                   PageFileSelectionTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) >= 0 &&
-                                   RecordFilePathTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) >= 0 &&
-                                   PageMapFilePathTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) >= 0 &&
-                                   RecordMapFilePathTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) >= 0;
+                                   PageFileSelectionTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) == -1 &&
+                                   RecordFilePathTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) == -1 &&
+                                   PageMapFilePathTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) == -1 &&
+                                   RecordMapFilePathTextBox.Text.IndexOfAny(Path.GetInvalidPathChars()) == -1;
             NewButton.IsEnabled = OpenButton.IsEnabled && InputValidation.TryParse<long>(DTextBox.Text);
         }
 

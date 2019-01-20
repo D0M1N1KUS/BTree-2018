@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows.Data;
 using BTree2018.BTreeIOComponents;
 using BTree2018.Builders;
 using BTree2018.Exceptions;
@@ -7,6 +8,7 @@ using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeOperations;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Interfaces.FileIO;
+using BTree2018.Logging;
 
 namespace BTree2018.BTreeStructure
 {
@@ -50,6 +52,42 @@ namespace BTree2018.BTreeStructure
         {
             var keyToRemove = new BTreeKey<T>(){Value = key, RecordPointer = RecordPointer<T>.NullPointer};
             Remove(keyToRemove);
+        }
+
+        public void Replace(T currentKey, IRecord<T> newRecord)
+        {
+            var newKey = new BTreeKey<T>() {Value = newRecord.Value, RecordPointer = RecordPointer<T>.NullPointer};
+            if (newKey.Value.Equals(currentKey))
+            {
+                if (Searcher.SearchForKey(newKey))
+                {
+                    BTreeIO.WriteRecord(new Record<T>(newRecord.ValueComponents, Searcher.FoundKey.RecordPointer));
+                    return;
+                }
+            }
+            else
+            {
+                if (HasKey(newKey.Value))
+                {
+                    Remove(currentKey);
+                    Add(newRecord);
+                    return;
+                }
+                    
+            }
+            Logger.Log("BTree Replace warning: The key " + currentKey +
+                       " does not exist. New record will be added instead.");
+            Add(newRecord);
+        }
+
+        public void Replace(IKey<T> currentKey, IRecord<T> newRecord)
+        {
+            Replace(currentKey.Value, newRecord);
+        }
+
+        public void Replace(IRecord<T> currentRecord, IRecord<T> newRecord)
+        {
+            Replace(currentRecord.Value, newRecord);
         }
 
         public bool HasKey(T key)

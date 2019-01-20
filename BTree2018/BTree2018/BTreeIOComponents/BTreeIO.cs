@@ -4,6 +4,7 @@ using BTree2018.BTreeStructure;
 using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Interfaces.FileIO;
+using BTree2018.Logging;
 
 namespace BTree2018.BTreeIOComponents
 {
@@ -20,6 +21,7 @@ namespace BTree2018.BTreeIOComponents
             if (page.PagePointer.Equals(BTreePagePointer<T>.NullPointer))
                 return BTreePageFile.AddNewPage(page);
             BTreePageFile.SetPage(page);
+            Statistics.AddWrittenPages(1);
             return page.PagePointer;
         }
 
@@ -42,11 +44,13 @@ namespace BTree2018.BTreeIOComponents
 
         public IPage<T> GetPage(IPagePointer<T> pointer)
         {
+            Statistics.AddReadPages(1);
             return BTreePageFile.PageAt(pointer);
         }
 
         public IPage<T> GetRootPage()
         {
+            Statistics.AddReadPages(1);
             return BTreePageFile.PageAt(BTreePageFile.RootPage);
         }
 

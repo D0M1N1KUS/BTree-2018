@@ -109,7 +109,9 @@
     <Compile Include="Interfaces\FileIO\IBTreeKeyConversion.cs" />
     <Compile Include="Interfaces\FileIO\IBTreePageConversion.cs" />
     <Compile Include="Interfaces\FileIO\IBTreePagePointerConversion.cs" />
+    <Compile Include="Interfaces\ICommandExecuter.cs" />
     <Compile Include="Logging\CollectionSerialization.cs" />
+    <Compile Include="Logging\Statistics.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -146,8 +148,10 @@
     <Compile Include="Interfaces\IBTree.cs" />
     <Compile Include="Interfaces\IRecord.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="UtilityClasses\CommandExecuter.cs" />
     <Compile Include="UtilityClasses\FileChooser.cs" />
     <Compile Include="UtilityClasses\InputValidation.cs" />
+    <Compile Include="UtilityClasses\MultipleOperationExecuter.cs" />
     <Compile Include="UtilityClasses\TextInputConverter.cs" />
     <Compile Include="NewOpenDialog.xaml.cs">
       <DependentUpon>NewOpenDialog.xaml</DependentUpon>
