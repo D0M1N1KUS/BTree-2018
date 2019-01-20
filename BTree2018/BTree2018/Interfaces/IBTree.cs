@@ -21,6 +21,8 @@ namespace BTree2018.Interfaces.BTreeStructure
 
         bool HasKey(T key);//Searching
         IRecord<T> Get(IKey<T> key); //Getting
+        IPage<T> GetPage(IPagePointer<T> pointer);
+        IPage<T> GetRootPage();
         void Set(IKey<T> key, IRecord<T> record);
         IRecord<T> this[IKey<T> key] { get; set; }//Getting/Altering
     }

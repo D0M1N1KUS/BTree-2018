@@ -1,0 +1,32 @@
+﻿<Window x:Class="BTree2018.NewOpenDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BTree2018"
+        mc:Ignorable="d"
+        Title="New / Open" Height="450" Width="800"
+        ResizeMode="NoResize">
+    <Grid Background="#FF1F1F1F">
+        <Button x:Name="SelectPagefileButton" Click="openFileDialog" Content="Select" Margin="0,68.068,92.127,0" HorizontalAlignment="Right" Width="75" Background="#FF444444" BorderBrush="#FFCFCFCF" Foreground="#FFC1C1C1" VerticalAlignment="Top" Height="28" d:LayoutOverrides="HorizontalAlignment"/>
+        <Label x:Name="RecordFileLabel" Content="Record file" HorizontalAlignment="Left" Width="98.333" Height="28" VerticalAlignment="Top" Margin="26.873,101.068,0,0" Foreground="#FFB6B6B6" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
+        <TextBox x:Name="RecordFilePathTextBox" TextWrapping="NoWrap" Text="Choose a record file" IsEnabled="False" Margin="130.206,101.068,167.127,0" Background="#3FFFFFFF" Foreground="White" VerticalAlignment="Top" Height="28"/>
+        <Button x:Name="SelectRecordfileButton" Click="openFileDialog" Content="Select" Margin="0,101.068,92.127,0" Background="#FF444444" BorderBrush="#FFCFCFCF" Foreground="#FFC1C1C1" VerticalAlignment="Top" Height="28" HorizontalAlignment="Right" Width="75"/>
+        <Label x:Name="MapFileLabel" Content="Page map file" HorizontalAlignment="Left" Width="98.333" Height="28" VerticalAlignment="Top" Margin="26.873,134.068,0,0" Foreground="#FFB6B6B6" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
+        <TextBox x:Name="PageMapFilePathTextBox" TextWrapping="NoWrap" Text="Choose a page map file" IsEnabled="False" Margin="130.206,134.068,167.127,0" Background="#3FFFFFFF" Foreground="White" VerticalAlignment="Top" Height="28"/>
+        <Button x:Name="SelectPageMapFileButton" Click="openFileDialog" Content="Select" Background="#FF444444" BorderBrush="#FFCFCFCF" Foreground="#FFC1C1C1" Margin="0,134.068,92.127,0" VerticalAlignment="Top" Height="28" HorizontalAlignment="Right" Width="75"/>
+        <Label x:Name="PageFileLabel" Content="Page file" HorizontalAlignment="Left" Width="98.333" Height="28" VerticalAlignment="Top" Margin="26.873,68.068,0,0" Foreground="#FFB6B6B6" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
+        <TextBox x:Name="PageFileSelectionTextBox" TextWrapping="NoWrap" Text="Choose a page file..." IsEnabled="False" Margin="130.206,68.068,167.127,0" Background="#3FFFFFFF" Foreground="White" VerticalAlignment="Top" Height="28" d:LayoutOverrides="HorizontalAlignment"/>
+        <Label x:Name="MapFileLabel_Copy" Content="Record map file" HorizontalAlignment="Left" Width="98.333" Height="28" VerticalAlignment="Top" Margin="26.873,167.068,0,0" Foreground="#FFB6B6B6" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
+        <TextBox x:Name="RecordMapFilePathTextBox" LostFocus="checkIfNumber" TextWrapping="NoWrap" Text="Choose a record map file" IsEnabled="False" Margin="130.206,167.068,167.127,0" Background="#3FFFFFFF" Foreground="White" VerticalAlignment="Top" Height="28"/>
+        <Button x:Name="SelectRecordMapFileButton" Click="openFileDialog" Content="Select" Background="#FF444444" BorderBrush="#FFCFCFCF" Foreground="#FFC1C1C1" Margin="0,167.068,92.127,0" VerticalAlignment="Top" Height="28" HorizontalAlignment="Right" Width="75"/>
+        <Button x:Name="OpenButton" Content="Open" Click="openBTree" HorizontalAlignment="Right" Margin="0,0,19.127,19.265" VerticalAlignment="Bottom" Width="75" Height="28" Background="#FF444444" BorderBrush="#FFCFCFCF" Foreground="#FFC1C1C1" IsEnabled="False"/>
+        <Button x:Name="NewButton" Content="New" Click="createNewBTree" HorizontalAlignment="Right" Margin="0,0,99.127,19.265" VerticalAlignment="Bottom" Width="75" Height="28" Background="#FF444444" BorderBrush="#FFCFCFCF" Foreground="#FFC1C1C1" IsEnabled="False"/>
+        <Button x:Name="CancelButton" Content="Cancel" Click="cancel" HorizontalAlignment="Left" Margin="26.873,0,0,19.265" VerticalAlignment="Bottom" Width="75" Height="28" Background="#FF444444" BorderBrush="#FFCFCFCF" Foreground="#FFC1C1C1"/>
+        <Label x:Name="DLabel" Content="D" HorizontalAlignment="Left" Width="98.333" Height="28" VerticalAlignment="Top" Margin="26.873,222.401,0,0" Foreground="#FFB6B6B6" d:LayoutOverrides="HorizontalAlignment"/>
+        <TextBox x:Name="DTextBox" TextWrapping="NoWrap" Text="1" Margin="130.206,222.401,0,168.599" Background="#3FFFFFFF" Foreground="White" HorizontalAlignment="Left" Width="146.667"/>
+        <Label x:Name="DInfoLabel" Content="*required only if creating a new BTree" HorizontalAlignment="Left" Width="418" Height="28" VerticalAlignment="Top" Margin="281.873,222.401,0,0" Foreground="White"/>
+        <TextBlock x:Name="LogTextBlock" Height="79.334" Margin="26.873,0,19.127,70.333" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White"/>
+
+    </Grid>
+</Window>

@@ -16,6 +16,8 @@ namespace BTree2018.Interfaces.BTreeStructure
         IPagePointer<T> RightPointerAt(long keyIndex);
         IKey<T> KeyAt(long index);
         PageType PageType { get; }
+
+        string ToString(string format = "");
     }
 
     public enum PageType

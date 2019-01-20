@@ -67,6 +67,16 @@ namespace BTree2018.BTreeStructure
             return BTreeIO.GetRecord(lastSearchedKey.RecordPointer);
         }
 
+        public IPage<T> GetPage(IPagePointer<T> pointer)
+        {
+            return BTreeIO.GetPage(pointer);
+        }
+
+        public IPage<T> GetRootPage()
+        {
+            return BTreeIO.GetRootPage();
+        }
+
         public void Set(IKey<T> key, IRecord<T> record)
         {
             if (Searcher.SearchForKey(key))
