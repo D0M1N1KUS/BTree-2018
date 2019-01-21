@@ -69,6 +69,9 @@ namespace BTree2018.BTreeStructure
             {
                 if (HasKey(currentKey))
                 {
+                    if (HasKey(newRecord.Value))
+                        throw new Exception("Can't replace " + currentKey + " with " +
+                                            newRecord + ". Value of the new record already exists!");
                     Remove(currentKey);
                 }
                 Add(newRecord);

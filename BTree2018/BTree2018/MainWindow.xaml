@@ -69,8 +69,8 @@
                         <Canvas Margin="0">
                             <Button x:Name="AddRecordButton" Click="addRecord" Content="Add" Width="116" Canvas.Left="10" Canvas.Top="10" Height="30" Background="#FF2DBB49" BorderBrush="White" Foreground="Black"/>
                             <Button x:Name="RemoveRecordButton" Click="removeRecord" Content="Remove" Width="116" Canvas.Left="131" Canvas.Top="10" Height="30" Background="#FFCF3131" Foreground="Black" BorderBrush="White"/>
-                            <Button x:Name="SearchValueButton" Content="Search for value" Width="116" Canvas.Left="466" Canvas.Top="10" Height="30" Background="#FF3AE0E0" Foreground="Black" BorderBrush="White"/>
-                            <Button x:Name="AlterRecordButton" Content="Replace" Width="116" Canvas.Left="252" Canvas.Top="10" Height="30" Background="#FFBCC500" Foreground="#FF040404" BorderBrush="White"/>
+                            <Button x:Name="SearchValueButton" Click="searchForKey" Content="Search for value" Width="116" Canvas.Left="466" Canvas.Top="10" Height="30" Background="#FF3AE0E0" Foreground="Black" BorderBrush="White"/>
+                            <Button x:Name="AlterRecordButton" Click="alterRecord" Content="Replace" Width="116" Canvas.Left="252" Canvas.Top="10" Height="30" Background="#FFBCC500" Foreground="#FF040404" BorderBrush="White"/>
                             <TextBlock x:Name="RecordOperationInfoTextBlock" TextWrapping="Wrap" Canvas.Left="10" Canvas.Top="74" Height="61" Width="572"/>
                             <CheckBox x:Name="RefreshTreeViewCheckBox" Content="Refresh tree view after completing operation" Canvas.Left="10" Canvas.Top="53.901" Width="311.395" Foreground="White"/>
                         </Canvas>

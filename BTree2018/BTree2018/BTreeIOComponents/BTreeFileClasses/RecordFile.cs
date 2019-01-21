@@ -77,7 +77,7 @@ namespace BTree2018.BTreeIOComponents.BTreeFileClasses
 
         public void SetRecord(IRecord<T> record)
         {
-            if (record.RecordPointer != RecordPointer<T>.NullPointer)
+            if (record.RecordPointer.Equals(RecordPointer<T>.NullPointer))
                 throw new NullReferenceException(record.ToString());
             FileIO.WriteBytes(recordToByteArray(record.ValueComponents), 
                 TYPE_STRING_PREAMBLE_SIZE + record.RecordPointer.Index * SizeOfRecord);

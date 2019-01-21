@@ -17,7 +17,7 @@ namespace BTree2018
     /// </summary>
     public partial class MainWindow
     {
-        private const int LOG_BUFFER_SIZE = 3000;
+        private const int LOG_BUFFER_SIZE = 10000;
         private readonly Brush ERROR_COLOR_BRUSH = Brushes.Red;
         private readonly Brush NORMAL_COLOR_BRUSH;
         private readonly Brush WHITE_BRUSH = Brushes.White;
@@ -120,12 +120,56 @@ namespace BTree2018
                 RecordOperationInfoTextBlock.Foreground = ERROR_COLOR_BRUSH;
                 RecordOperationInfoTextBlock.Text = "Failed do remove record!";
                 Logger.Log("Failed do remove record!");
+                Logger.Log(ex);
             }
         }
 
         private void alterRecord(object sender, RoutedEventArgs e)
         {
-            
+            try
+            {
+                if (!InputValidation.TryParseTextBoxCollection<int>(getValueTextBoxes(),
+                    (TextBox textBox) => textBox.BorderBrush = ERROR_COLOR_BRUSH,
+                    (TextBox textBox) => textBox.BorderBrush = NORMAL_COLOR_BRUSH))
+                    return;
+                if (!InputValidation.TryParse<int>(RecordValueTextBox.Text)) return;
+                var recordToAdd = TextInputConverter.ConvertToRecord<int>(getValueTextBoxes());
+                var keyToAlter = TextInputConverter.ConvertToKey<int>(RecordValueTextBox);
+                BTree.Replace(keyToAlter, recordToAdd);
+                writeStatisticsToInfoBar();               
+                if(RefreshTreeViewCheckBox.IsChecked ?? false) refreshTreeView(sender, e);
+                RecordOperationInfoTextBlock.Foreground = WHITE_BRUSH;
+                RecordOperationInfoTextBlock.Text = "Successfully replaced " + keyToAlter + " with " + recordToAdd.Value;
+                Statistics.GetStatistics();
+            }
+            catch (Exception ex)
+            {
+                RecordOperationInfoTextBlock.Foreground = ERROR_COLOR_BRUSH;
+                RecordOperationInfoTextBlock.Text = "Failed do alter record!";
+                Logger.Log("Failed do alter record!");
+                Logger.Log(ex);
+            }
+        }
+
+        private void searchForKey(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!InputValidation.TryParse<int>(RecordValueTextBox.Text)) return;
+                var keyToFind = TextInputConverter.ConvertToKey<int>(RecordValueTextBox);
+                var record = BTree.Get(keyToFind);
+                writeStatisticsToInfoBar();  
+                RecordOperationInfoTextBlock.Foreground = WHITE_BRUSH;
+                RecordOperationInfoTextBlock.Text = "Found record " + record;
+                loadRecord(record);
+            }
+            catch (Exception ex)
+            {
+                RecordOperationInfoTextBlock.Foreground = ERROR_COLOR_BRUSH;
+                RecordOperationInfoTextBlock.Text = "Key not found!";
+                Logger.Log("Key not found!");
+                Logger.Log(ex);
+            }
         }
 
         private void showNewBTreeDialog(object sender, RoutedEventArgs e)
@@ -137,6 +181,7 @@ namespace BTree2018
             else
             {
                 BTree = diaglog.BTree;
+                refreshTreeView(sender, e);
                 enableButtons();
             }
         }
@@ -201,8 +246,20 @@ namespace BTree2018
             try
             {
                 var record = BTree.Get(key);
+                loadRecord(record);
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e);
+            }
+        }
+
+        private void loadRecord(IRecord<int> record)
+        {
+            try
+            {
                 var valueTextBoxes = getValueTextBoxes();
-                for(var i = 0; i < record.ValueComponents.Length; i++)
+                for (var i = 0; i < record.ValueComponents.Length; i++)
                 {
                     valueTextBoxes[i].Text = record.ValueComponents[i].ToString();
                 }
