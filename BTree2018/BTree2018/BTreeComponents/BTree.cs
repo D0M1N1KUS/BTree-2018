@@ -67,12 +67,12 @@ namespace BTree2018.BTreeStructure
             }
             else
             {
-                if (HasKey(newKey.Value))
+                if (HasKey(currentKey))
                 {
                     Remove(currentKey);
-                    Add(newRecord);
-                    return;
                 }
+                Add(newRecord);
+                return;
                     
             }
             Logger.Log("BTree Replace warning: The key " + currentKey +

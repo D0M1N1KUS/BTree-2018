@@ -100,6 +100,9 @@
     <Compile Include="BTreeOperations\Compensation\BTreePageNeighbours.cs" />
     <Compile Include="Exceptions\DuplicateKeyException.cs" />
     <Compile Include="BTreeBuilder.cs" />
+    <Compile Include="FileViewer.xaml.cs">
+      <DependentUpon>FileViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\BTreeOperations\IBTreeLeafKeyRemoval.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBTreePageNeighbours.cs" />
     <Compile Include="Interfaces\BTreeOperations\IBtreeReorganizing.cs" />
@@ -150,8 +153,11 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="UtilityClasses\CommandExecuter.cs" />
     <Compile Include="UtilityClasses\FileChooser.cs" />
+    <Compile Include="UtilityClasses\FileMapPrinter.cs" />
     <Compile Include="UtilityClasses\InputValidation.cs" />
     <Compile Include="UtilityClasses\MultipleOperationExecuter.cs" />
+    <Compile Include="UtilityClasses\PageFilePrinter.cs" />
+    <Compile Include="UtilityClasses\RecordFilePrinter.cs" />
     <Compile Include="UtilityClasses\TextInputConverter.cs" />
     <Compile Include="NewOpenDialog.xaml.cs">
       <DependentUpon>NewOpenDialog.xaml</DependentUpon>
@@ -176,6 +182,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="FileViewer.xaml" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

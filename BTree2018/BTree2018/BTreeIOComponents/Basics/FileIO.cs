@@ -53,25 +53,21 @@ namespace BTree2018.BTreeIOComponents.Basics
 
         public byte[] GetBytes(long begin, long n)
         {
-            Statistics.AddReadBytes(n);
             return output.GetBytes(begin, n);
         }
 
         public byte GetByte(long index)
         {
-            Statistics.AddReadBytes(1);
             return output.GetBytes(index, 1)[0];
         }
 
         public void WriteBytes(byte[] bytes, long begin)
         {
-            Statistics.AddWrittenBytes(bytes.Length);
             input.WriteBytes(bytes, begin);
         }
 
         public void WriteZeros(long begin, long n)
         {
-            Statistics.AddWrittenBytes(n);
             input.WriteBytes(Enumerable.Repeat((byte)0, (int)n).ToArray(), begin);
         }
     }

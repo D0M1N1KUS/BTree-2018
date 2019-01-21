@@ -39,6 +39,7 @@ namespace BTree2018.BTreeIOComponents
         public IPagePointer<T> WriteNewRootPage(IPage<T> page)
         {
             FreePage(BTreePageFile.RootPage);
+            Statistics.AddWrittenPages(1);
             return BTreePageFile.AddNewRootPage(page);
         }
 

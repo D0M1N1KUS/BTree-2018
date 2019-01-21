@@ -14,6 +14,7 @@ namespace BTree2018.BTreeOperations
         public IBTreeAdding<T> BTreeAdding;
         public IBTreePageNeighbours<T> BTreePageNeighbours;
         
+        //TODO: Something is broken while turning left :/
         public bool EvenOutKeys(ref IPage<T> parentPage, int parentKeyIndex, ref IPage<T> leftPage,
             ref IPage<T> rightPage)
         {

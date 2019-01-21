@@ -7,7 +7,7 @@
     mc:Ignorable="d"
     Title="BTree2018" Height="720" Width="1280" Background="#FF1F1F1F" Foreground="White">
     <Grid>
-        <TabControl x:Name="TabControl" Margin="10,35,0,25" Background="#FF616161" HorizontalAlignment="Left" Width="630">
+        <TabControl x:Name="TabControl" Margin="10,35,0,40" Background="#FF616161" HorizontalAlignment="Left" Width="630">
             <TabItem x:Name="SingleOperationTab" Header="Single operations" Foreground="#FF000324">
                 <Grid Background="#FF1F1F1F">
                     <GroupBox x:Name="RecordEditorBox" Header="Record" Margin="10,0,10,186.04" Foreground="White">
@@ -97,10 +97,10 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Border BorderThickness="1" Height="25" VerticalAlignment="Bottom" Background="#FF00647D">
+        <Border BorderThickness="1" Height="35" VerticalAlignment="Bottom" Background="#FF00647D">
             <Label x:Name="StatusLabel" Content="" Foreground="White"/>
         </Border>
-        <GroupBox x:Name="TreeViewGroupBox" Header="BTree view" Margin="645,35,10,30" Foreground="White">
+        <GroupBox x:Name="TreeViewGroupBox" Header="BTree view" Margin="645,35,10,40" Foreground="White">
             <TreeView x:Name="BTreeViewTreeView" Background="{x:Null}" Margin="0,0.98,-2,-0.98">
                 <TreeViewItem x:Name="RootTreeViewItem" Header="Root" Height="591.04" Width="597" Foreground="White" HorizontalAlignment="Left"/>
             </TreeView>

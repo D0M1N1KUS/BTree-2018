@@ -31,7 +31,9 @@ namespace BTree2018.Logging
 
         public static Tuple<long, long, long, long> GetStatistics(bool clearStatistics = true)
         {
-            return new Tuple<long, long, long, long>(bytesRead, bytesWritten, pagesRead, pagesWritten);
+            var statistics = new Tuple<long, long, long, long>(bytesRead, bytesWritten, pagesRead, pagesWritten);
+            if (clearStatistics) bytesRead = pagesRead = bytesWritten = pagesWritten = 0;
+            return statistics;
         }
     }
 }

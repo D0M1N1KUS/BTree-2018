@@ -24,6 +24,8 @@ namespace BTree2018.BTreeOperations
             var parentPage = BTreePageNeighbours.ParentPage;
             if (checkIfPageCanBeCompensated(leftNeighbourPtr, out var leftNeighbourPage))
             {
+                if (!rightNeighbourPtr.Equals(BTreePagePointer<T>.NullPointer))
+                    parentKey = BTreePageNeighbours.ParentPage.KeyAt(--parentKeyIndex);
                 if (!EvenOutKeys(ref parentPage, parentKeyIndex, ref leftNeighbourPage, ref page))
                     return false;
                 var pointers = BTreeIO.WritePages(parentPage, leftNeighbourPage, page);

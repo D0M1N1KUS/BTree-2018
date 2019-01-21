@@ -76,6 +76,7 @@ namespace BTree2018.BTreeIOComponents
                 getNewCachedMapPiece(index);
                 cachedMapChanged = true;
                 setBit(ref cachedMapPiece, (int)(7 - index % 8), value);
+                Flush();//TODO: remove
             }
         }
 

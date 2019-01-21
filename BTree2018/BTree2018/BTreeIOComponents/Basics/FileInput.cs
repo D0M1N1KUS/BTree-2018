@@ -4,6 +4,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Text.RegularExpressions;
 using BTree2018.Interfaces.FileIO;
+using BTree2018.Logging;
 
 namespace BTree2018.BTreeIOComponents.Basics
 {
@@ -50,6 +51,7 @@ namespace BTree2018.BTreeIOComponents.Basics
 
         public void WriteBytes(byte[] bytes, long begin)
         {
+            Statistics.AddWrittenBytes(bytes.Length);
             if (bytes.Length == 0) return;
             if (begin + bytes.Length <= fileInfo.Length)
                 overwrite(bytes, begin);

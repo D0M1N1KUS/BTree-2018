@@ -21,6 +21,7 @@ namespace BTree2018
         private readonly Brush ERROR_COLOR_BRUSH = Brushes.Red;
         private readonly Brush NORMAL_COLOR_BRUSH;
         private readonly Brush WHITE_BRUSH = Brushes.White;
+        private readonly Brush GRAY_BRUSH = Brushes.Gray;
 
         private IBTree<int> BTree;
 
@@ -122,6 +123,11 @@ namespace BTree2018
             }
         }
 
+        private void alterRecord(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         private void showNewBTreeDialog(object sender, RoutedEventArgs e)
         {
             var diaglog = new NewOpenDialog();
@@ -164,7 +170,7 @@ namespace BTree2018
             if (beginningPage.PageType == PageType.NULL || beginningPage.KeysInPage == 0)
             {
                 var newTreeViewItem = new TreeViewItem();
-                newTreeViewItem.Foreground = WHITE_BRUSH;
+                newTreeViewItem.Foreground = GRAY_BRUSH;
                 newTreeViewItem.Header = "[empty]";
                 current.Items.Add(newTreeViewItem);
             }
@@ -173,7 +179,7 @@ namespace BTree2018
                 if (!beginningPage.PointerAt(i).Equals(BTreePagePointer<int>.NullPointer))
                 {
                     var newTreeViewItem = new TreeViewItem();
-                    newTreeViewItem.Foreground = WHITE_BRUSH;
+                    newTreeViewItem.Foreground = GRAY_BRUSH;
                     newTreeViewItem.Header = "PageIndex: " + beginningPage.PointerAt(i).Index;
                     buildTreeView(BTree.GetPage(beginningPage.PointerAt(i)), newTreeViewItem);
                     current.Items.Add(newTreeViewItem);

@@ -37,6 +37,7 @@ namespace BTree2018.BTreeIOComponents.Basics
 
         public byte[] GetBytes(long begin, long n)
         {
+            Statistics.AddReadBytes(n);
             var listOfBytes = new byte[n];
             using (var stream = File.Open(filePath, FileMode.Open))
             {

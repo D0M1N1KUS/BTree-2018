@@ -28,16 +28,20 @@ namespace BTree2018.BTreeOperations
             
             if (checkIfPagesCanBeMerged(leftNeighbourPtr, pageWithShortage, out var leftPage))
             {
+                if (!rightNeighbourPtr.Equals(BTreePagePointer<T>.NullPointer))
+                    parentKey = BTreePageNeighbours.ParentPage.KeyAt(--parentKeyIndex);
                 mergedPage = MergePagesAndKey(leftPage, parentKey, pageWithShortage);
                 newParentPage =
                     RemoveParentPageKeyAndInsetNewPointer(parentPage, parentKeyIndex, mergedPage.PagePointer);
                 BTreeIO.FreePage(pageWithShortage);
+                BTreeIO.FreePage(leftPage);
             }
             else if (checkIfPagesCanBeMerged(rightNeighbourPtr, pageWithShortage, out var rightPage))
             {
                 mergedPage = MergePagesAndKey(pageWithShortage, parentKey, rightPage);
                 newParentPage =
                     RemoveParentPageKeyAndInsetNewPointer(parentPage, parentKeyIndex, mergedPage.PagePointer);
+                BTreeIO.FreePage(pageWithShortage);
                 BTreeIO.FreePage(rightPage);
             }
             else
@@ -97,8 +101,8 @@ namespace BTree2018.BTreeOperations
             var newRootPage = MergePagesAndKey(leftPage, rootPage.KeyAt(0), rightPage, PageType.ROOT);
             BTreeIO.FreePage(rightPage);
             BTreeIO.FreePage(rootPage);
+            BTreeIO.FreePage(leftPage);
             var newRootPagePointer = BTreeIO.WriteNewRootPage(newRootPage);
-            BTreeIO.FreePage(rightPage);//TODO: Some pages aren't being freed properly
             updateParentPagePointersAfterMerge(newRootPagePointer);
             ParentPage = newRootPage;
         }
