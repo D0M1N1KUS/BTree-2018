@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{6F7C3CE0-4921-4B95-86A4-CA57D2F053ED}</ProjectGuid>
+        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>TestProject</RootNamespace>
+        <AssemblyName>TestProject</AssemblyName>
+        <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+          <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="NSubstitute, Version=4.0.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca">
+          <HintPath>..\packages\NSubstitute.4.0.0-rc1\lib\net46\NSubstitute.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Configuration" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+          <HintPath>..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Xml" />
+        <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+            <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="BisectionTests.cs" />
+        <Compile Include="BTreeComponentsTests\BTreeCompensationTests.cs" />
+        <Compile Include="BTreeComponentsTests\BTreeKeyTests.cs" />
+        <Compile Include="BTreeComponentsTests\BTreePageTests.cs" />
+        <Compile Include="BTreeOperationsTests\BTreeAddingTests.cs" />
+        <Compile Include="BTreeOperationsTests\BTreeRemovingTests\BTreeLeafKeyRemoverTests.cs" />
+        <Compile Include="BTreeOperationsTests\BTreeRemovingTests\BTreeMergerBaseTests.cs" />
+        <Compile Include="BTreeOperationsTests\BTreeRemovingTests\BTreeMergingTests.cs" />
+        <Compile Include="BTreeOperationsTests\BTreeSearchingTests.cs" />
+        <Compile Include="BTreeOperationsTests\BTreeSplittingTests.cs" />
+        <Compile Include="BTreeOperationsTests\CompensationTests\BTreeCompensationPageModifierTests.cs" />
+        <Compile Include="BTreeOperationsTests\CompensationTests\BTreeCompensationTests.cs" />
+        <Compile Include="BTreeOperationsTests\CompensationTests\BTreePageNeighboursTests.cs" />
+        <Compile Include="BuilderTests\PageBuilderTests.cs" />
+        <Compile Include="CommandExecuterTests.cs" />
+        <Compile Include="FileIOTests\BasicIOTests\FileInputTests.cs" />
+        <Compile Include="FileIOTests\BasicIOTests\FileIOTests.cs" />
+        <Compile Include="FileIOTests\BasicIOTests\FileOutputTests.cs" />
+        <Compile Include="FileIOTests\ConverterTests\BTreeKeyConverterTests.cs" />
+        <Compile Include="FileIOTests\ConverterTests\BTreePageConverterTests.cs" />
+        <Compile Include="FileIOTests\ConverterTests\BTreePagePointerConverterTests.cs" />
+        <Compile Include="FileIOTests\ConverterTests\GenericArithmeticTests.cs" />
+        <Compile Include="FileIOTests\ConverterTests\TypeConverterTests.cs" />
+        <Compile Include="FileIOTests\FileClassesTests\BitTesting.cs" />
+        <Compile Include="FileIOTests\FileClassesTests\BTreePageFileTests.cs" />
+        <Compile Include="FileIOTests\FileClassesTests\FileMapTests.cs" />
+        <Compile Include="FileIOTests\FileClassesTests\RecordFileTests.cs" />
+        <Compile Include="HelperClasses\BTree\BTreeIOTestFixture.cs" />
+        <Compile Include="HelperClasses\BTree\PageTestFixture.cs" />
+        <Compile Include="HelperClasses\CustomCollection.cs" />
+        <Compile Include="HelperClasses\MemoryFileIO.cs" />
+        <Compile Include="HelperClasses\MemoryFileMap.cs" />
+        <Compile Include="IntegrationTests\NewBTreeTests.cs" />
+        <Compile Include="ITestInterface.cs" />
+        <Compile Include="LoggerTests.cs" />
+        <Compile Include="NSubstituteTests.cs" />
+        <Compile Include="RecordTests.cs" />
+        <Compile Include="Tests.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\BTree2018\BTree2018.csproj">
+        <Project>{c495a6a0-d238-4d67-8b65-f0b0a2f12c49}</Project>
+        <Name>BTree2018</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
