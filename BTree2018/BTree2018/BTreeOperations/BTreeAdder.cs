@@ -13,15 +13,16 @@ namespace BTree2018.BTreeOperations
 {
     public class BTreeAdder<T> : IBTreeAdding<T> where T : IComparable
     {
-        private IKey<T> keyToAdd;
-        private IPage<T> currentPage;
+//        private IKey<T> keyToAdd;
+//        private IPage<T> currentPage;
 
         private IPagePointer<T> rightPointerOfAddedKey;
         
         public IBTreeIO<T> BTreeIO;
         public IBTreeSearching<T> BTreeSearching;
-        public IBTreeCompensation<T> BTreeCompensation;
-        public IBTreeSplitting<T> BTreeSplitting;
+//        public IBTreeCompensation<T> BTreeCompensation;
+//        public IBTreeSplitting<T> BTreeSplitting;
+        public IBtreeReorganizing<T> Reorganizer;
         
         public IPage<T> Add(IKey<T> key)
         {
@@ -34,33 +35,31 @@ namespace BTree2018.BTreeOperations
             return AddToPage(key, BTreeSearching.FoundPage);
         }
 
-        private IPage<T> AddToPage(IKey<T> key, IPage<T> page, bool addWithOverflow = false)
+        public IPage<T> AddToPage(IKey<T> key, IPage<T> page)
         {
-            currentPage = page;
-            keyToAdd = key;
-            
-            if (currentPage.KeysInPage < currentPage.PageLength || 
-                currentPage.KeysInPage == currentPage.PageLength && addWithOverflow)//m < 2d
+            if (page.KeysInPage < page.PageLength) //|| page.KeysInPage == page.PageLength)//m < 2d
             {
-                //BTreeIO.WritePage(addKeyToPage());
-                return addKeyToPage();
+                var newPage = addKeyToPage(page, key);
+                BTreeIO.WritePage(newPage);
+                return newPage;
             }
-            else if (currentPage.KeysInPage == currentPage.PageLength)//found page is full
+            else if (page.KeysInPage == page.PageLength)//found page is full
             {
-                if (!BTreeCompensation.Compensate(currentPage, key))
-                    return BTreeSplitting.Split(page, key);
-                return BTreeIO.GetPage(currentPage.PagePointer);//TODO: test return page;
+//                if (!BTreeCompensation.Compensate(page, key))
+//                    return BTreeSplitting.Split(page, key);
+//                return BTreeCompensation.Page;
+                return Reorganizer.Reorganize(page, key);
             }
 
-            throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!");
+            throw KeyAddingException("Page inconsistency detected: There are more keys in this page than allowed!",
+                key, page);
         }
 
-        private IPage<T> addKeyToPage()
+        private IPage<T> addKeyToPage(IPage<T> currentPage, IKey<T> keyToAdd)
         {
             var keyAdded = false;
             var pageBuilder = new BTreePageBuilder<T>((int) currentPage.PageLength)
-                .SetPageType(currentPage.PageType)
-                .SetParentPagePointer(currentPage.ParentPage)
+                .CreateEmptyCloneFromPage(currentPage)
                 .AddPointer(currentPage.LeftPointerAt(0));
             for (var i = 0; i < currentPage.KeysInPage; i++)
             {
@@ -79,7 +78,7 @@ namespace BTree2018.BTreeOperations
                     keyAdded = true;
                 }
                 else
-                    throw KeyAddingException("Duplicate key detected while inserting.");
+                    throw KeyAddingException("Duplicate key detected while inserting.", keyToAdd, currentPage);
             }
 
             if (!keyAdded)
@@ -89,7 +88,7 @@ namespace BTree2018.BTreeOperations
             return pageBuilder.Build();
         }
 
-        private Exception KeyAddingException(string message)
+        private Exception KeyAddingException(string message, IKey<T> keyToAdd, IPage<T> currentPage)
         {
             var e = new Exception(message);
             e.Data.Add("Key to add", keyToAdd.ToString());
@@ -108,7 +107,7 @@ namespace BTree2018.BTreeOperations
         public IPage<T> InsertKeyIntoPage(IPage<T> page, IKey<T> key, IPagePointer<T> rightPointerOfKey = null)
         {
             rightPointerOfAddedKey = rightPointerOfKey;
-            return AddToPage(key, page, addWithOverflow: true);
+            return addKeyToPage(page, key);
         }
     }
 }

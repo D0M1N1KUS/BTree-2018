@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using BTree2018.Interfaces.BTreeStructure;
 using BTree2018.Interfaces.CustomCollection;
 using BTree2018.Logging;
@@ -11,7 +12,7 @@ namespace BTree2018.BTreeStructure
         public IPagePointer<T>[] Pointers;
         public IKey<T>[] Keys;
 
-        public bool OverFlown { get; set; }
+        public bool OverFlown => KeysInPage > PageLength;
         public long PageLength { get; set; }
         public long KeysInPage { get; set; }
 
@@ -58,6 +59,38 @@ namespace BTree2018.BTreeStructure
                 ") ParentPage(", ParentPage?.ToString() ?? "NULL",
                 ") PagePointer(", PagePointer?.ToString() ?? "NULL",
                 ")]");
+        }
+        
+        public string ToString(string format = "")
+        {
+            if (format == null) throw new ArgumentNullException(nameof(format));
+
+            var printPointers = format.Contains('p');
+            var printKeys = format.Contains('k');
+            
+            var pageStringBuilder = new StringBuilder();
+            pageStringBuilder.Append("[");
+            
+            for (var i = 0; i < KeysInPage + 1; i++)
+            {
+                if (printPointers)
+                {
+                    pageStringBuilder.Append("(");
+                    pageStringBuilder.Append(Pointers[i]);
+                    pageStringBuilder.Append(")");
+                    if (i < KeysInPage) pageStringBuilder.Append(",");
+                }
+
+                if (printKeys && i < KeysInPage)
+                {
+                    pageStringBuilder.Append(Keys[i]);
+                    if (i < KeysInPage - 1 && !printPointers)
+                        pageStringBuilder.Append(",");
+                }
+            }
+
+            pageStringBuilder.Append("]");
+            return pageStringBuilder.ToString();
         }
 
         public override bool Equals(object o)

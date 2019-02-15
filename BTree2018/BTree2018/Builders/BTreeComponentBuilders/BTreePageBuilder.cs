@@ -15,7 +15,7 @@ namespace BTree2018.Builders
         private List<IPagePointer<T>> pagePointers;
         private List<IKey<T>> keys;
         private int pageLength;
-        private int keysInPage = -1;
+        private int keysInPage = 0;//TODO: check if changing this from -1 to 0 breaks everything
         
         private IPagePointer<T> ParentPage = BTreePagePointer<T>.NullPointer;
         private PageType PageType = PageType.NULL;
@@ -45,7 +45,22 @@ namespace BTree2018.Builders
 
         public static IPage<T> BuildNullPage()
         {
-            return new BTreePage<T>();
+            return new BTreePage<T> {PageType = PageType.NULL};
+        }
+
+        public static IPage<T> BuildEmptyPage(long pageLength, PageType pageType, 
+            IPagePointer<T> currentPagePointer = null, IPagePointer<T> parentPagePointer = null)
+        {
+            return new BTreePage<T>()
+            {
+                PageType = pageType,
+                PagePointer = currentPagePointer ?? BTreePagePointer<T>.NullPointer,
+                ParentPage = parentPagePointer ?? BTreePagePointer<T>.NullPointer,
+                KeysInPage = 0,
+                Keys = new IKey<T>[0], 
+                Pointers = new IPagePointer<T>[0],
+                PageLength = pageLength
+            };
         }
 
         public IPage<T> Build()
@@ -61,7 +76,6 @@ namespace BTree2018.Builders
                 PageType = PageType,
                 KeysInPage = keysInPage,
                 PageLength = pageLength == 0 ? keys.Count : pageLength - 1,
-                OverFlown = keys.Count == pageLength,
                 PagePointer = pagePointer 
             };
 
@@ -176,7 +190,8 @@ namespace BTree2018.Builders
 
                 return array;
             }
-            throw new Exception("No keys provided!");
+            return new IKey<T>[0];
+            //throw new Exception("BTreePageBuilder error: No keys provided!");
         }
 
         private IPagePointer<T>[] PointersToArray()
@@ -194,7 +209,7 @@ namespace BTree2018.Builders
         private bool checkIfAllNecessaryValuesInitialized()
         {
             bool allNecessaryValuesInitialized = true;
-            if (keys.Count + 1 != pagePointers.Count)
+            if (keys.Count + 1 != pagePointers.Count && PageType != PageType.LEAF && PageType != PageType.ROOT)
             {
                 Logger.Log("BTreePageBuilder warning: Inconsistent number of keys or pointers detected! Keys: " + 
                            keys.Count + " Pointers: " + pagePointers.Count);
@@ -216,7 +231,7 @@ namespace BTree2018.Builders
                 allNecessaryValuesInitialized = false;
             }
 
-            if (PageType != PageType.ROOT && ParentPage == null)
+            if (PageType != PageType.ROOT && ParentPage.Equals(BTreePagePointer<T>.NullPointer))
             {
                 Logger.Log("BTreePageBuilder error: Page has no pointer to parent page!");
                 allNecessaryValuesInitialized = false;

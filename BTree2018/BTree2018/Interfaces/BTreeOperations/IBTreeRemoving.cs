@@ -5,6 +5,6 @@ namespace BTree2018.Interfaces.BTreeOperations
 {
     public interface IBTreeRemoving<T> where T : IComparable
     {
-        void RemoveKey(IKey<T> key);
+        IRecordPointer<T> RemoveKey(IKey<T> key);
     }
 }

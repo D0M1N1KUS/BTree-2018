@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BTree2018.BTreeIOComponents;
 using BTree2018.Enums;
 using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeStructure;
@@ -11,8 +12,9 @@ namespace BTree2018.BTreeStructure
     {
         public T Value { get; set; }
         public IRecordPointer<T> RecordPointer { get; set; }
-        //public IPagePointer<T> LeftPagePointer { get; set; }
-        //public IPagePointer<T> RightPagePointer { get; set; }
+
+        public static IKey<T> NullKey => new BTreeKey<T>()
+            {RecordPointer = RecordPointer<T>.NullPointer, Value = GenericArithmetic<T>.ConvertToGeneric(0)};
 
         public int CompareTo(IKey<T> other)
         {
@@ -38,7 +40,7 @@ namespace BTree2018.BTreeStructure
         public override bool Equals(object o)
         {
             var otherKey = o as IKey<T>;
-            if (otherKey == null || !Value.Equals(otherKey.Value) || !RecordPointer.Equals(otherKey.RecordPointer))
+            if (otherKey == null || !Value.Equals(otherKey.Value)) //removing  || !RecordPointer.Equals(otherKey.RecordPointer)
                 return false;
             return true;
         }

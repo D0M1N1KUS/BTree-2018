@@ -5,6 +5,7 @@ namespace BTree2018.Interfaces.BTreeOperations
 {
     public interface IBtreeReorganizing<T> where T : IComparable
     {
-        void Reorganize(IPage<T> modifiedLeafPage);
+        IPage<T> Reorganize(IPage<T> modifiedLeafPage);
+        IPage<T> Reorganize(IPage<T> fullPage, IKey<T> keyToInsert);
     }
 }

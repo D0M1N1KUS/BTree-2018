@@ -6,6 +6,7 @@ namespace BTree2018.Interfaces.BTreeOperations
     public interface IBTreeAdding<T> where T : IComparable
     {
         IPage<T> Add(IKey<T> key);
+        IPage<T> AddToPage(IKey<T> key, IPage<T> page);
         IPage<T> InsertKeyIntoPage(IPage<T> page, IKey<T> key, IPagePointer<T> rightPointerOfKey = null);
     }
 }

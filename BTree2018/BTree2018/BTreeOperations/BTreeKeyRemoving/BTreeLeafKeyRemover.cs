@@ -18,7 +18,7 @@ namespace BTree2018.BTreeOperations
                 currentPage = BTreeIO.GetPage(currentPage.PointerAt(currentPage.KeysInPage));
             }
 
-            var newLeafPage = new BTreePageBuilder<T>((int) currentPage.Length)
+            var newLeafPage = new BTreePageBuilder<T>((int) currentPage.PageLength)
                 .CreateEmptyCloneFromPage(currentPage)
                 .AddPointer(currentPage.PointerAt(0));
 
@@ -41,7 +41,7 @@ namespace BTree2018.BTreeOperations
                 currentPage = BTreeIO.GetPage(currentPage.PointerAt(0));
             }
 
-            var newLeafPage = new BTreePageBuilder<T>((int) currentPage.Length)
+            var newLeafPage = new BTreePageBuilder<T>((int) currentPage.PageLength)
                 .CreateEmptyCloneFromPage(currentPage);
 
             for (var i = 1; i < currentPage.KeysInPage; i++)

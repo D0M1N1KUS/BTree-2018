@@ -11,15 +11,22 @@ namespace BTree2018.Interfaces.BTreeStructure
         //Splitting class is required
         //Merging required
 
+        long D { get; }
+        long H { get; }
+
         void Add(IRecord<T> record); //Adding
         void Remove(IRecord<T> record); //Removing
         void Remove(IKey<T> key);
         void Remove(T key);
+        void Replace(T currentKey, IRecord<T> newRecord);
+        void Replace(IKey<T> currentKey, IRecord<T> newRecord);
+        void Replace(IRecord<T> currentRecord, IRecord<T> newRecord);
 
         bool HasKey(T key);//Searching
-        void Get(IKey<T> key); //Getting
+        IRecord<T> Get(IKey<T> key); //Getting
+        IPage<T> GetPage(IPagePointer<T> pointer);
+        IPage<T> GetRootPage();
+        void Set(IKey<T> key, IRecord<T> record);
         IRecord<T> this[IKey<T> key] { get; set; }//Getting/Altering
-
-        void Reorganize(); //Reorganizing on demand
     }
 }

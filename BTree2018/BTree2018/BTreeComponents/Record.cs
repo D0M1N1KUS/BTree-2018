@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using BTree2018.BTreeIOComponents;
 using BTree2018.Enums;
 using BTree2018.Interfaces;
 using BTree2018.Interfaces.BTreeStructure;
@@ -13,6 +14,19 @@ namespace BTree2018.BTreeStructure
         public IRecordPointer<T> RecordPointer { get; }
         public T Value { get; set; }
         public T[] ValueComponents { get; set; }
+
+        public Record(T[] valueComponents, IRecordPointer<T> pointer)
+        {
+            ValueComponents = valueComponents;
+            Value = valueComponents[0];
+            foreach (var value in valueComponents)
+            {
+                if (value.CompareTo(Value) == (int) Comparison.GREATER)
+                    Value = value;
+            }
+
+            RecordPointer = pointer;
+        }
 
         public int CompareTo(object obj)
         {
